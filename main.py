@@ -2,13 +2,10 @@ import time
 
 import requests
 
-# URL API của server (thay thế bằng URL thực tế)
-API_URL = "https://vietteltelecom.vn/api/get/sim"
-
 # File để lưu kết quả
-OUTPUT_FILE = "results.txt"
+OUTPUT_FILE = "result.csv"
 
-current_pattern = "0333997597"
+current_pattern = "032551????"
 
 
 def is_valid_input(s):
@@ -18,6 +15,7 @@ def is_valid_input(s):
     for i in range(len(s)):
         v1 = char_value(current_pattern[i])
         v2 = char_value(s[i])
+        # print(v1, v2)
         if v1 < v2:
             return True
         elif v1 > v2:
@@ -26,56 +24,68 @@ def is_valid_input(s):
 
 
 def query_server(pattern):
-    request_url = f"https://apigami.viettel.vn/mvt-api/myviettel.php/omiSearchSimV2?isdn_type=22&page_type=&page=1&page_size=50&key_search={pattern}&total_record=1&captcha=&sid=";
-    print("querying")
+    request_url = f"https://apigami.viettel.vn/mvt-api/myviettel.php/omiSearchSimV2?isdn_type=22&page_type=&page=1&page_size=50&key_search={pattern}&total_record=1&captcha=&sid="
+    username = "u2efd59ce569505c1-zone-custom-session-LvnIoYDJ2-sessTime-1"
+    password = "u2efd59ce569505c1"
+    proxy_dns = "43.153.237.55:2334"
+    proxy = {
+        "https": "http://{}:{}@{}".format(username, password, proxy_dns),
+        "http": "http://{}:{}@{}".format(username, password, proxy_dns)
+    }
     response = requests.post(
         request_url,
-        proxies={
-            "http": "http://rrbrigxf:affxtr7giqm5@198.23.239.134:6540/",
-            "https": "http://rrbrigxf:affxtr7giqm5@198.23.239.134:6540/"
-        }
+        proxies=proxy
     )
-    # print(response.content)
+    print(response.content)
     if response.status_code != 200:
         print(
             f"Lỗi HTTP {response.status_code} khi truy vấn pattern {pattern}, response = {(response.content[:100]) if (len(response.content) > 100) else response.content}")
         return None
-    print(f"response = {(response.content[:100]) if (len(response.content) > 100) else response.content}")
     # Trích xuất JSON từ response
     response_data = response.json()
+
     return response_data
 
 
-def save_to_file(numbers):
+def save_to_file(pattern, numbers):
+    if len(numbers) == 0:
+        return
     try:
         with open(OUTPUT_FILE, "a") as f:
             for number in numbers:
-                f.write(number + "\n")
-        print(f"Lưu {len(numbers)} số điện thoại vào file.")
+                f.write(number + ", " + pattern + "\n")
+        # print(f"Saved to file: {len(numbers)} numbers")
     except Exception as e:
         print(f"Lỗi khi lưu file: {e}")
 
 
 def crawl_pattern(pattern):
-    print(f"Truy vấn pattern: {pattern}")
-    if current_pattern > pattern:
-        print(f"Last pattern: {current_pattern}, pattern query: {pattern}")
+    print(f"Pattern: {pattern}")
+    if not is_valid_input(pattern):
+        if is_valid_input(pattern.replace('?', str(9), 1)):
+            for i in range(10):
+                if "?" in pattern:
+                    sub_pattern = pattern.replace('?', str(i), 1)
+                    crawl_pattern(sub_pattern)
         return
     response = query_server(pattern)
     time.sleep(2)
     if not response or response.get("errorCode") != 0:
         print(f"Lỗi khi truy vấn pattern {pattern}: {response}")
-        raise ValueError("Limit rate")
+        if response.get("errorCode") == 1:
+            raise ValueError("Limit rate")
+        else:
+            print(f"Unk error: {response.get('message', '')}")
+            return
     data = response.get("data", [])
     numbers = [item["isdn"] for item in data]
+    print(f"{len(numbers)} numbers")
 
-    if len(numbers) < 50:
+    if 20 > len(numbers):
         numbers.sort()
-        save_to_file(numbers)
-        print(f'saved {len(numbers)} to file')
+        save_to_file(pattern, numbers)
         return
 
-    # Nếu số lượng kết quả > 50, chia nhỏ pattern và đệ quy
     for i in range(10):
         sub_pattern = pattern.replace('?', str(i), 1)
 
