@@ -1,0 +1,97 @@
+2025-06-19 18:53:06,482 - ERROR - Timeout, pattern: 09612?????, retry
+2025-06-19 18:53:31,689 - ERROR - Timeout, pattern: 09617?????, retry
+2025-06-19 18:54:42,319 - ERROR - Timeout, pattern: 09623?????, retry
+2025-06-19 18:54:48,447 - ERROR - Unknown error: HTTPSConnectionPool(host='apigami.viettel.vn', port=443): Max retries exceeded with url: /mvt-api/myviettel.php/omiSearchSimV2?isdn_type=2&page_type=&page=1&page_size=50&key_search=09625?????&total_record=1&captcha=&sid= (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1006)'))), retry
+2025-06-19 18:55:56,542 - ERROR - Timeout, pattern: 096382????, retry
+2025-06-19 18:56:40,426 - ERROR - Timeout, pattern: 096395????, retry
+2025-06-19 18:56:46,317 - ERROR - Timeout, pattern: 096395????, retry
+2025-06-19 18:56:46,930 - ERROR - Requests ProxyError, pattern: 096396????, retry
+2025-06-19 18:57:10,307 - ERROR - Timeout, pattern: 09641?????, retry
+2025-06-19 18:57:20,835 - ERROR - Timeout, pattern: 09642?????, retry
+2025-06-19 18:57:28,827 - ERROR - Timeout, pattern: 09643?????, retry
+2025-06-19 18:57:47,048 - ERROR - Requests ProxyError, pattern: 096433????, retry
+2025-06-19 18:58:16,763 - ERROR - Timeout, pattern: 096440????, retry
+2025-06-19 18:59:00,663 - ERROR - Timeout, pattern: 0965??????, retry
+2025-06-19 18:59:48,332 - ERROR - Timeout, pattern: 0966??????, retry
+2025-06-19 19:00:10,352 - ERROR - Timeout, pattern: 096603????, retry
+2025-06-19 19:00:13,330 - ERROR - Requests ProxyError, pattern: 096604????, retry
+2025-06-19 19:00:19,159 - ERROR - Timeout, pattern: 096604????, retry
+2025-06-19 19:00:34,994 - ERROR - Timeout, pattern: 096608????, retry
+2025-06-19 19:00:40,099 - ERROR - Timeout, pattern: 096608????, retry
+2025-06-19 19:01:50,197 - ERROR - Timeout, pattern: 096624????, retry
+2025-06-19 19:02:07,286 - ERROR - Timeout, pattern: 096627????, retry
+2025-06-19 19:02:18,151 - ERROR - Requests ProxyError, pattern: 096631????, retry
+2025-06-19 19:02:40,436 - ERROR - Timeout, pattern: 096637????, retry
+2025-06-19 19:04:08,062 - ERROR - Timeout, pattern: 096685????, retry
+2025-06-19 19:04:19,696 - ERROR - Timeout, pattern: 096688????, retry
+2025-06-19 19:05:41,825 - ERROR - Timeout, pattern: 09679?????, retry
+2025-06-19 19:05:57,105 - ERROR - Timeout, pattern: 096800????, retry
+2025-06-19 19:06:02,932 - ERROR - Timeout, pattern: 096800????, retry
+2025-06-19 19:06:25,216 - ERROR - Timeout, pattern: 096806????, retry
+2025-06-19 19:06:33,440 - ERROR - Timeout, pattern: 096807????, retry
+2025-06-19 19:06:50,994 - ERROR - Timeout, pattern: 096809????, retry
+2025-06-19 19:07:07,379 - ERROR - Timeout, pattern: 096812????, retry
+2025-06-19 19:08:08,065 - ERROR - Timeout, pattern: 096827????, retry
+2025-06-19 19:08:35,772 - ERROR - Requests ProxyError, pattern: 096835????, retry
+2025-06-19 19:08:43,660 - ERROR - Timeout, pattern: 096836????, retry
+2025-06-19 19:08:52,484 - ERROR - Timeout, pattern: 096838????, retry
+2025-06-19 19:09:11,293 - ERROR - Timeout, pattern: 096843????, retry
+2025-06-19 19:09:31,133 - ERROR - Timeout, pattern: 096848????, retry
+2025-06-19 19:11:48,432 - ERROR - Timeout, pattern: 09725?????, retry
+2025-06-19 19:12:14,185 - ERROR - Timeout, pattern: 09732?????, retry
+2025-06-19 19:12:28,388 - ERROR - Timeout, pattern: 09735?????, retry
+2025-06-19 19:12:38,011 - ERROR - Timeout, pattern: 097351????, retry
+2025-06-19 19:12:47,434 - ERROR - Requests ProxyError, pattern: 097353????, retry
+2025-06-19 19:12:51,589 - ERROR - Requests ProxyError, pattern: 097354????, retry
+2025-06-19 19:12:56,686 - ERROR - Timeout, pattern: 097354????, retry
+2025-06-19 19:12:57,518 - ERROR - Unknown error: HTTPSConnectionPool(host='apigami.viettel.vn', port=443): Max retries exceeded with url: /mvt-api/myviettel.php/omiSearchSimV2?isdn_type=2&page_type=&page=1&page_size=50&key_search=097354????&total_record=1&captcha=&sid= (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1006)'))), retry
+2025-06-19 19:13:35,688 - ERROR - Timeout, pattern: 097364????, retry
+2025-06-19 19:13:58,825 - ERROR - Timeout, pattern: 09737?????, retry
+2025-06-19 19:14:40,610 - ERROR - Requests ProxyError, pattern: 0974??????, retry
+2025-06-19 19:15:52,055 - ERROR - Timeout, pattern: 097418????, retry
+2025-06-19 19:16:15,368 - ERROR - Timeout, pattern: 09746?????, retry
+2025-06-19 19:16:30,731 - ERROR - Timeout, pattern: 097490????, retry
+2025-06-19 19:16:36,594 - ERROR - Timeout, pattern: 097490????, retry
+2025-06-19 19:16:55,545 - ERROR - Timeout, pattern: 097495????, retry
+2025-06-19 19:17:08,417 - ERROR - Timeout, pattern: 097496????, retry
+2025-06-19 19:17:28,722 - ERROR - Timeout, pattern: 0975??????, retry
+2025-06-19 19:18:26,210 - ERROR - Timeout, pattern: 097527????, retry
+2025-06-19 19:18:51,651 - ERROR - Timeout, pattern: 097533????, retry
+2025-06-19 19:19:34,128 - ERROR - Timeout, pattern: 09758?????, retry
+2025-06-19 19:19:58,168 - ERROR - Timeout, pattern: 09761?????, retry
+2025-06-19 19:21:00,059 - ERROR - Timeout, pattern: 097641????, retry
+2025-06-19 19:22:08,804 - ERROR - Timeout, pattern: 097660????, retry
+2025-06-19 19:22:29,514 - ERROR - Timeout, pattern: 097663????, retry
+2025-06-19 19:22:48,189 - ERROR - Timeout, pattern: 097666????, retry
+2025-06-19 19:23:23,989 - ERROR - Timeout, pattern: 0977??????, retry
+2025-06-19 19:23:45,742 - ERROR - Timeout, pattern: 09774?????, retry
+2025-06-19 19:23:52,592 - ERROR - Timeout, pattern: 09774?????, retry
+2025-06-19 19:24:30,216 - ERROR - Timeout, pattern: 09781?????, retry
+2025-06-19 19:25:12,949 - ERROR - Timeout, pattern: 097819????, retry
+2025-06-19 19:25:40,202 - ERROR - Timeout, pattern: 09787?????, retry
+2025-06-19 19:25:51,783 - ERROR - Timeout, pattern: 09789?????, retry
+2025-06-19 19:25:55,038 - ERROR - Requests ProxyError, pattern: 09790?????, retry
+2025-06-19 19:26:26,248 - ERROR - Timeout, pattern: 097943????, retry
+2025-06-19 19:27:08,886 - ERROR - Timeout, pattern: 09798?????, retry
+2025-06-19 19:27:14,690 - ERROR - Timeout, pattern: 09798?????, retry
+2025-06-19 19:27:20,799 - ERROR - Requests ProxyError, pattern: 09799?????, retry
+2025-06-19 19:28:09,716 - ERROR - Timeout, pattern: 098136????, retry
+2025-06-19 19:29:05,704 - ERROR - Requests ProxyError, pattern: 09820?????, retry
+2025-06-19 19:29:18,769 - ERROR - Timeout, pattern: 09823?????, retry
+2025-06-19 19:29:32,237 - ERROR - Timeout, pattern: 098241????, retry
+2025-06-19 19:30:58,196 - ERROR - Timeout, pattern: 09835?????, retry
+2025-06-19 19:31:05,778 - ERROR - Requests ProxyError, pattern: 09837?????, retry
+2025-06-19 19:31:30,259 - ERROR - Timeout, pattern: 09840?????, retry
+2025-06-19 19:31:50,819 - ERROR - Timeout, pattern: 09844?????, retry
+2025-06-19 19:32:00,684 - ERROR - Timeout, pattern: 09845?????, retry
+2025-06-19 19:32:10,381 - ERROR - Timeout, pattern: 09846?????, retry
+2025-06-19 19:32:35,346 - ERROR - Requests ProxyError, pattern: 09851?????, retry
+2025-06-19 19:32:44,631 - ERROR - Unknown error: HTTPSConnectionPool(host='apigami.viettel.vn', port=443): Max retries exceeded with url: /mvt-api/myviettel.php/omiSearchSimV2?isdn_type=2&page_type=&page=1&page_size=50&key_search=09852?????&total_record=1&captcha=&sid= (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1006)'))), retry
+2025-06-19 19:33:24,210 - ERROR - Timeout, pattern: 09863?????, retry
+2025-06-19 19:33:43,512 - ERROR - Timeout, pattern: 09868?????, retry
+2025-06-19 19:33:49,337 - ERROR - Timeout, pattern: 09868?????, retry
+2025-06-19 19:33:57,686 - ERROR - Timeout, pattern: 09869?????, retry
+2025-06-19 19:35:04,377 - ERROR - Timeout, pattern: 098797????, retry
+2025-06-19 19:35:09,465 - ERROR - Timeout, pattern: 098797????, retry
+2025-06-19 19:35:48,160 - ERROR - Timeout, pattern: 09885?????, retry
+2025-06-19 19:36:42,101 - ERROR - Timeout, pattern: 099???????, retry
