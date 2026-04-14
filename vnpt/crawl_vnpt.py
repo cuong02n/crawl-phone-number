@@ -13,8 +13,8 @@ logging.basicConfig(
     level=logging.ERROR  # Chỉ ghi các log mức ERROR trở lên
 )
 
-# File để lưu kết quả
-OUTPUT_PREFIX = "E:\sim_data/vnpt/result_"
+# File để lưu kết quả (Gộp chung tất cả VNPT)
+OUTPUT_FILE = "vnpt_all.csv"
 prefixs = ['82', '85', '88', '91', '94']
 
 
@@ -61,11 +61,11 @@ def query_server(pattern, prefix):
     return query_server(pattern, prefix)
 
 
-def save_to_file(numbers, prefix):
+def save_to_file(numbers):
     if len(numbers) == 0:
         return
     try:
-        with open(OUTPUT_PREFIX + prefix + '.csv', "a") as f:
+        with open(OUTPUT_FILE, "a") as f:
             for number in numbers:
                 f.write(number + "\n")
     except Exception as e:
@@ -88,7 +88,7 @@ def crawl_pattern(pattern, prefix):
         numbers = [item["so_tb"][2:] for item in data]
 
         numbers.sort()
-        save_to_file(numbers, prefix)
+        save_to_file(numbers)
         return
 
     for i in range(10):

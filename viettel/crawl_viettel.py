@@ -13,19 +13,18 @@ parser.add_argument('--pattern', type=str, default="09????????", help='Pattern t
 args = parser.parse_args()
 
 PATTERN_INPUT = args.pattern
-PREFIX = PATTERN_INPUT[:2] if len(PATTERN_INPUT) >= 2 else "unknown"
 
 # --- Setup Logging ---
-log_file = f'error_{PREFIX}.log'
+log_file = 'error_viettel.log'
 logging.basicConfig(
     filename=log_file,
     filemode='a',
     format='%(asctime)s - %(levelname)s - %(message)s',
-    level=logging.ERROR
+    level=logging.INFO # Chuyển sang INFO để thấy tiến trình
 )
 
-# File để lưu kết quả
-OUTPUT_FILE = f"result_{PREFIX}_tratruoc.csv"
+# File để lưu kết quả (Gộp chung tất cả Viettel)
+OUTPUT_FILE = "viettel_all.csv"
 CONFIG_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'config.json')
 
 current_pattern = "?" * len(PATTERN_INPUT)
@@ -52,9 +51,31 @@ def query_server(pattern):
     password = config.get("password", "z")
     proxy_dns = config.get("proxy_dns", "")
 
+    url = "https://vietteltelecom.vn/api/get/sim"
+    
+    headers = {
+        'accept': 'application/json, text/plain, */*',
+        'accept-language': 'en-US,en;q=0.9',
+        'content-type': 'application/json;charset=UTF-8',
+        'origin': 'https://vietteltelecom.vn',
+        'referer': 'https://vietteltelecom.vn/di-dong/sim-so',
+        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'x-xsrf-token': 'eyJpdiI6InpQU0dUQ09XMkZhSm5lZndYWUpsTGc9PSIsInZhbHVlIjoiNGdDUkx2b0xmbzE1d0VDK2FsQ00rakR4MHpVenVTU0lrcTdSU3ZGRTQ2UE40NSs1QzRRcjFqV1FJVkhoazU3WSIsIm1hYyI6IjQ3MzljNmQyMGE4ZmRjNzc0ODdlZDY1Y2U1MWY4NjliMjg4OWY2NTQ0NjQ1ZDIzMjhiM2M0MmZkMWFkYWU3NzIifQ==',
+        'Cookie': 'D1N=165828b83086199e87cba40c4d8cf5ad; XSRF-TOKEN=eyJpdiI6Ind0MjQyXC93aHBBZjdMVThQWTl1alF3PT0iLCJ2YWx1ZSI6IlRXTDRiQ1oyZll6MzhiTkZlTUszOVk1N2VyWGcyR2V6ME5LdTlmampoSGlqRnZ4c0NzYkc0RUptclBiVU1GXC80IiwibWFjIjoiYmZkODY4MzIxYTEzNDU5NDk2MjljMjYwMGEzMjc5Nzk1MTMxNDBjZmU3MWIyMTc2YjNjOGY2NzVjZTdiN2FhYiJ9; laravel_session=ZtsloajYhPT0YAtHPV5DOn38jrVeiG9QTsQBDFEx'
+    }
+    
+    payload = {
+        "key_search": pattern,
+        "page": 1,
+        "page_size": 50,
+        "total_record": 1,
+        "isdn_type": 2,
+        "captcha": "",
+        "sid": "",
+        "page_type": ""
+    }
+
     try:
-        request_url = f"https://apigami.viettel.vn/mvt-api/myviettel.php/omiSearchSimV2?isdn_type=2&page_type=&page=1&page_size=50&key_search={pattern}&total_record=1&captcha=&sid="
-        
         proxies = None
         if proxy_dns:
             proxies = {
@@ -62,9 +83,9 @@ def query_server(pattern):
                 "http": f"http://{username}:{password}@{proxy_dns}"
             }
             
-        response = requests.post(request_url, proxies=proxies, timeout=5)
+        response = requests.post(url, headers=headers, json=payload, proxies=proxies, timeout=5)
         if response.status_code != 200:
-            logging.error(f"Lỗi HTTP {response.status_code} cho pattern {pattern}")
+            logging.error(f"Lỗi HTTP {response.status_code} cho pattern {pattern}. Body: {response.text[:200]}")
             return None
             
         return response.json()
@@ -83,7 +104,7 @@ def save_to_file(numbers):
         logging.error(f"Lỗi khi lưu file: {e}")
 
 def crawl_pattern(pattern):
-    print(f"Bắt đầu quét Pattern: {pattern}")
+    logging.info(f"Bắt đầu quét Pattern: {pattern}")
     if not is_valid_input(pattern):
         if is_valid_input(pattern.replace('?', '9')):
             for i in range(10):
@@ -98,8 +119,15 @@ def crawl_pattern(pattern):
         return
 
     data = response.get("data", [])
-    numbers = [item["isdn"] for item in data]
-    print(f"Tìm thấy {len(numbers)} số với pattern {pattern}")
+    numbers = []
+    for item in data:
+        isdn = str(item.get("isdn", ""))
+        if len(isdn) == 9:
+            isdn = "0" + isdn
+        if isdn:
+            numbers.append(isdn)
+            
+    logging.info(f"Tìm thấy {len(numbers)} số với pattern {pattern}")
 
     if 30 > len(numbers):
         numbers.sort()
@@ -110,5 +138,5 @@ def crawl_pattern(pattern):
         crawl_pattern(pattern.replace('?', str(i), 1))
 
 if __name__ == '__main__':
-    print(f"🚀 Unified Crawler started for: {PATTERN_INPUT}")
+    logging.info(f"🚀 Unified Crawler started for: {PATTERN_INPUT}")
     crawl_pattern(PATTERN_INPUT)

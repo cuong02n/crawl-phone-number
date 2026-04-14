@@ -79,7 +79,7 @@ def save_config(config_data):
     with open(CONFIG_PATH, 'w') as f:
         json.dump(config_data, f, indent=2)
 
-col_side, col_main = st.columns([1, 2.5])
+col_side, col_main = st.columns([1, 4])
 
 with col_side:
     st.header("⚙️ Configuration")
@@ -108,72 +108,86 @@ with col_side:
             subprocess.Popen([sys.executable, path, "--pattern", pattern], cwd=os.path.dirname(path))
             st.toast(f"✅ Đã khởi chạy cào Viettel pattern: {pattern}")
 
-    if st.button("Start Viettel Crawler", use_container_width=True): 
+    if st.button("Start Viettel Crawler", width="stretch"): 
         start_crawler("viettel", pattern=viettel_pattern)
-    if st.button("Start VNPT Crawler", use_container_width=True): 
+    if st.button("Start VNPT Crawler", width="stretch"): 
         start_crawler("vnpt")
 
 with col_main:
-    st.header("🔍 Data Explorer & Filters")
+    # 📊 PHẦN 1: DATA EXPLORER & FILTERS (THU GỌN)
+    with st.expander("📊 Data Explorer & Filters", expanded=True):
+        csv_files = glob.glob("**/*.csv", recursive=True)
+        if not csv_files:
+            st.warning("Chưa tìm thấy file dữ liệu CSV nào.")
+        else:
+            file_col, filter_col = st.columns([1, 1])
+            with file_col:
+                selected_file = st.selectbox("📁 Chọn file dữ liệu:", csv_files)
+            with filter_col:
+                selected_presets = st.multiselect("🎯 Chọn bộ lọc (Presets):", list(PRESETS.keys()))
+
+            if selected_file:
+                try:
+                    df_preview = pd.read_csv(selected_file, nrows=5000, header=None if "result" in selected_file else 'infer')
+                    if df_preview.shape[1] == 1: df_preview.columns = ["number"]
+                    if selected_presets:
+                        for preset in selected_presets:
+                            df_preview = df_preview[df_preview["number"].astype(str).apply(PRESETS[preset])]
+                    
+                    row_count = sum(1 for line in open(selected_file, 'rb'))
+                    st.write(f"📊 Hiển thị **{len(df_preview)}** kết quả | 📈 Tổng: **{row_count:,}**")
+                    st.dataframe(df_preview, width="stretch", height=200, column_config={"number": st.column_config.TextColumn("Số điện thoại", width="medium")})
+                    
+                    if st.button("🪄 Xuất toàn bộ file", type="secondary"):
+                        with st.spinner("Đang xử lý..."):
+                            output_path = selected_file.replace(".csv", "_filtered_ui.csv")
+                            first_chunk = True
+                            count_filtered = 0
+                            for chunk in pd.read_csv(selected_file, chunksize=50000, header=None if "result" in selected_file else 'infer'):
+                                if chunk.shape[1] == 1: chunk.columns = ["number"]
+                                for preset in selected_presets:
+                                    chunk = chunk[chunk["number"].astype(str).apply(PRESETS[preset])]
+                                if not chunk.empty:
+                                    chunk.to_csv(output_path, mode='a', index=False, header=first_chunk)
+                                    first_chunk = False
+                                    count_filtered += len(chunk)
+                            st.success(f"✅ Đã lưu: `{output_path}` ({count_filtered} số).")
+                except Exception as e:
+                    st.error(f"Lỗi: {e}")
+
+    # 📜 PHẦN 2: CRAWLER LOGS (REAL-TIME)
+    st.markdown("---")
+    st.header("📜 Crawler Logs (Real-time)")
     
-    csv_files = glob.glob("**/*.csv", recursive=True)
-    if not csv_files:
-        st.warning("Chưa tìm thấy file dữ liệu CSV nào.")
-    else:
-        file_col, filter_col = st.columns([1, 1])
-        with file_col:
-            selected_file = st.selectbox("📁 Chọn file dữ liệu:", csv_files)
-        with filter_col:
-            selected_presets = st.multiselect("🎯 Chọn bộ lọc (Presets):", list(PRESETS.keys()))
-
-        if selected_file:
+    log_auto_refresh = st.toggle("Tự động làm mới (3 giây)", value=True)
+    
+    col_log1, col_log2 = st.columns(2)
+    
+    log_files = ["viettel/error_viettel.log", "vnpt/error.log"]
+    
+    def get_log_content(file_path):
+        if os.path.exists(file_path):
             try:
-                # Preview data
-                df_preview = pd.read_csv(selected_file, nrows=5000, header=None if "result" in selected_file else 'infer')
-                if df_preview.shape[1] == 1: df_preview.columns = ["number"]
-                
-                # Áp dụng bộ lọc live
-                if selected_presets:
-                    for preset in selected_presets:
-                        df_preview = df_preview[df_preview["number"].astype(str).apply(PRESETS[preset])]
-                
-                row_count = sum(1 for line in open(selected_file, 'rb'))
-                st.write(f"📊 Hiển thị **{len(df_preview)}** kết quả phù hợp (từ 5000 dòng đầu mẫu) | 📈 Tổng file: **{row_count:,}**")
-                
-                st.dataframe(
-                    df_preview, 
-                    use_container_width=True, 
-                    height=400,
-                    column_config={
-                        "number": st.column_config.TextColumn(
-                            "Số điện thoại",
-                            help="Danh sách số điện thoại tìm được",
-                            width="medium",
-                        )
-                    }
-                )
-                
-                # Nút xuất file lọc
-                if st.button("🪄 Xuất toàn bộ file theo bộ lọc này", type="secondary"):
-                    with st.spinner("Đang xử lý toàn bộ file..."):
-                        output_path = selected_file.replace(".csv", "_filtered_ui.csv")
-                        # Xử lý theo chunk để ko treo RAM
-                        first_chunk = True
-                        count_filtered = 0
-                        for chunk in pd.read_csv(selected_file, chunksize=50000, header=None if "result" in selected_file else 'infer'):
-                            if chunk.shape[1] == 1: chunk.columns = ["number"]
-                            for preset in selected_presets:
-                                chunk = chunk[chunk["number"].astype(str).apply(PRESETS[preset])]
-                            
-                            if not chunk.empty:
-                                chunk.to_csv(output_path, mode='a', index=False, header=first_chunk)
-                                first_chunk = False
-                                count_filtered += len(chunk)
-                        
-                        st.success(f"✅ Đã lọc xong! Lưu tại: `{output_path}`. Tìm thấy {count_filtered} số phù hợp.")
+                with open(file_path, "r", encoding="utf-8") as f:
+                    lines = f.readlines()
+                    return "".join(lines[-100:])
+            except:
+                return "Đang đọc log..."
+        return "Chưa có dữ liệu log..."
 
-            except Exception as e:
-                st.error(f"Lỗi: {e}")
+    col_log1.subheader("Viettel Logs")
+    col_log1.code(get_log_content(log_files[0]), language="txt")
+    
+    col_log2.subheader("VNPT Logs")
+    col_log2.code(get_log_content(log_files[1]), language="txt")
+
+    if log_auto_refresh:
+        import time
+        time.sleep(3)
+        st.rerun()
+    else:
+        if st.button("🔄 Làm mới Log"):
+            st.rerun()
 
 st.markdown("---")
-st.info("💡 Bạn có thể chọn nhiều bộ lọc cùng lúc để tìm các số siêu VIP (ví dụ vừa Tứ quý vừa là số Chẵn).")
+st.info("💡 Mẹo: Phần Data Explorer đã được thu gọn phía trên để bạn tập trung nhìn Logs của các Job đang chạy.")
