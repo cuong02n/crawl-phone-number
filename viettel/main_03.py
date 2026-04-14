@@ -1,4 +1,6 @@
 import time
+import json
+import os
 
 import requests
 import urllib3
@@ -34,9 +36,15 @@ def is_valid_input(s):
 def query_server(pattern):
     try:
         request_url = f"https://apigami.viettel.vn/mvt-api/myviettel.php/omiSearchSimV2?isdn_type=2&page_type=&page=1&page_size=50&key_search={pattern}&total_record=1&captcha=&sid="
-        username = "z"
-        password = "z"
-        proxy_dns = "43.153.237.55:2334"
+        
+        config_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'config.json')
+        with open(config_path, 'r') as f:
+            config = json.load(f)
+            
+        username = config.get("username", "")
+        password = config.get("password", "")
+        proxy_dns = config.get("proxy_dns", "")
+        
         proxy = {
             "https": "http://{}:{}@{}".format(username, password, proxy_dns),
             "http": "http://{}:{}@{}".format(username, password, proxy_dns)

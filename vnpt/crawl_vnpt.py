@@ -1,4 +1,6 @@
 import threading
+import json
+import os
 
 import requests
 import urllib3
@@ -19,9 +21,14 @@ prefixs = ['82', '85', '88', '91', '94']
 def query_server(pattern, prefix):
     try:
         request_url = f"https://digishop.vnpt.vn/apiprod/sim/num_search3?prefix=84{prefix}&search={pattern}*"
-        username = "z"
-        password = "z"
-        proxy_dns = "43.153.237.55:2334"
+        
+        config_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'config.json')
+        with open(config_path, 'r') as f:
+            config = json.load(f)
+            
+        username = config.get("username", "")
+        password = config.get("password", "")
+        proxy_dns = config.get("proxy_dns", "")
 
         proxy = {
             "https": "http://{}:{}@{}".format(username, password, proxy_dns),
