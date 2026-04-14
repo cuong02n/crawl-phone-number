@@ -104,7 +104,8 @@ def save_to_file(numbers):
         logging.error(f"Lỗi khi lưu file: {e}")
 
 def crawl_pattern(pattern):
-    logging.info(f"Bắt đầu quét Pattern: {pattern}")
+    logging.info(f"📍 TRẠNG THÁI: Đang quét nhánh '{pattern}'...")
+    
     if not is_valid_input(pattern):
         if is_valid_input(pattern.replace('?', '9')):
             for i in range(10):
@@ -114,7 +115,10 @@ def crawl_pattern(pattern):
 
     response = query_server(pattern)
     if not response or response.get("errorCode") != 0:
-        logging.error(f"Lỗi pattern {pattern}: {response}")
+        err_msg = json.dumps(response, ensure_ascii=False) if response else "No Response"
+        logging.error(f"❌ LỖI API pattern {pattern}: {err_msg}")
+        # Đợi một chút rồi thử lại để tránh bị chặn hoàn toàn
+        time.sleep(2)
         crawl_pattern(pattern)
         return
 
@@ -127,7 +131,7 @@ def crawl_pattern(pattern):
         if isdn:
             numbers.append(isdn)
             
-    logging.info(f"Tìm thấy {len(numbers)} số với pattern {pattern}")
+    logging.info(f"✅ KẾT QUẢ: Tìm thấy {len(numbers)} số với pattern {pattern}")
 
     if 30 > len(numbers):
         numbers.sort()
@@ -138,5 +142,5 @@ def crawl_pattern(pattern):
         crawl_pattern(pattern.replace('?', str(i), 1))
 
 if __name__ == '__main__':
-    logging.info(f"🚀 Unified Crawler started for: {PATTERN_INPUT}")
+    logging.info(f"🚀 === BẮT ĐẦU CÀO VIETTEL: {PATTERN_INPUT} ===")
     crawl_pattern(PATTERN_INPUT)

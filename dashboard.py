@@ -97,21 +97,88 @@ with col_side:
     
     viettel_pattern = st.text_input("Pattern Viettel (VD: 09????????)", value="09????????")
     
+    JOBS_FILE = os.path.join(os.path.dirname(__file__), "jobs.json")
+    
+    def load_jobs():
+        if os.path.exists(JOBS_FILE):
+            with open(JOBS_FILE, 'r') as f:
+                return json.load(f)
+        return {"viettel": None, "vnpt": None}
+
+    def save_jobs(jobs):
+        with open(JOBS_FILE, 'w') as f:
+            json.dump(jobs, f)
+
+    def is_job_running(network):
+        jobs = load_jobs()
+        pid = jobs.get(network)
+        if pid:
+            try:
+                import psutil
+                process = psutil.Process(pid)
+                return process.is_running() and process.status() != psutil.STATUS_ZOMBIE
+            except:
+                return False
+        return False
+
+    def stop_crawler(network):
+        jobs = load_jobs()
+        pid = jobs.get(network)
+        if pid:
+            try:
+                import psutil
+                process = psutil.Process(pid)
+                for child in process.children(recursive=True):
+                    child.kill()
+                process.kill()
+                st.toast(f"🛑 Đã dừng cào {network.upper()}")
+            except:
+                st.toast(f"⚠️ Không tìm thấy tiến trình {network}")
+        jobs[network] = None
+        save_jobs(jobs)
+
     def start_crawler(network, pattern=None):
+        if is_job_running(network):
+            st.error(f"Tiến trình {network} đang chạy rồi!")
+            return
+            
         base_dir = os.path.dirname(__file__)
         if network == "vnpt":
             path = os.path.join(base_dir, "vnpt", "crawl_vnpt.py")
-            subprocess.Popen([sys.executable, path], cwd=os.path.dirname(path))
+            proc = subprocess.Popen([sys.executable, path], cwd=os.path.dirname(path))
             st.toast("✅ Đã khởi chạy cào VNPT")
         elif network == "viettel":
             path = os.path.join(base_dir, "viettel", "crawl_viettel.py")
-            subprocess.Popen([sys.executable, path, "--pattern", pattern], cwd=os.path.dirname(path))
+            proc = subprocess.Popen([sys.executable, path, "--pattern", pattern], cwd=os.path.dirname(path))
             st.toast(f"✅ Đã khởi chạy cào Viettel pattern: {pattern}")
+        
+        jobs = load_jobs()
+        jobs[network] = proc.pid
+        save_jobs(jobs)
 
-    if st.button("Start Viettel Crawler", width="stretch"): 
-        start_crawler("viettel", pattern=viettel_pattern)
-    if st.button("Start VNPT Crawler", width="stretch"): 
-        start_crawler("vnpt")
+    # --- UI Cho Viettel ---
+    st.subheader("Viettel")
+    if is_job_running("viettel"):
+        st.success("🟢 Đang chạy...")
+        if st.button("Stop Viettel", type="primary", width="stretch"):
+            stop_crawler("viettel")
+            st.rerun()
+    else:
+        if st.button("Start Viettel", width="stretch"):
+            start_crawler("viettel", pattern=viettel_pattern)
+            st.rerun()
+
+    # --- UI Cho VNPT ---
+    st.subheader("VNPT")
+    if is_job_running("vnpt"):
+        st.success("🟢 Đang chạy...")
+        if st.button("Stop VNPT", type="primary", width="stretch"):
+            stop_crawler("vnpt")
+            st.rerun()
+    else:
+        if st.button("Start VNPT", width="stretch"):
+            start_crawler("vnpt")
+            st.rerun()
 
 with col_main:
     # 📊 PHẦN 1: DATA EXPLORER & FILTERS (THU GỌN)
@@ -166,14 +233,25 @@ with col_main:
     log_files = ["viettel/error_viettel.log", "vnpt/error.log"]
     
     def get_log_content(file_path):
-        if os.path.exists(file_path):
+        if not os.path.exists(file_path):
+             return "Chưa có dữ liệu log..."
+        try:
+            # Sử dụng cách đọc file chia sẻ (shared access) để tránh bị chặn trên Windows
+            with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
+                lines = f.readlines()
+                return "".join(lines[-100:])
+        except PermissionError:
+            # Nếu file bị lock bởi tiến trình khác, thử lại bằng cách đọc binary
             try:
-                with open(file_path, "r", encoding="utf-8") as f:
-                    lines = f.readlines()
-                    return "".join(lines[-100:])
+                with open(file_path, "rb") as f:
+                    f.seek(0, os.SEEK_END)
+                    size = f.tell()
+                    f.seek(max(0, size - 10000)) # Đọc khoảng 10KB cuối
+                    return f.read().decode("utf-8", errors="ignore")
             except:
-                return "Đang đọc log..."
-        return "Chưa có dữ liệu log..."
+                return "Phần mềm đang ghi log, vui lòng đợi..."
+        except Exception as e:
+            return f"Lỗi đọc log: {str(e)}"
 
     col_log1.subheader("Viettel Logs")
     col_log1.code(get_log_content(log_files[0]), language="txt")
