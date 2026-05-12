@@ -1,0 +1,19 @@
+# Runtime data
+jobs.db
+data/
+logs/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# IDE
+.idea/
+.vscode/
+
+# Node
+ui/node_modules/
+ui/dist/
