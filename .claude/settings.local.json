@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir -p \"E:\\\\CODE\\\\python\\\\crawl-phone-number\\\\archive\\\\v1\")",
+      "Bash(mv \"E:\\\\CODE\\\\python\\\\crawl-phone-number\\\\viettel\" \"E:\\\\CODE\\\\python\\\\crawl-phone-number\\\\archive\\\\v1\\\\viettel\")",
+      "Bash(mv \"E:\\\\CODE\\\\python\\\\crawl-phone-number\\\\vnpt\" \"E:\\\\CODE\\\\python\\\\crawl-phone-number\\\\archive\\\\v1\\\\vnpt\")"
+    ]
+  }
+}
