@@ -15,7 +15,7 @@ python app.py
 # or
 uvicorn app:app --host 0.0.0.0 --port 8000 --reload
 ```
-API available at `http://localhost:8000`
+API available at `http://localhost:9000`
 
 ### Run frontend (React dev server)
 ```bash
@@ -23,13 +23,13 @@ cd ui
 npm install
 npm run dev
 ```
-UI available at `http://localhost:5173` (proxies API to port 8000)
+UI available at `http://localhost:8999` (proxies API to port 9000)
 
 ### Build frontend for production
 ```bash
 cd ui
 npm run build
-# Built files go to ui/dist/ — served automatically by FastAPI at http://localhost:8000
+# Built files go to ui/dist/ — served automatically by FastAPI at http://localhost:9000
 ```
 
 ### Run Streamlit dashboard (alternative UI)
