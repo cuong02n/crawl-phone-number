@@ -64,7 +64,7 @@ export default function Settings() {
         </form>
 
         <p className="muted" style={{ marginTop: 16, fontSize: 12, lineHeight: 1.6 }}>
-          Bỏ trống <strong>Proxy DNS</strong> nếu không dùng proxy.<br />
+          <strong>Proxy DNS là bắt buộc</strong> — crawler sẽ không chạy nếu chưa cấu hình.<br />
           Cấu hình được đọc mỗi lần gửi request — không cần restart crawler.
         </p>
       </div>

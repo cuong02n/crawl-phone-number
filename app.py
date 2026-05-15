@@ -61,6 +61,8 @@ def _pause(job_id: str):
 class CreateJobRequest(BaseModel):
     network: str
     pattern: str = "09????????"
+    x_csrf_token: str = ""
+    cookie: str = ""
 
 
 class ProxyConfig(BaseModel):
@@ -123,8 +125,16 @@ def list_jobs():
 def create_job(body: CreateJobRequest):
     if body.network not in ("viettel", "vnpt"):
         raise HTTPException(400, "network must be 'viettel' or 'vnpt'")
+    cfg = load_config()
+    if not cfg.get("proxy_dns", "").strip():
+        raise HTTPException(400, "Chưa cấu hình proxy. Vào Settings để nhập proxy trước khi chạy.")
+    if body.network == "viettel" and not body.x_csrf_token.strip():
+        raise HTTPException(400, "Viettel yêu cầu x-csrf-token.")
+    if body.network == "viettel" and not body.cookie.strip():
+        raise HTTPException(400, "Viettel yêu cầu cookie.")
     seed = body.pattern if body.network == "viettel" else "all"
-    job_id = store.create_job(body.network, seed)
+    meta = {"x_csrf_token": body.x_csrf_token, "cookie": body.cookie} if body.network == "viettel" else {}
+    job_id = store.create_job(body.network, seed, meta)
     _start(job_id, body.network)
     return {"job_id": job_id}
 

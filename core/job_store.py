@@ -1,3 +1,4 @@
+import json
 import os
 import sqlite3
 import uuid
@@ -27,6 +28,12 @@ class JobStore:
         self._init_schema()
 
     def _init_schema(self):
+        # migrate: add meta column if missing
+        cols = [r[1] for r in self.conn.execute("PRAGMA table_info(jobs)").fetchall()]
+        if "meta" not in cols:
+            self.conn.execute("ALTER TABLE jobs ADD COLUMN meta TEXT DEFAULT '{}'")
+            self.conn.commit()
+
         self.conn.executescript("""
             CREATE TABLE IF NOT EXISTS jobs (
                 id          TEXT PRIMARY KEY,
@@ -37,7 +44,8 @@ class JobStore:
                 output_file TEXT,
                 log_file    TEXT,
                 created_at  TEXT,
-                updated_at  TEXT
+                updated_at  TEXT,
+                meta        TEXT DEFAULT '{}'
             );
 
             CREATE TABLE IF NOT EXISTS queue (
@@ -54,16 +62,16 @@ class JobStore:
 
     # ── Job lifecycle ──────────────────────────────────────────────────────────
 
-    def create_job(self, network: str, pattern: str) -> str:
+    def create_job(self, network: str, pattern: str, meta: dict | None = None) -> str:
         job_id = str(uuid.uuid4())[:8]
         now = datetime.now().isoformat()
         output_file = os.path.join(DATA_DIR, f"{network}_{job_id}.csv")
         log_file = os.path.join(LOG_DIR, f"{job_id}.log")
 
         self.conn.execute(
-            "INSERT INTO jobs VALUES (?,?,?,?,0,?,?,?,?)",
+            "INSERT INTO jobs VALUES (?,?,?,?,0,?,?,?,?,?)",
             (job_id, network, pattern, JobStatus.PENDING,
-             output_file, log_file, now, now),
+             output_file, log_file, now, now, json.dumps(meta or {})),
         )
         # Seed the first pattern into the queue
         self.conn.execute(
@@ -164,12 +172,26 @@ class JobStore:
         pending = row["pending"] or 0
         failed  = row["failed"]  or 0
         total   = done + pending + failed
+
+        cur = self.conn.execute(
+            "SELECT pattern FROM queue WHERE job_id=? AND status='processing' LIMIT 1",
+            (job_id,),
+        ).fetchone()
+
         return {
-            "done":    done,
-            "pending": pending,
-            "failed":  failed,
-            "percent": round(done / total * 100, 1) if total > 0 else 0,
+            "done":            done,
+            "pending":         pending,
+            "failed":          failed,
+            "total":           total,
+            "percent":         round(done / total * 100, 1) if total > 0 else 0,
+            "current_pattern": cur["pattern"] if cur else None,
         }
+
+    def get_meta(self, job_id: str) -> dict:
+        row = self.conn.execute(
+            "SELECT meta FROM jobs WHERE id=?", (job_id,)
+        ).fetchone()
+        return json.loads(row["meta"] or "{}") if row else {}
 
     def get_output_file(self, job_id: str) -> str:
         row = self.conn.execute(

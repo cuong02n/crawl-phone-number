@@ -95,6 +95,18 @@ function JobCard({ job, onRefresh }) {
       {/* Progress */}
       <ProgressBar {...progress} />
 
+      {/* Realtime stats */}
+      {status === 'running' && (
+        <div className="job-realtime">
+          <span className="realtime-pattern">
+            ⚙ {progress.current_pattern ?? '…'}
+          </span>
+          <span className="realtime-counts">
+            {progress.done.toLocaleString()} / {progress.total.toLocaleString()} patterns
+          </span>
+        </div>
+      )}
+
       {/* Actions */}
       <div className="job-actions">
         {status === 'running' && (
@@ -147,27 +159,67 @@ function JobCard({ job, onRefresh }) {
 // ── Page ───────────────────────────────────────────────────────────────────────
 
 export default function Jobs() {
-  const [jobs, setJobs]       = useState([])
-  const [network, setNetwork] = useState('viettel')
-  const [pattern, setPattern] = useState('09????????')
-  const [busy, setBusy]       = useState(false)
+  const [jobs, setJobs]         = useState([])
+  const [network, setNetwork]   = useState('viettel')
+  const [pattern, setPattern]   = useState('09????????')
+  const [csrfToken, setCsrf]    = useState('')
+  const [d1n, setD1n]           = useState('')
+  const [laravelSession, setLaravel] = useState('')
+  const [inputMode, setInputMode] = useState('fields') // 'fields' | 'cookie' | 'curl'
+  const [busy, setBusy]         = useState(false)
+
+  const extractCookieFields = (cookieStr) => {
+    const get = (key) => {
+      const m = cookieStr.match(new RegExp(`${key}=([^;]+)`))
+      return m ? m[1].trim() : ''
+    }
+    const d = get('D1N')
+    const l = get('laravel_session')
+    if (d) setD1n(d)
+    if (l) setLaravel(l)
+  }
+
+  const parseCurl = (raw) => {
+    // normalize Windows CMD escaping (^ before quotes, %3D, etc.)
+    const s = raw.replace(/\^"/g, '"').replace(/\^/g, '').replace(/%3D/g, '=')
+
+    const csrfMatch = s.match(/-H\s+"x-csrf-token:\s*([^"]+)"/i)
+    if (csrfMatch) setCsrf(csrfMatch[1].trim())
+
+    const cookieMatch = s.match(/-b\s+"([^"]+)"/) || s.match(/-H\s+"cookie:\s*([^"]+)"/i)
+    if (cookieMatch) extractCookieFields(cookieMatch[1])
+  }
+  const [hasProxy, setHasProxy] = useState(true)
+  const [error, setError]       = useState('')
 
   const refresh = useCallback(async () => {
     try { setJobs(await api.listJobs()) } catch { /* ignore */ }
   }, [])
 
+  const checkProxy = useCallback(async () => {
+    try {
+      const cfg = await api.getConfig()
+      setHasProxy(!!cfg.proxy_dns?.trim())
+    } catch { /* ignore */ }
+  }, [])
+
   useEffect(() => {
+    checkProxy()
     refresh()
-    const t = setInterval(refresh, 2000)
+    const t = setInterval(() => { refresh(); checkProxy() }, 2000)
     return () => clearInterval(t)
-  }, [refresh])
+  }, [refresh, checkProxy])
 
   const create = async (e) => {
     e.preventDefault()
+    setError('')
     setBusy(true)
     try {
-      await api.createJob({ network, pattern })
+      const cookie = `D1N=${d1n}; laravel_session=${laravelSession}`
+      await api.createJob({ network, pattern, x_csrf_token: csrfToken, cookie })
       await refresh()
+    } catch (err) {
+      setError(err.message || 'Lỗi không xác định')
     } finally { setBusy(false) }
   }
 
@@ -184,36 +236,148 @@ export default function Jobs() {
         <span className="badge badge-blue">{complete} done</span>
       </div>
 
+      {/* Proxy warning */}
+      {!hasProxy && (
+        <div className="alert alert-warning">
+          ⚠ Chưa cấu hình proxy — crawler sẽ không chạy được.{' '}
+          <a href="/settings" style={{ color: 'inherit', fontWeight: 600 }}>Vào Settings để cấu hình.</a>
+        </div>
+      )}
+
       {/* Create form */}
       <div className="card create-card">
         <div className="card-title">➕ Tạo Job mới</div>
-        <form className="form-row" onSubmit={create}>
-          <select className="form-select" value={network}
-            onChange={e => setNetwork(e.target.value)}>
-            <option value="viettel">Viettel</option>
-            <option value="vnpt">VNPT</option>
-          </select>
+        {error && <div className="alert alert-error" style={{ marginBottom: 10 }}>{error}</div>}
+        <form onSubmit={create}>
+          <div className="form-row" style={{ marginBottom: 10 }}>
+            <select className="form-select" value={network}
+              onChange={e => setNetwork(e.target.value)}>
+              <option value="viettel">Viettel</option>
+              <option value="vnpt">VNPT</option>
+            </select>
+
+            {network === 'viettel' && (
+              <>
+                <input
+                  className="form-input"
+                  value={pattern}
+                  onChange={e => setPattern(e.target.value)}
+                  placeholder="09????????"
+                  style={{ fontFamily: 'var(--mono)', width: 180 }}
+                />
+                <select
+                  className="form-select"
+                  defaultValue=""
+                  onChange={e => e.target.value && setPattern(e.target.value)}
+                >
+                  <option value="">Gợi ý…</option>
+                  {PATTERN_PRESETS.map(p => (
+                    <option key={p.value} value={p.value}>{p.label} — {p.value}</option>
+                  ))}
+                </select>
+              </>
+            )}
+          </div>
 
           {network === 'viettel' && (
-            <>
-              <input
-                className="form-input"
-                value={pattern}
-                onChange={e => setPattern(e.target.value)}
-                placeholder="09????????"
-                style={{ fontFamily: 'var(--mono)', width: 180 }}
-              />
-              <select
-                className="form-select"
-                defaultValue=""
-                onChange={e => e.target.value && setPattern(e.target.value)}
-              >
-                <option value="">Gợi ý…</option>
-                {PATTERN_PRESETS.map(p => (
-                  <option key={p.value} value={p.value}>{p.label} — {p.value}</option>
+            <div style={{ marginBottom: 10 }}>
+
+              {/* Mode tabs */}
+              <div className="input-mode-tabs">
+                {[['fields', 'Từng field'], ['cookie', 'Paste Cookie'], ['curl', 'Paste cURL']].map(([m, label]) => (
+                  <button key={m} type="button"
+                    className={`mode-tab${inputMode === m ? ' active' : ''}`}
+                    onClick={() => setInputMode(m)}>
+                    {label}
+                  </button>
                 ))}
-              </select>
-            </>
+              </div>
+
+              {/* Fields mode */}
+              {inputMode === 'fields' && (
+                <div>
+                  <div className="form-group" style={{ marginBottom: 8 }}>
+                    <label className="field-label">x-csrf-token</label>
+                    <input className="form-input" value={csrfToken}
+                      onChange={e => setCsrf(e.target.value)}
+                      placeholder="HL2g2Ck0lbHkLFZWzuyhzA2x..."
+                      style={{ width: '100%', fontFamily: 'var(--mono)', fontSize: 11 }} />
+                  </div>
+                  <div className="cookie-box">
+                    <div className="cookie-box-label">Cookie</div>
+                    <div className="form-row">
+                      <div style={{ flex: 1 }}>
+                        <label className="field-label">D1N</label>
+                        <input className="form-input" value={d1n}
+                          onChange={e => setD1n(e.target.value)}
+                          placeholder="de0bcefe22038b32..."
+                          style={{ width: '100%', fontFamily: 'var(--mono)', fontSize: 11 }} />
+                      </div>
+                      <div style={{ flex: 1 }}>
+                        <label className="field-label">laravel_session</label>
+                        <input className="form-input" value={laravelSession}
+                          onChange={e => setLaravel(e.target.value)}
+                          placeholder="vre9ZH5KJk5mIAcb..."
+                          style={{ width: '100%', fontFamily: 'var(--mono)', fontSize: 11 }} />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Paste Cookie mode */}
+              {inputMode === 'cookie' && (
+                <div>
+                  <div className="form-group" style={{ marginBottom: 8 }}>
+                    <label className="field-label">x-csrf-token</label>
+                    <input className="form-input" value={csrfToken}
+                      onChange={e => setCsrf(e.target.value)}
+                      placeholder="HL2g2Ck0lbHkLFZWzuyhzA2x..."
+                      style={{ width: '100%', fontFamily: 'var(--mono)', fontSize: 11 }} />
+                  </div>
+                  <div className="cookie-box">
+                    <div className="cookie-box-label">Cookie</div>
+                    <textarea className="form-input"
+                      placeholder="D1N=...; laravel_session=...; ..."
+                      onChange={e => {
+                        e.target.style.height = 'auto'
+                        e.target.style.height = e.target.scrollHeight + 'px'
+                        extractCookieFields(e.target.value)
+                      }}
+                      style={{ width: '100%', fontFamily: 'var(--mono)', fontSize: 11, resize: 'none', overflow: 'hidden', minHeight: 60 }} />
+                    {(d1n || laravelSession) && (
+                      <div style={{ marginTop: 6, fontSize: 11, color: 'var(--green)' }}>
+                        {d1n && <span>✓ D1N&nbsp;&nbsp;</span>}
+                        {laravelSession && <span>✓ laravel_session</span>}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Paste cURL mode */}
+              {inputMode === 'curl' && (
+                <div>
+                  <label className="field-label">Paste lệnh cURL (copy từ DevTools → Network → Copy as cURL)</label>
+                  <textarea className="form-input"
+                    placeholder={'curl "https://vietteltelecom.vn/api/get/sim" \\\n  -H "x-csrf-token: ..." \\\n  -b "D1N=...; laravel_session=..."'}
+                    onChange={e => {
+                      e.target.style.height = 'auto'
+                      e.target.style.height = e.target.scrollHeight + 'px'
+                      parseCurl(e.target.value)
+                    }}
+                    style={{ width: '100%', fontFamily: 'var(--mono)', fontSize: 11, resize: 'none', overflow: 'hidden', minHeight: 80 }} />
+                  {(csrfToken || d1n || laravelSession) && (
+                    <div style={{ marginTop: 6, fontSize: 11, color: 'var(--green)' }}>
+                      {csrfToken && <span>✓ x-csrf-token&nbsp;&nbsp;</span>}
+                      {d1n && <span>✓ D1N&nbsp;&nbsp;</span>}
+                      {laravelSession && <span>✓ laravel_session</span>}
+                    </div>
+                  )}
+                </div>
+              )}
+
+            </div>
           )}
 
           {network === 'vnpt' && (
@@ -222,7 +386,9 @@ export default function Jobs() {
             </span>
           )}
 
-          <button type="submit" className="btn btn-primary" disabled={busy}>
+          <button type="submit" className="btn btn-primary"
+            disabled={busy || !hasProxy || (network === 'viettel' && (!csrfToken.trim() || !d1n.trim() || !laravelSession.trim()))}>
+
             {busy ? 'Đang tạo…' : '🚀 Start'}
           </button>
         </form>
