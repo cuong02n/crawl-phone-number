@@ -187,6 +187,15 @@ class JobStore:
             "current_pattern": cur["pattern"] if cur else None,
         }
 
+    def queue_count(self, job_id: str) -> int:
+        return self.conn.execute(
+            "SELECT COUNT(*) FROM queue WHERE job_id=?", (job_id,)
+        ).fetchone()[0]
+
+    def clear_queue(self, job_id: str):
+        self.conn.execute("DELETE FROM queue WHERE job_id=?", (job_id,))
+        self.conn.commit()
+
     def get_meta(self, job_id: str) -> dict:
         row = self.conn.execute(
             "SELECT meta FROM jobs WHERE id=?", (job_id,)

@@ -1,7 +1,6 @@
 import requests
 
 from core.base_crawler import BaseCrawler
-from core.config import load_config
 from core.job_store import JobStatus, JobStore
 
 # VNPT crawls 5 prefixes concurrently.
@@ -16,22 +15,20 @@ MAX_SEARCH_DEPTH = 7  # don't expand the search string beyond 7 digits
 class VNPTCrawler(BaseCrawler):
     THRESHOLD = 50
 
+    def __init__(self, job_id: str, store: JobStore):
+        super().__init__(job_id, store)
+        self._session = requests.Session()
+
     def run(self):
         """Override to seed 5 prefix roots instead of the generic pattern."""
         self._stop_event.clear()
         self.store.set_status(self.job_id, JobStatus.RUNNING)
         self.logger.info(f"=== Job {self.job_id} RUNNING (VNPT) ===")
 
-        # On a fresh job the queue has only 1 row (the placeholder "all" seed).
+        # On a fresh job the queue has only 1 row (the placeholder seed).
         # Replace it with 5 prefix roots.
-        total_in_queue = self.store.conn.execute(
-            "SELECT COUNT(*) FROM queue WHERE job_id=?", (self.job_id,)
-        ).fetchone()[0]
-        if total_in_queue <= 1:
-            self.store.conn.execute(
-                "DELETE FROM queue WHERE job_id=?", (self.job_id,)
-            )
-            self.store.conn.commit()
+        if self.store.queue_count(self.job_id) <= 1:
+            self.store.clear_queue(self.job_id)
             self.store.enqueue(self.job_id, [f"{p}:" for p in PREFIXES])
             self.logger.info(f"Seeded {len(PREFIXES)} prefix roots.")
 
@@ -72,7 +69,7 @@ class VNPTCrawler(BaseCrawler):
             )
 
     def _query(self, prefix: str, search: str) -> tuple[list[str], int]:
-        resp = requests.get(
+        resp = self._session.get(
             API_URL,
             params={"prefix": f"84{prefix}", "search": f"{search}*" if search else "*"},
             timeout=10,

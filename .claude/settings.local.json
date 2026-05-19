@@ -3,7 +3,13 @@
     "allow": [
       "Bash(mkdir -p \"E:\\\\CODE\\\\python\\\\crawl-phone-number\\\\archive\\\\v1\")",
       "Bash(mv \"E:\\\\CODE\\\\python\\\\crawl-phone-number\\\\viettel\" \"E:\\\\CODE\\\\python\\\\crawl-phone-number\\\\archive\\\\v1\\\\viettel\")",
-      "Bash(mv \"E:\\\\CODE\\\\python\\\\crawl-phone-number\\\\vnpt\" \"E:\\\\CODE\\\\python\\\\crawl-phone-number\\\\archive\\\\v1\\\\vnpt\")"
+      "Bash(mv \"E:\\\\CODE\\\\python\\\\crawl-phone-number\\\\vnpt\" \"E:\\\\CODE\\\\python\\\\crawl-phone-number\\\\archive\\\\v1\\\\vnpt\")",
+      "Bash(python -c ' *)",
+      "Bash(curl -s http://localhost:9000/api/stats)",
+      "Bash(python -c \"import requests; r = requests.get\\('http://localhost:9000/api/stats', timeout=3\\); print\\(r.status_code, r.text[:200]\\)\")",
+      "Bash(python app.py)",
+      "Bash(python -c \"import requests; r = requests.get\\('http://localhost:9000/api/stats', timeout=5\\); print\\(r.status_code, r.text\\)\")",
+      "Bash(python *)"
     ]
   }
 }
