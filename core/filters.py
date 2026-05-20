@@ -68,6 +68,16 @@ def xyztxyzt(number: str) -> bool:
     return False
 
 
+def is_abxabyabz(number: str) -> bool:
+    s = str(number)
+    if len(s) == 9:
+        s = "0" + s
+    if len(s) != 10:
+        return False
+    ab = s[1:3]
+    return s[4:6] == ab and s[7:9] == ab
+
+
 PRESETS: dict[str, Callable[[str], bool]] = {
     "Tứ quý (xxxx)":       has_tu_quy,
     "Ngũ quý (xxxxx)":     has_ngu_quy,
@@ -78,4 +88,5 @@ PRESETS: dict[str, Callable[[str], bool]] = {
     "Tiến đều (4 số cuối)": is_last4_increasing,
     "Sảnh tiến (>=4 số)":  has_sanh_tien,
     "Toàn số chẵn":        is_all_even,
+    "0abxabyabz":          is_abxabyabz,
 }

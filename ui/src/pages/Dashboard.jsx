@@ -1,5 +1,4 @@
-import { useState, useEffect } from 'react'
-import { api } from '../api'
+import { useWsData } from '../App'
 
 function StatCard({ label, value }) {
   return (
@@ -11,26 +10,8 @@ function StatCard({ label, value }) {
 }
 
 export default function Dashboard() {
-  const [stats, setStats]     = useState({ total_jobs: 0, running_jobs: 0, total_saved: 0, avg_progress: 0 })
-  const [numbers, setNumbers] = useState([])
-
-  const refresh = async () => {
-    try {
-      const [s, f] = await Promise.all([api.getStats(), api.getRecentNumbers(60)])
-      setStats(s)
-      setNumbers(prev => {
-        const next = [...f.numbers].reverse()
-        // Highlight new ones by comparing with previous
-        return next
-      })
-    } catch { /* backend not ready yet */ }
-  }
-
-  useEffect(() => {
-    refresh()
-    const t = setInterval(refresh, 2000)
-    return () => clearInterval(t)
-  }, [])
+  const { stats, feed } = useWsData()
+  const numbers = [...feed].reverse()
 
   return (
     <div>
@@ -44,7 +25,7 @@ export default function Dashboard() {
       </div>
 
       <div className="card">
-        <div className="card-title">🔢 Live Number Feed — cập nhật mỗi 2 giây</div>
+        <div className="card-title">🔢 Live Number Feed</div>
         {numbers.length === 0 ? (
           <p className="muted" style={{ padding: '12px 0' }}>
             Chờ crawler tìm được số... Hãy tạo job ở trang Jobs.

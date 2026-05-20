@@ -9,7 +9,14 @@
       "Bash(python -c \"import requests; r = requests.get\\('http://localhost:9000/api/stats', timeout=3\\); print\\(r.status_code, r.text[:200]\\)\")",
       "Bash(python app.py)",
       "Bash(python -c \"import requests; r = requests.get\\('http://localhost:9000/api/stats', timeout=5\\); print\\(r.status_code, r.text\\)\")",
-      "Bash(python *)"
+      "Bash(python *)",
+      "Bash(npm run *)",
+      "Bash(Get-Process -Name \"node\" -ErrorAction SilentlyContinue)",
+      "Bash(Stop-Process -Force)",
+      "Bash(Write-Host \"Killed\")",
+      "PowerShell(Get-Process *)",
+      "Bash(cd /d E:\\\\CODE\\\\python\\\\crawl-phone-number)",
+      "Bash(pip show *)"
     ]
   }
 }

@@ -1,7 +1,3 @@
-# Runtime data
-jobs.db
-data/
-logs/
 
 # Python
 __pycache__/

@@ -1,3 +1,4 @@
+import queue
 import requests
 
 from core.base_crawler import BaseCrawler
@@ -19,11 +20,15 @@ class VNPTCrawler(BaseCrawler):
         super().__init__(job_id, store)
         self._session = requests.Session()
 
-    def run(self):
-        """Override to seed 5 prefix roots instead of the generic pattern."""
+    def run(self, threads: int = 1):
+        """Override to seed 5 prefix roots then delegate to base worker loop."""
         self._stop_event.clear()
+        self._exit_queue = queue.Queue()
+        with self._threads_lock:
+            self._target_threads = threads
+            self._next_idx = threads + 1
         self.store.set_status(self.job_id, JobStatus.RUNNING)
-        self.logger.info(f"=== Job {self.job_id} RUNNING (VNPT) ===")
+        self.logger.info(f"=== Job {self.job_id} RUNNING (VNPT, {threads} thread(s)) ===")
 
         # On a fresh job the queue has only 1 row (the placeholder seed).
         # Replace it with 5 prefix roots.
@@ -32,23 +37,15 @@ class VNPTCrawler(BaseCrawler):
             self.store.enqueue(self.job_id, [f"{p}:" for p in PREFIXES])
             self.logger.info(f"Seeded {len(PREFIXES)} prefix roots.")
 
-        while not self._stop_event.is_set():
-            encoded = self.store.pop_next(self.job_id)
-            if encoded is None:
-                self.store.set_status(self.job_id, JobStatus.COMPLETED)
-                self.logger.info(f"=== Job {self.job_id} COMPLETED ===")
-                return
-            self._process(encoded)
-
-        self.store.set_status(self.job_id, JobStatus.PAUSED)
-        self.logger.info(f"=== Job {self.job_id} PAUSED ===")
+        self._run_workers(threads)
 
     def _process(self, encoded: str):
+        t = getattr(self._tl, 'num', 1)
         prefix, search = encoded.split(":", 1)
         try:
             numbers, total_items = self._query(prefix, search)
         except Exception as e:
-            self.logger.error(f"fetch failed prefix={prefix} search={search}: {e}")
+            self.logger.error(f"[T{t}] fetch failed prefix={prefix} search={search}: {e}")
             self.store.mark_failed(self.job_id, encoded)
             return
 
@@ -57,16 +54,12 @@ class VNPTCrawler(BaseCrawler):
         if total_items < self.THRESHOLD or at_max_depth:
             self._save(numbers)
             self.store.mark_done(self.job_id, encoded)
-            self.logger.info(
-                f"leaf prefix={prefix} search={search!r} saved={len(numbers)}"
-            )
+            self.logger.info(f"[T{t}] leaf prefix={prefix} search={search!r} saved={len(numbers)}")
         else:
             children = [f"{prefix}:{search}{d}" for d in "0123456789"]
             self.store.enqueue(self.job_id, children)
             self.store.mark_done(self.job_id, encoded)
-            self.logger.info(
-                f"expand prefix={prefix} search={search!r} totalItems={total_items}"
-            )
+            self.logger.info(f"[T{t}] expand prefix={prefix} search={search!r} totalItems={total_items}")
 
     def _query(self, prefix: str, search: str) -> tuple[list[str], int]:
         resp = self._session.get(

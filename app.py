@@ -1,10 +1,13 @@
+import asyncio
 import glob
+import json
 import os
 import sys
 import threading
+from contextlib import asynccontextmanager
 
 import pandas as pd
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
@@ -20,7 +23,25 @@ from crawlers.vnpt import VNPTCrawler
 
 # ── Setup ──────────────────────────────────────────────────────────────────────
 
-app = FastAPI(title="Sim Crawler API")
+_broadcast_task: asyncio.Task | None = None
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    global _broadcast_task
+    print("[WS] startup — creating broadcast task", flush=True)
+    _broadcast_task = asyncio.create_task(_broadcast())
+    print(f"[WS] broadcast task created: {_broadcast_task}", flush=True)
+    yield
+    if _broadcast_task:
+        _broadcast_task.cancel()
+        try:
+            await _broadcast_task
+        except asyncio.CancelledError:
+            pass
+
+
+app = FastAPI(title="Sim Crawler API", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
@@ -38,6 +59,130 @@ for _job in store.list_jobs():
         store.set_status(_job["id"], JobStatus.PAUSED)
 
 
+# ── WebSocket ──────────────────────────────────────────────────────────────────
+
+_ws_clients: set[WebSocket] = set()
+
+
+def _read_log_tail(log_file: str, lines: int = 80) -> str:
+    if not log_file or not os.path.exists(log_file):
+        return ""
+    try:
+        with open(log_file, "rb") as f:
+            f.seek(0, 2)
+            size = f.tell()
+            # Each log line ≈ 120 bytes; read enough from the end to cover `lines`
+            f.seek(max(0, size - lines * 120))
+            raw = f.read().decode("utf-8", errors="ignore")
+        all_lines = raw.splitlines(keepends=True)
+        # If we started mid-line, drop the incomplete first line
+        if size > lines * 120:
+            all_lines = all_lines[1:]
+        return "".join(all_lines[-lines:])
+    except Exception:
+        return ""
+
+
+def _ws_payload() -> dict:
+    jobs = store.list_jobs()
+    running = sum(1 for j in jobs if j["status"] == JobStatus.RUNNING)
+    total_saved = sum(j["total_saved"] for j in jobs)
+    progresses = [store.get_progress(j["id"])["percent"] for j in jobs if j["total_saved"] > 0]
+    avg_progress = round(sum(progresses) / len(progresses), 1) if progresses else 0
+
+    numbers = []
+    for csv_file in sorted(glob.glob(os.path.join(DATA_DIR, "*.csv"))):
+        try:
+            with open(csv_file, "rb") as f:
+                f.seek(0, 2)
+                f.seek(max(0, f.tell() - 60 * 14))
+                lines = [ln.strip() for ln in f.read().decode("utf-8", errors="ignore").split("\n") if ln.strip()]
+                numbers.extend(lines)
+        except Exception:
+            pass
+
+    return {
+        "jobs": [
+            {
+                **job,
+                "threads": json.loads(job.get("meta") or "{}").get("threads", 1),
+                "progress": store.get_progress(job["id"]),
+                "log": _read_log_tail(job.get("log_file", "")),
+            }
+            for job in jobs
+        ],
+        "stats": {"total_jobs": len(jobs), "running_jobs": running,
+                  "total_saved": total_saved, "avg_progress": avg_progress},
+        "feed": list(dict.fromkeys(numbers))[-60:],
+        "has_proxy": bool(load_config().get("proxy_dns", "").strip()),
+    }
+
+
+@app.websocket("/ws")
+async def ws_endpoint(ws: WebSocket):
+    await ws.accept()
+    _ws_clients.add(ws)
+    print(f"[WS] client connected — total: {len(_ws_clients)}", flush=True)
+    # Send a small ping first so the client knows the connection is live
+    try:
+        await ws.send_json({"_ping": True})
+        print(f"[WS] ping sent", flush=True)
+    except Exception as e:
+        print(f"[WS] ping failed: {e}", flush=True)
+    try:
+        payload = await asyncio.to_thread(_ws_payload)
+        await ws.send_json(payload)
+        print(f"[WS] initial payload sent ({len(str(payload))} chars)", flush=True)
+    except Exception as e:
+        print(f"[WS] initial payload error: {e}", flush=True)
+        import traceback; traceback.print_exc()
+    try:
+        while True:
+            await ws.receive_text()
+    except (WebSocketDisconnect, Exception):
+        pass
+    finally:
+        _ws_clients.discard(ws)
+        print(f"[WS] client disconnected — total: {len(_ws_clients)}", flush=True)
+
+
+async def _broadcast():
+    import traceback as _tb
+    try:
+        cycle = 0
+        while True:
+            await asyncio.sleep(1)
+            cycle += 1
+            if not _ws_clients:
+                if cycle % 10 == 0:
+                    print(f"[WS] broadcast cycle {cycle}: no clients", flush=True)
+                continue
+            try:
+                payload = await asyncio.to_thread(_ws_payload)
+            except Exception as e:
+                print(f"[WS] payload build error (cycle {cycle}): {e}", flush=True)
+                _tb.print_exc()
+                continue
+            dead = set()
+            for ws in list(_ws_clients):
+                try:
+                    await ws.send_json(payload)
+                except Exception as e:
+                    print(f"[WS] send error: {e}", flush=True)
+                    dead.add(ws)
+            _ws_clients.difference_update(dead)
+            if cycle % 5 == 0:
+                print(f"[WS] broadcast cycle {cycle}: sent to {len(_ws_clients)} client(s)", flush=True)
+    except asyncio.CancelledError:
+        print("[WS] _broadcast cancelled (shutdown)", flush=True)
+        raise
+    except BaseException as e:
+        print(f"[WS] _broadcast CRASHED: {e}", flush=True)
+        _tb.print_exc()
+        raise
+
+
+
 # ── Helpers ────────────────────────────────────────────────────────────────────
 
 def _make_crawler(job_id: str, network: str):
@@ -47,10 +192,13 @@ def _make_crawler(job_id: str, network: str):
 def _start(job_id: str, network: str):
     crawler = _make_crawler(job_id, network)
     _crawlers[job_id] = crawler
-    threading.Thread(target=crawler.run, daemon=True).start()
+    meta = store.get_meta(job_id)
+    threads = int(meta.get("threads", 1))
+    threading.Thread(target=crawler.run, kwargs={"threads": threads}, daemon=True).start()
 
 
 def _pause(job_id: str):
+    store.set_status(job_id, JobStatus.PAUSED)
     c = _crawlers.get(job_id)
     if c:
         c.pause()
@@ -63,6 +211,15 @@ class CreateJobRequest(BaseModel):
     pattern: str = "09????????"
     x_csrf_token: str = ""
     cookie: str = ""
+    threads: int = 1
+
+
+class ResumeJobRequest(BaseModel):
+    threads: int | None = None
+
+
+class UpdateThreadsRequest(BaseModel):
+    threads: int
 
 
 class ProxyConfig(BaseModel):
@@ -78,6 +235,26 @@ class FilterRequest(BaseModel):
 
 
 # ── Config ─────────────────────────────────────────────────────────────────────
+
+@app.get("/api/ws-debug")
+def ws_debug():
+    status = "none"
+    exc_info = None
+    if _broadcast_task is not None:
+        if not _broadcast_task.done():
+            status = "running"
+        elif _broadcast_task.cancelled():
+            status = "cancelled"
+        else:
+            exc = _broadcast_task.exception()
+            status = "failed" if exc else "completed_unexpectedly"
+            exc_info = repr(exc) if exc else None
+    return {
+        "clients": len(_ws_clients),
+        "broadcast_task": status,
+        "broadcast_exception": exc_info,
+    }
+
 
 @app.get("/api/config")
 def get_config():
@@ -116,7 +293,11 @@ def get_stats():
 @app.get("/api/jobs")
 def list_jobs():
     return [
-        {**job, "progress": store.get_progress(job["id"])}
+        {
+            **job,
+            "threads": json.loads(job.get("meta") or "{}").get("threads", 1),
+            "progress": store.get_progress(job["id"]),
+        }
         for job in store.list_jobs()
     ]
 
@@ -134,6 +315,7 @@ def create_job(body: CreateJobRequest):
         raise HTTPException(400, "Viettel yêu cầu cookie.")
     seed = body.pattern if body.network == "viettel" else "all"
     meta = {"x_csrf_token": body.x_csrf_token, "cookie": body.cookie} if body.network == "viettel" else {}
+    meta["threads"] = max(1, min(50, body.threads))
     job_id = store.create_job(body.network, seed, meta)
     _start(job_id, body.network)
     return {"job_id": job_id}
@@ -146,12 +328,28 @@ def pause_job(job_id: str):
 
 
 @app.post("/api/jobs/{job_id}/resume")
-def resume_job(job_id: str):
+def resume_job(job_id: str, body: ResumeJobRequest = ResumeJobRequest()):
     job = store.get_job(job_id)
     if not job:
         raise HTTPException(404, "Job not found")
+    if body.threads is not None:
+        meta = store.get_meta(job_id)
+        meta["threads"] = max(1, min(50, body.threads))
+        store.set_meta(job_id, meta)
     _start(job_id, job["network"])
     return {"status": "resuming"}
+
+
+@app.post("/api/jobs/{job_id}/threads")
+def update_threads(job_id: str, body: UpdateThreadsRequest):
+    n = max(1, min(50, body.threads))
+    meta = store.get_meta(job_id)
+    meta["threads"] = n
+    store.set_meta(job_id, meta)
+    c = _crawlers.get(job_id)
+    if c:
+        c.set_threads(n)
+    return {"threads": n}
 
 
 @app.post("/api/jobs/{job_id}/retry")

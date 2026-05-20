@@ -81,6 +81,34 @@ nav { padding: 8px 0; }
   padding: 28px 32px;
 }
 
+.ws-status-bar {
+  margin-top: auto;
+  padding: 12px 16px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ws-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.ws-dot.ws-connected    { background: var(--green); box-shadow: 0 0 6px var(--green); animation: ws-pulse 2s infinite; }
+.ws-dot.ws-connecting   { background: var(--yellow); }
+.ws-dot.ws-disconnected { background: var(--muted); }
+.ws-dot.ws-error        { background: var(--red); }
+
+.ws-label { font-size: 11px; color: var(--muted); }
+
+@keyframes ws-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+
 /* ── Typography ────────────────────────────────────────────────────────────── */
 
 .page-title { font-size: 18px; font-weight: 600; margin-bottom: 20px; }

@@ -12,6 +12,7 @@ const PRESETS = [
   'Tiến đều (4 số cuối)',
   'Sảnh tiến (>=4 số)',
   'Toàn số chẵn',
+  '0abxabyabz',
 ]
 
 export default function Explorer() {

@@ -23,9 +23,10 @@ export const api = {
   // Jobs
   listJobs:          ()     => fetch(`${B}/jobs`).then(json),
   createJob:         (data) => post(`${B}/jobs`, data),
-  pauseJob:          (id)   => post(`${B}/jobs/${id}/pause`),
-  resumeJob:         (id)   => post(`${B}/jobs/${id}/resume`),
-  retryJob:          (id)   => post(`${B}/jobs/${id}/retry`),
+  pauseJob:          (id)         => post(`${B}/jobs/${id}/pause`),
+  resumeJob:         (id, data)   => post(`${B}/jobs/${id}/resume`, data ?? {}),
+  setJobThreads:     (id, threads) => post(`${B}/jobs/${id}/threads`, { threads }),
+  retryJob:          (id)         => post(`${B}/jobs/${id}/retry`),
   deleteJob:         (id)   => fetch(`${B}/jobs/${id}`, { method: 'DELETE' }).then(json),
   getLog:            (id, lines = 80) => fetch(`${B}/jobs/${id}/log?lines=${lines}`).then(json),
   getFailedPatterns: (id)   => fetch(`${B}/jobs/${id}/failed-patterns`).then(json),

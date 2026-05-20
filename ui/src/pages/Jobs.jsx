@@ -1,6 +1,7 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { ChevronDown, ChevronUp, Play, Pause, RotateCcw, Trash2 } from 'lucide-react'
 import { api } from '../api'
+import { useWsData } from '../App'
 
 // ── Constants ──────────────────────────────────────────────────────────────────
 
@@ -44,30 +45,29 @@ function ProgressBar({ done, pending, failed, percent }) {
 
 function JobCard({ job, onRefresh }) {
   const [open, setOpen]                   = useState(false)
-  const [log, setLog]                     = useState('')
   const [failedPatterns, setFailedPats]   = useState([])
   const [busy, setBusy]                   = useState(false)
+  const [resumeThreads, setResumeThreads] = useState(job.threads ?? 1)
 
-  const { id, network, pattern, status, total_saved, progress } = job
+  const { id, network, pattern, status, total_saved, progress, threads = 1, log = '' } = job
   const s = STATUS[status] ?? STATUS.pending
 
-  const loadDetails = useCallback(async () => {
-    const [logRes, fpRes] = await Promise.all([api.getLog(id), api.getFailedPatterns(id)])
-    setLog(logRes.log)
-    setFailedPats(fpRes.patterns)
+  const logRef = useRef(null)
+
+  // Auto-scroll log to bottom when content updates
+  useEffect(() => {
+    if (logRef.current) logRef.current.scrollTop = logRef.current.scrollHeight
+  }, [log])
+
+  const loadFailedPatterns = useCallback(async () => {
+    const res = await api.getFailedPatterns(id)
+    setFailedPats(res.patterns)
   }, [id])
 
   const toggle = () => {
-    if (!open) loadDetails()
+    if (!open) loadFailedPatterns()
     setOpen(v => !v)
   }
-
-  // Re-fetch log while expanded
-  useEffect(() => {
-    if (!open) return
-    const t = setInterval(loadDetails, 3000)
-    return () => clearInterval(t)
-  }, [open, loadDetails])
 
   const act = async (fn) => {
     setBusy(true)
@@ -110,16 +110,32 @@ function JobCard({ job, onRefresh }) {
       {/* Actions */}
       <div className="job-actions">
         {status === 'running' && (
-          <button className="btn btn-warning" disabled={busy}
-            onClick={() => act(() => api.pauseJob(id))}>
-            <Pause size={13} /> Pause
-          </button>
+          <>
+            <button className="btn btn-warning" disabled={busy}
+              onClick={() => act(() => api.pauseJob(id))}>
+              <Pause size={13} /> Pause
+            </button>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+              <button className="btn btn-ghost" style={{ padding: '2px 8px' }} disabled={busy || threads <= 1}
+                onClick={() => act(() => api.setJobThreads(id, threads - 1))}>−</button>
+              <span style={{ fontSize: 12, minWidth: 40, textAlign: 'center' }}>{threads}T</span>
+              <button className="btn btn-ghost" style={{ padding: '2px 8px' }} disabled={busy || threads >= 50}
+                onClick={() => act(() => api.setJobThreads(id, threads + 1))}>+</button>
+            </div>
+          </>
         )}
         {['paused', 'pending', 'failed', 'completed'].includes(status) && (
-          <button className="btn btn-success" disabled={busy}
-            onClick={() => act(() => api.resumeJob(id))}>
-            <Play size={13} /> Resume
-          </button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            <input type="number" min={1} max={50}
+              className="form-input" value={resumeThreads}
+              onChange={e => setResumeThreads(Math.max(1, parseInt(e.target.value) || 1))}
+              style={{ width: 52, padding: '3px 6px' }} />
+            <span style={{ fontSize: 11, color: 'var(--muted)' }}>threads</span>
+            <button className="btn btn-success" disabled={busy}
+              onClick={() => act(() => api.resumeJob(id, { threads: resumeThreads }))}>
+              <Play size={13} /> Resume
+            </button>
+          </div>
         )}
         {progress.failed > 0 && (
           <button className="btn btn-ghost" disabled={busy}
@@ -147,8 +163,8 @@ function JobCard({ job, onRefresh }) {
             </div>
           )}
           <div className="log-section">
-            <h4>📜 Log (live)</h4>
-            <pre className="log-pre">{log || 'Chưa có log...'}</pre>
+            <h4>📜 Log</h4>
+            <pre className="log-pre" ref={logRef}>{log || 'Chưa có log...'}</pre>
           </div>
         </div>
       )}
@@ -159,13 +175,13 @@ function JobCard({ job, onRefresh }) {
 // ── Page ───────────────────────────────────────────────────────────────────────
 
 export default function Jobs() {
-  const [jobs, setJobs]         = useState([])
   const [network, setNetwork]   = useState('viettel')
   const [pattern, setPattern]   = useState('09????????')
   const [csrfToken, setCsrf]    = useState('')
   const [d1n, setD1n]           = useState('')
   const [laravelSession, setLaravel] = useState('')
   const [inputMode, setInputMode] = useState('fields') // 'fields' | 'cookie' | 'curl'
+  const [threads, setThreads]   = useState(1)
   const [busy, setBusy]         = useState(false)
 
   const extractCookieFields = (cookieStr) => {
@@ -189,26 +205,24 @@ export default function Jobs() {
     const cookieMatch = s.match(/-b\s+"([^"]+)"/) || s.match(/-H\s+"cookie:\s*([^"]+)"/i)
     if (cookieMatch) extractCookieFields(cookieMatch[1])
   }
-  const [hasProxy, setHasProxy] = useState(true)
-  const [error, setError]       = useState('')
+  const [error, setError] = useState('')
+  const [jobs, setJobs] = useState([])
 
+  const { jobs: wsJobs, has_proxy: hasProxy } = useWsData()
+
+  // Keep local jobs in sync with WS; WS is the live source
+  useEffect(() => { setJobs(wsJobs) }, [wsJobs])
+
+  // After a user action, fetch fresh state immediately; preserve log content from WS (HTTP endpoint doesn't return it)
   const refresh = useCallback(async () => {
-    try { setJobs(await api.listJobs()) } catch { /* ignore */ }
-  }, [])
-
-  const checkProxy = useCallback(async () => {
     try {
-      const cfg = await api.getConfig()
-      setHasProxy(!!cfg.proxy_dns?.trim())
-    } catch { /* ignore */ }
+      const fresh = await api.listJobs()
+      setJobs(prev => {
+        const logMap = Object.fromEntries((prev || []).map(j => [j.id, j.log ?? '']))
+        return fresh.map(j => ({ ...j, log: logMap[j.id] ?? '' }))
+      })
+    } catch {}
   }, [])
-
-  useEffect(() => {
-    checkProxy()
-    refresh()
-    const t = setInterval(() => { refresh(); checkProxy() }, 2000)
-    return () => clearInterval(t)
-  }, [refresh, checkProxy])
 
   const create = async (e) => {
     e.preventDefault()
@@ -216,7 +230,7 @@ export default function Jobs() {
     setBusy(true)
     try {
       const cookie = `D1N=${d1n}; laravel_session=${laravelSession}`
-      await api.createJob({ network, pattern, x_csrf_token: csrfToken, cookie })
+      await api.createJob({ network, pattern, x_csrf_token: csrfToken, cookie, threads })
       await refresh()
     } catch (err) {
       setError(err.message || 'Lỗi không xác định')
@@ -386,9 +400,19 @@ export default function Jobs() {
             </span>
           )}
 
+          <div className="form-row" style={{ marginBottom: 10, alignItems: 'center', gap: 8 }}>
+            <label className="field-label" style={{ margin: 0 }}>Threads:</label>
+            <input
+              type="number" min={1} max={50}
+              className="form-input"
+              value={threads}
+              onChange={e => setThreads(Math.max(1, parseInt(e.target.value) || 1))}
+              style={{ width: 70 }}
+            />
+          </div>
+
           <button type="submit" className="btn btn-primary"
             disabled={busy || !hasProxy || (network === 'viettel' && (!csrfToken.trim() || !d1n.trim() || !laravelSession.trim()))}>
-
             {busy ? 'Đang tạo…' : '🚀 Start'}
           </button>
         </form>
