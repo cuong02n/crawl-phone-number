@@ -428,15 +428,23 @@ def preview_data(body: FilterRequest):
     if not os.path.exists(body.file):
         raise HTTPException(404, "File not found")
     try:
-        df = pd.read_csv(body.file, nrows=10_000, header=None, dtype=str)
-        df.columns = ["number"]
-        for name in body.presets:
-            if name in PRESETS:
-                df = df[df["number"].apply(PRESETS[name])]
-        total = sum(1 for _ in open(body.file, "rb"))
+        filter_fn = next((PRESETS[n] for n in body.presets if n in PRESETS), None)
+        numbers: list[str] = []
+        total = 0
+        filtered = 0
+        with open(body.file, "r", encoding="utf-8", errors="ignore") as f:
+            for line in f:
+                num = line.strip()
+                if not num:
+                    continue
+                total += 1
+                if filter_fn is None or filter_fn(num):
+                    filtered += 1
+                    if len(numbers) < body.limit:
+                        numbers.append(num)
         return {
-            "numbers": df["number"].head(body.limit).tolist(),
-            "filtered_count": len(df),
+            "numbers": numbers,
+            "filtered_count": filtered if filter_fn else total,
             "total_count": total,
         }
     except Exception as e:

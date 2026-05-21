@@ -78,15 +78,45 @@ def is_abxabyabz(number: str) -> bool:
     return s[4:6] == ab and s[7:9] == ab
 
 
+def is_abx_seq(number: str) -> bool:
+    """0abxab(x+1)ab(x+2) — e.g. 0123124125"""
+    s = str(number)
+    if len(s) == 9:
+        s = "0" + s
+    if len(s) != 10:
+        return False
+    ab = s[1:3]
+    if s[4:6] != ab or s[7:9] != ab:
+        return False
+    x = int(s[3])
+    return x <= 7 and int(s[6]) == x + 1 and int(s[9]) == x + 2
+
+
+def is_abx_seq_desc(number: str) -> bool:
+    """0abxab(x-1)ab(x-2) — e.g. 0125124123"""
+    s = str(number)
+    if len(s) == 9:
+        s = "0" + s
+    if len(s) != 10:
+        return False
+    ab = s[1:3]
+    if s[4:6] != ab or s[7:9] != ab:
+        return False
+    x = int(s[3])
+    return x >= 2 and int(s[6]) == x - 1 and int(s[9]) == x - 2
+
+
 PRESETS: dict[str, Callable[[str], bool]] = {
-    "Tứ quý (xxxx)":       has_tu_quy,
-    "Ngũ quý (xxxxx)":     has_ngu_quy,
-    "Taxi (abcabc)":        is_taxi,
-    "Lặp đôi (aabbcc)":    is_lap_doi,
-    "Sảnh xyzxyz":         xyzxyz,
-    "Sảnh xyztxyzt":       xyztxyzt,
-    "Tiến đều (4 số cuối)": is_last4_increasing,
-    "Sảnh tiến (>=4 số)":  has_sanh_tien,
-    "Toàn số chẵn":        is_all_even,
-    "0abxabyabz":          is_abxabyabz,
+    "Tứ quý (xxxx)":            has_tu_quy,
+    "Ngũ quý (xxxxx)":          has_ngu_quy,
+    "Taxi (abcabc)":             is_taxi,
+    "Lặp đôi (aabbcc)":         is_lap_doi,
+    "Sảnh xyzxyz":              xyzxyz,
+    "Sảnh xyztxyzt":            xyztxyzt,
+    "Tiến đều (4 số cuối)":     is_last4_increasing,
+    "Sảnh tiến (>=4 số)":       has_sanh_tien,
+    "Toàn số chẵn":             is_all_even,
+    "0abxabyabz":               is_abxabyabz,
+    "0abxab(x+1)ab(x+2)":      is_abx_seq,
+    "0abxab(x-1)ab(x-2)":      is_abx_seq_desc,
 }

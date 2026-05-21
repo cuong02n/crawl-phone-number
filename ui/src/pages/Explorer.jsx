@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Search, Download } from 'lucide-react'
+import { Download } from 'lucide-react'
 import { api } from '../api'
 
 const PRESETS = [
@@ -13,12 +13,14 @@ const PRESETS = [
   'Sảnh tiến (>=4 số)',
   'Toàn số chẵn',
   '0abxabyabz',
+  '0abxab(x+1)ab(x+2)',
+  '0abxab(x-1)ab(x-2)',
 ]
 
 export default function Explorer() {
   const [files, setFiles]       = useState([])
   const [selected, setSelected] = useState('')
-  const [presets, setPresets]   = useState([])
+  const [preset, setPreset]     = useState('')
   const [result, setResult]     = useState(null)
   const [loading, setLoading]   = useState(false)
 
@@ -29,14 +31,15 @@ export default function Explorer() {
     }).catch(() => {})
   }, [])
 
-  const toggle = (name) =>
-    setPresets(p => p.includes(name) ? p.filter(x => x !== name) : [...p, name])
-
-  const preview = async () => {
-    if (!selected) return
+  const preview = async (file, activePreset) => {
+    if (!file) return
     setLoading(true)
     try {
-      const r = await api.previewData({ file: selected, presets, limit: 200 })
+      const r = await api.previewData({
+        file,
+        presets: activePreset ? [activePreset] : [],
+        limit: 200,
+      })
       setResult(r)
     } catch (e) {
       alert('Lỗi: ' + e.message)
@@ -45,20 +48,30 @@ export default function Explorer() {
     }
   }
 
-  const selectedFile = files.find(f => f.path === selected)
+  const handleFileChange = (path) => {
+    setSelected(path)
+    setResult(null)
+    preview(path, preset)
+  }
+
+  const handlePreset = (name) => {
+    const next = preset === name ? '' : name
+    setPreset(next)
+    preview(selected, next)
+  }
 
   return (
     <div>
       <h1 className="page-title">Data Explorer</h1>
 
       <div className="card">
-        {/* File selector + actions */}
+        {/* File selector + download */}
         <div className="explorer-row">
           <select
             className="form-select"
             style={{ flex: 1, maxWidth: 420 }}
             value={selected}
-            onChange={e => { setSelected(e.target.value); setResult(null) }}
+            onChange={e => handleFileChange(e.target.value)}
           >
             {files.length === 0 && <option>Chưa có file CSV...</option>}
             {files.map(f => (
@@ -68,11 +81,6 @@ export default function Explorer() {
             ))}
           </select>
 
-          <button className="btn btn-primary" onClick={preview} disabled={loading || !selected}>
-            <Search size={13} />
-            {loading ? 'Đang lọc…' : 'Lọc & xem'}
-          </button>
-
           {selected && (
             <a className="btn btn-ghost" href={api.downloadUrl(selected)} download>
               <Download size={13} /> Download
@@ -80,14 +88,14 @@ export default function Explorer() {
           )}
         </div>
 
-        {/* Filter presets */}
-        <div className="card-title">🎯 Bộ lọc số đẹp — chọn một hoặc nhiều</div>
+        {/* Filter presets — single select, click to apply */}
+        <div className="card-title">🎯 Bộ lọc số đẹp</div>
         <div className="preset-grid">
           {PRESETS.map(name => (
             <label
               key={name}
-              className={`preset-chip${presets.includes(name) ? ' on' : ''}`}
-              onClick={() => toggle(name)}
+              className={`preset-chip${preset === name ? ' on' : ''}`}
+              onClick={() => handlePreset(name)}
             >
               {name}
             </label>
@@ -95,14 +103,16 @@ export default function Explorer() {
         </div>
 
         {/* Results */}
-        {result && (
+        {loading && <p className="muted" style={{ marginTop: 12 }}>Đang lọc…</p>}
+
+        {!loading && result && (
           <>
             <div className="result-bar">
               <strong>{result.filtered_count.toLocaleString()}</strong>
               <span className="muted">kết quả</span>
               <span className="muted">/</span>
               <span className="muted">{result.total_count.toLocaleString()} tổng</span>
-              {presets.length > 0 && result.numbers.length < result.filtered_count && (
+              {preset && result.numbers.length < result.filtered_count && (
                 <span className="muted" style={{ fontSize: 12 }}>
                   (hiển thị 200 đầu)
                 </span>
