@@ -1,6 +1,6 @@
 import requests
 
-from core.base_crawler import BaseCrawler
+from core.base_crawler import BaseCrawler, SessionExpiredError
 from core.config import build_proxies, load_config
 
 _HEADERS = {
@@ -14,6 +14,10 @@ _HEADERS = {
         "Chrome/120.0.0.0 Safari/537.36"
     ),
 }
+
+# errorCodes Viettel trả về khi session/cookie hết hạn
+# Thêm vào đây sau khi quan sát log
+_SESSION_EXPIRED_CODES = {401, 403}
 
 
 class ViettelCrawler(BaseCrawler):
@@ -53,6 +57,13 @@ class ViettelCrawler(BaseCrawler):
             proxies=build_proxies(config),
             timeout=10,
         )
+
+        # HTTP-level auth failure → session definitely dead
+        if resp.status_code in (401, 403):
+            raise SessionExpiredError(
+                f"HTTP {resp.status_code} — laravel_session/D1N hết hạn. Body: {resp.text[:300]}"
+            )
+
         resp.raise_for_status()
 
         if not resp.text.strip():
@@ -61,12 +72,20 @@ class ViettelCrawler(BaseCrawler):
         try:
             data = resp.json()
         except Exception:
-            raise ValueError(f"Non-JSON response (status={resp.status_code}): {resp.text[:200]}")
+            raise ValueError(f"Non-JSON response (status={resp.status_code}): {resp.text[:300]}")
 
-        if data.get("errorCode") != 0:
-            raise ValueError(
-                f"API errorCode={data.get('errorCode')} msg={data.get('message', '')}"
+        error_code = data.get("errorCode")
+        if error_code != 0:
+            self.logger.warning(
+                f"[VIETTEL] errorCode={error_code} msg={data.get('message', '')} "
+                f"pattern={pattern} status={resp.status_code} "
+                f"body={resp.text[:300]}"
             )
+            if error_code in _SESSION_EXPIRED_CODES:
+                raise SessionExpiredError(
+                    f"errorCode={error_code} msg={data.get('message', '')} — session hết hạn"
+                )
+            raise ValueError(f"API errorCode={error_code} msg={data.get('message', '')}")
 
         return [
             "0" + str(item["isdn"]) if len(str(item["isdn"])) == 9 else str(item["isdn"])

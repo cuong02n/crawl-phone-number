@@ -30,10 +30,13 @@ class JobStore:
         self._init_schema()
 
     def _init_schema(self):
-        # migrate: add meta column if missing
+        # migrate: add columns if missing
         cols = [r[1] for r in self.conn.execute("PRAGMA table_info(jobs)").fetchall()]
         if "meta" not in cols:
             self.conn.execute("ALTER TABLE jobs ADD COLUMN meta TEXT DEFAULT '{}'")
+            self.conn.commit()
+        if "fail_reason" not in cols:
+            self.conn.execute("ALTER TABLE jobs ADD COLUMN fail_reason TEXT DEFAULT ''")
             self.conn.commit()
 
         self.conn.executescript("""
@@ -83,11 +86,11 @@ class JobStore:
             self.conn.commit()
         return job_id
 
-    def set_status(self, job_id: str, status: JobStatus):
+    def set_status(self, job_id: str, status: JobStatus, reason: str = ""):
         with self._db_lock:
             self.conn.execute(
-                "UPDATE jobs SET status=?, updated_at=? WHERE id=?",
-                (status, datetime.now().isoformat(), job_id),
+                "UPDATE jobs SET status=?, updated_at=?, fail_reason=? WHERE id=?",
+                (status, datetime.now().isoformat(), reason, job_id),
             )
             self.conn.commit()
 

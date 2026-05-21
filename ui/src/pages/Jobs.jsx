@@ -49,7 +49,7 @@ function JobCard({ job, onRefresh }) {
   const [busy, setBusy]                   = useState(false)
   const [resumeThreads, setResumeThreads] = useState(job.threads ?? 1)
 
-  const { id, network, pattern, status, total_saved, progress, threads = 1, log = '' } = job
+  const { id, network, pattern, status, total_saved, progress, threads = 1, log = '', fail_reason = '' } = job
   const s = STATUS[status] ?? STATUS.pending
 
   const logRef = useRef(null)
@@ -91,6 +91,13 @@ function JobCard({ job, onRefresh }) {
           </button>
         </div>
       </div>
+
+      {/* Session expired warning */}
+      {status === 'failed' && fail_reason && (
+        <div className="alert alert-error" style={{ margin: '6px 0 0', fontSize: 12 }}>
+          🔑 {fail_reason}
+        </div>
+      )}
 
       {/* Progress */}
       <ProgressBar {...progress} />

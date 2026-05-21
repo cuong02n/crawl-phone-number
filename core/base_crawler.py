@@ -7,6 +7,10 @@ from abc import ABC, abstractmethod
 from .job_store import JobStatus, JobStore
 
 
+class SessionExpiredError(Exception):
+    """Raised when the carrier rejects our session/cookie — stop the job immediately."""
+
+
 class BaseCrawler(ABC):
     THRESHOLD = 30
 
@@ -159,6 +163,11 @@ class BaseCrawler(ABC):
         t = getattr(self._tl, 'num', 1)
         try:
             numbers = self.fetch(pattern)
+        except SessionExpiredError as e:
+            self.logger.error(f"[T{t}] SESSION EXPIRED — dừng job: {e}")
+            self.store.set_status(self.job_id, JobStatus.FAILED, reason=str(e))
+            self._stop_event.set()
+            return
         except Exception as e:
             self.logger.error(f"[T{t}] fetch failed pattern={pattern}: {e}")
             self.store.mark_failed(self.job_id, pattern)

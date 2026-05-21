@@ -108,6 +108,7 @@ def _ws_payload() -> dict:
                 "threads": json.loads(job.get("meta") or "{}").get("threads", 1),
                 "progress": store.get_progress(job["id"]),
                 "log": _read_log_tail(job.get("log_file", "")),
+                "fail_reason": job.get("fail_reason") or "",
             }
             for job in jobs
         ],
