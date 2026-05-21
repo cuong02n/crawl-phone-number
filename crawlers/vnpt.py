@@ -24,6 +24,7 @@ class VNPTCrawler(BaseCrawler):
         """Override to seed 5 prefix roots then delegate to base worker loop."""
         self._stop_event.clear()
         self._exit_queue = queue.Queue()
+        self.store.requeue_processing(self.job_id)  # reclaim orphaned in-flight rows
         with self._threads_lock:
             self._target_threads = threads
             self._next_idx = threads + 1

@@ -38,6 +38,7 @@ class BaseCrawler(ABC):
     def run(self, threads: int = 1):
         self._stop_event.clear()
         self._exit_queue = queue.Queue()  # reset on each run
+        self.store.requeue_processing(self.job_id)  # reclaim orphaned in-flight rows
         with self._threads_lock:
             self._target_threads = threads
             self._next_idx = threads + 1
@@ -117,6 +118,7 @@ class BaseCrawler(ABC):
 
     def _worker_loop(self, thread_num: int):
         self._tl.num = thread_num
+        spin_cycles = 0
         while not self._stop_event.is_set():
             # Scale-down: consume a sentinel and exit
             try:
@@ -135,9 +137,22 @@ class BaseCrawler(ABC):
                 progress = self.store.get_progress(self.job_id)
                 if progress["pending"] == 0:
                     return  # queue truly empty
+
+                spin_cycles += 1
+                # If this is the last active worker and still no pending rows after
+                # 2s of spinning, all remaining rows are stuck in 'processing' from
+                # a previous crash. Safe to requeue since no other worker holds them.
+                if spin_cycles >= 10:
+                    with self._threads_lock:
+                        is_last = self._active_count == 1
+                    if is_last:
+                        self.store.requeue_processing(self.job_id)
+                        self.logger.info(f"[T{thread_num}] requeued stuck processing rows")
+                    spin_cycles = 0
                 time.sleep(0.2)
                 continue
 
+            spin_cycles = 0
             self._process(pattern)
 
     def _process(self, pattern: str):

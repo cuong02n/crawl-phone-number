@@ -160,6 +160,15 @@ class JobStore:
             )
             self.conn.commit()
 
+    def requeue_processing(self, job_id: str):
+        """Reset in-flight rows left over from a previous pause/crash."""
+        with self._db_lock:
+            self.conn.execute(
+                "UPDATE queue SET status='pending' WHERE job_id=? AND status='processing'",
+                (job_id,),
+            )
+            self.conn.commit()
+
     # ── Stats ──────────────────────────────────────────────────────────────────
 
     def increment_saved(self, job_id: str, count: int):
