@@ -38,11 +38,11 @@ class ViettelCrawler(BaseCrawler):
         self._rate_lock = threading.Lock()
         self._last_req_time = 0.0
 
-        # Sticky proxy session: D1N cookie is IP-bound, so all requests must use
-        # the same proxy IP. Append session ID to username for sticky routing.
-        self._proxy_session_id = uuid.uuid4().hex[:8]
-
         meta = store.get_meta(job_id)
+
+        # Sticky proxy session: D1N cookie is IP-bound, so all requests must use
+        # the same proxy IP. Reuse session ID from auto-auth if available.
+        self._proxy_session_id = meta.get("proxy_session_id") or uuid.uuid4().hex[:8]
         if meta.get("x_csrf_token"):
             self._session.headers["x-csrf-token"] = meta["x_csrf_token"]
         if meta.get("cookie"):

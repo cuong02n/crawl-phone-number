@@ -16,6 +16,7 @@ from pydantic import BaseModel
 sys.path.insert(0, os.path.dirname(__file__))
 
 from core.config import load_config, save_config
+from core.viettel_auth import async_fetch_viettel_credentials
 from core.filters import PRESETS
 from core.job_store import DATA_DIR, JobStatus, JobStore
 from crawlers.viettel import ViettelCrawler
@@ -212,6 +213,7 @@ class CreateJobRequest(BaseModel):
     pattern: str = "09????????"
     x_csrf_token: str = ""
     cookie: str = ""
+    proxy_session_id: str = ""
     threads: int = 1
 
 
@@ -255,6 +257,24 @@ def ws_debug():
         "broadcast_task": status,
         "broadcast_exception": exc_info,
     }
+
+
+@app.post("/api/viettel/auto-session")
+async def viettel_auto_session():
+    """Launch headless browser via proxy to auto-fetch Viettel credentials."""
+    import traceback
+    try:
+        creds = await async_fetch_viettel_credentials()
+        return {
+            "x_csrf_token": creds["x_csrf_token"],
+            "cookie": creds["cookie"],
+            "proxy_session_id": creds["proxy_session_id"],
+        }
+    except Exception as e:
+        tb = traceback.format_exc()
+        print(f"[AUTO-SESSION ERROR] {type(e).__name__}: {e}\n{tb}", flush=True)
+        status = 400 if isinstance(e, RuntimeError) else 500
+        raise HTTPException(status_code=status, detail=f"{type(e).__name__}: {e}")
 
 
 @app.get("/api/config")
@@ -315,7 +335,11 @@ def create_job(body: CreateJobRequest):
     if body.network == "viettel" and not body.cookie.strip():
         raise HTTPException(400, "Viettel yêu cầu cookie.")
     seed = body.pattern if body.network == "viettel" else "all"
-    meta = {"x_csrf_token": body.x_csrf_token, "cookie": body.cookie} if body.network == "viettel" else {}
+    meta = (
+        {"x_csrf_token": body.x_csrf_token, "cookie": body.cookie,
+         "proxy_session_id": body.proxy_session_id}
+        if body.network == "viettel" else {}
+    )
     meta["threads"] = max(1, min(50, body.threads))
     job_id = store.create_job(body.network, seed, meta)
     _start(job_id, body.network)

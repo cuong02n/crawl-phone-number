@@ -187,7 +187,10 @@ export default function Jobs() {
   const [csrfToken, setCsrf]    = useState('')
   const [d1n, setD1n]           = useState('')
   const [laravelSession, setLaravel] = useState('')
-  const [inputMode, setInputMode] = useState('fields') // 'fields' | 'cookie' | 'curl'
+  const [proxySessionId, setProxySessionId] = useState('')
+  const [inputMode, setInputMode] = useState('auto') // 'auto' | 'fields' | 'cookie' | 'curl'
+  const [autoStatus, setAutoStatus] = useState('') // 'loading' | 'ok' | 'error'
+  const [autoError, setAutoError]   = useState('')
   const [threads, setThreads]   = useState(1)
   const [busy, setBusy]         = useState(false)
 
@@ -231,13 +234,33 @@ export default function Jobs() {
     } catch {}
   }, [])
 
+  const fetchAutoSession = async () => {
+    setAutoStatus('loading')
+    setAutoError('')
+    try {
+      const res = await api.viettelAutoSession()
+      const get = (key) => {
+        const m = res.cookie.match(new RegExp(`${key}=([^;]+)`))
+        return m ? m[1].trim() : ''
+      }
+      setCsrf(res.x_csrf_token)
+      setD1n(get('D1N'))
+      setLaravel(get('laravel_session'))
+      setProxySessionId(res.proxy_session_id)
+      setAutoStatus('ok')
+    } catch (err) {
+      setAutoError(err.message || 'Lỗi không xác định')
+      setAutoStatus('error')
+    }
+  }
+
   const create = async (e) => {
     e.preventDefault()
     setError('')
     setBusy(true)
     try {
       const cookie = `D1N=${d1n}; laravel_session=${laravelSession}`
-      await api.createJob({ network, pattern, x_csrf_token: csrfToken, cookie, threads })
+      await api.createJob({ network, pattern, x_csrf_token: csrfToken, cookie, proxy_session_id: proxySessionId, threads })
       await refresh()
     } catch (err) {
       setError(err.message || 'Lỗi không xác định')
@@ -305,7 +328,7 @@ export default function Jobs() {
 
               {/* Mode tabs */}
               <div className="input-mode-tabs">
-                {[['fields', 'Từng field'], ['cookie', 'Paste Cookie'], ['curl', 'Paste cURL']].map(([m, label]) => (
+                {[['auto', '🤖 Tự động'], ['fields', 'Từng field'], ['cookie', 'Paste Cookie'], ['curl', 'Paste cURL']].map(([m, label]) => (
                   <button key={m} type="button"
                     className={`mode-tab${inputMode === m ? ' active' : ''}`}
                     onClick={() => setInputMode(m)}>
@@ -313,6 +336,32 @@ export default function Jobs() {
                   </button>
                 ))}
               </div>
+
+              {/* Auto mode */}
+              {inputMode === 'auto' && (
+                <div style={{ padding: '10px 0' }}>
+                  <p className="muted" style={{ marginBottom: 10, fontSize: 12 }}>
+                    Tự động mở browser headless qua proxy, lấy session Viettel mà không cần copy từ DevTools.
+                  </p>
+                  <button type="button" className="btn btn-primary"
+                    disabled={autoStatus === 'loading' || !hasProxy}
+                    onClick={fetchAutoSession}
+                    style={{ marginBottom: 8 }}>
+                    {autoStatus === 'loading' ? '⏳ Đang lấy session (~10s)…' : '🤖 Lấy session tự động'}
+                  </button>
+                  {autoStatus === 'ok' && (
+                    <div style={{ fontSize: 12, color: 'var(--green)' }}>
+                      ✓ Session sẵn sàng — proxy_session: <code>{proxySessionId}</code>
+                      <br />✓ csrf: <code>{csrfToken.slice(0, 12)}…</code>
+                      &nbsp;✓ D1N: <code>{d1n.slice(0, 12)}…</code>
+                      &nbsp;✓ laravel_session: <code>{laravelSession.slice(0, 12)}…</code>
+                    </div>
+                  )}
+                  {autoStatus === 'error' && (
+                    <div style={{ fontSize: 12, color: 'var(--red)' }}>✗ {autoError}</div>
+                  )}
+                </div>
+              )}
 
               {/* Fields mode */}
               {inputMode === 'fields' && (
@@ -420,7 +469,7 @@ export default function Jobs() {
 
           <button type="submit" className="btn btn-primary"
             disabled={busy || !hasProxy || (network === 'viettel' && (!csrfToken.trim() || !d1n.trim() || !laravelSession.trim()))}>
-            {busy ? 'Đang tạo…' : '🚀 Start'}
+            {busy ? 'Đang tạo…' : '🚀 Start Job'}
           </button>
         </form>
       </div>

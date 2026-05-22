@@ -17,6 +17,9 @@ export const api = {
   getConfig:  ()     => fetch(`${B}/config`).then(json),
   saveConfig: (data) => post(`${B}/config`, data),
 
+  // Viettel auto-session
+  viettelAutoSession: () => post(`${B}/viettel/auto-session`, {}),
+
   // Stats
   getStats: () => fetch(`${B}/stats`).then(json),
 
