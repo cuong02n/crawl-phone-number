@@ -9,7 +9,7 @@ def load_config() -> dict:
     if os.path.exists(CONFIG_PATH):
         with open(CONFIG_PATH, "r") as f:
             return json.load(f)
-    return {"proxy_dns": "", "username": "", "password": ""}
+    return {"proxy_dns": "", "username": "", "password": "", "proxy_mode": "sticky"}
 
 
 def save_config(data: dict):

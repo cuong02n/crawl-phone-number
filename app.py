@@ -229,6 +229,7 @@ class ProxyConfig(BaseModel):
     proxy_dns: str
     username: str
     password: str
+    proxy_mode: str = "sticky"
 
 
 class FilterRequest(BaseModel):

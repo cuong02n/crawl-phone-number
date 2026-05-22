@@ -3,7 +3,7 @@ import { CheckCircle } from 'lucide-react'
 import { api } from '../api'
 
 export default function Settings() {
-  const [cfg, setCfg]     = useState({ proxy_dns: '', username: '', password: '' })
+  const [cfg, setCfg]     = useState({ proxy_dns: '', username: '', password: '', proxy_mode: 'sticky' })
   const [saved, setSaved] = useState(false)
 
   useEffect(() => {
@@ -51,6 +51,28 @@ export default function Settings() {
               value={cfg.password}
               onChange={set('password')}
             />
+          </div>
+
+          <div className="form-group">
+            <label>Proxy Mode</label>
+            <div style={{ display: 'flex', gap: 16, marginTop: 4 }}>
+              {[
+                ['sticky',   'Sticky (per-job)',    'Cùng IP cho toàn bộ job. D1N challenge chỉ 1 lần đầu. Phù hợp nếu rate limit per-session.'],
+                ['rotating', 'Rotating (per-pattern)', 'IP mới mỗi pattern. Bypass rate limit per-IP. Mỗi pattern tốn thêm 1 request D1N challenge.'],
+              ].map(([val, label, desc]) => (
+                <label key={val} style={{ display: 'flex', alignItems: 'flex-start', gap: 6, cursor: 'pointer', flex: 1 }}>
+                  <input type="radio" name="proxy_mode" value={val}
+                    checked={cfg.proxy_mode === val}
+                    onChange={() => setCfg(c => ({ ...c, proxy_mode: val }))}
+                    style={{ marginTop: 3 }} />
+                  <span>
+                    <strong style={{ fontSize: 12 }}>{label}</strong>
+                    <br />
+                    <span className="muted" style={{ fontSize: 11 }}>{desc}</span>
+                  </span>
+                </label>
+              ))}
+            </div>
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center' }}>

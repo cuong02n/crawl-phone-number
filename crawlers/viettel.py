@@ -84,15 +84,17 @@ class ViettelCrawler(BaseCrawler):
         self.logger.info(f"[D1N] auto-refreshed: {m.group(1)[:16]}...")
         return True
 
-    def _refresh_session(self):
+    def _refresh_session(self, proxy_session_id: str | None = None):
         """
         Get a brand-new laravel_session + x_csrf_token via Playwright headless browser.
-        Reuses the same sticky proxy IP so D1N cookie is still valid on that IP.
+        proxy_session_id: pass the current pattern's session_id so Playwright uses the
+        same IP → D1N cookie acquired on that IP is still valid for the retry.
         Persists new credentials to DB so they survive pause/resume.
         """
         from core.viettel_auth import fetch_viettel_credentials
-        self.logger.info("[SESSION] refreshing via Playwright (same proxy IP)...")
-        creds = fetch_viettel_credentials(proxy_session_id=self._proxy_session_id)
+        sid = proxy_session_id or self._proxy_session_id
+        self.logger.info(f"[SESSION] refreshing via Playwright (proxy_session={sid})...")
+        creds = fetch_viettel_credentials(proxy_session_id=sid)
 
         self._session.headers["x-csrf-token"] = creds["x_csrf_token"]
         for part in creds["cookie"].split(";"):
@@ -110,7 +112,16 @@ class ViettelCrawler(BaseCrawler):
         self.logger.info(f"[SESSION] refreshed: csrf={creds['x_csrf_token'][:12]}...")
 
     def fetch(self, pattern: str) -> list[str]:
-        proxies = build_proxies(load_config(), session_id=self._proxy_session_id)
+        config = load_config()
+        # rotating mode: each pattern gets a fresh IP.
+        # D1N is still handled correctly because both the challenge request and its
+        # retry use the same session_id (same IP) within this fetch() call.
+        # Trade-off: every pattern costs 1 extra D1N challenge request (~2x requests).
+        if config.get("proxy_mode") == "rotating":
+            session_id = uuid.uuid4().hex[:8]
+        else:
+            session_id = self._proxy_session_id
+        proxies = build_proxies(config, session_id=session_id)
         resp = self._throttled_post(pattern, proxies)
 
         # D1N challenge: HTML response with new D1N embedded in JS
@@ -144,7 +155,7 @@ class ViettelCrawler(BaseCrawler):
         if error_code == 1:
             self.logger.warning(f"[RATE] ec=1 pattern={pattern}, attempting session refresh...")
             try:
-                self._refresh_session()
+                self._refresh_session(proxy_session_id=session_id)
                 self.logger.info("[RATE] session refreshed, retrying pattern")
             except Exception as refresh_err:
                 self.logger.warning(
