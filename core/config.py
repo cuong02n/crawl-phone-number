@@ -17,11 +17,13 @@ def save_config(data: dict):
         json.dump(data, f, indent=2)
 
 
-def build_proxies(config: dict) -> dict | None:
+def build_proxies(config: dict, session_id: str | None = None) -> dict | None:
     proxy_dns = config.get("proxy_dns", "").strip()
     if not proxy_dns:
         return None
     username = config.get("username", "").strip()
     password = config.get("password", "").strip()
+    if username and session_id:
+        username = f"{username}-session-{session_id}"
     url = f"http://{username}:{password}@{proxy_dns}" if username else f"http://{proxy_dns}"
     return {"http": url, "https": url}
