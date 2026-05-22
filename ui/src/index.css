@@ -141,7 +141,7 @@ h3, h4 { font-weight: 600; }
 
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
   gap: 12px;
   margin-bottom: 16px;
 }
@@ -593,6 +593,11 @@ h3, h4 { font-weight: 600; }
   color: var(--green);
   font-size: 12px;
   margin-left: 8px;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
 }
 
 /* ── Scrollbar ─────────────────────────────────────────────────────────────── */

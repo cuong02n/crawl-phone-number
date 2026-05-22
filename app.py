@@ -219,6 +219,9 @@ class CreateJobRequest(BaseModel):
 
 class ResumeJobRequest(BaseModel):
     threads: int | None = None
+    x_csrf_token: str = ""
+    cookie: str = ""
+    proxy_session_id: str = ""
 
 
 class UpdateThreadsRequest(BaseModel):
@@ -358,10 +361,16 @@ def resume_job(job_id: str, body: ResumeJobRequest = ResumeJobRequest()):
     job = store.get_job(job_id)
     if not job:
         raise HTTPException(404, "Job not found")
+    meta = store.get_meta(job_id)
     if body.threads is not None:
-        meta = store.get_meta(job_id)
         meta["threads"] = max(1, min(50, body.threads))
-        store.set_meta(job_id, meta)
+    if body.x_csrf_token.strip():
+        meta["x_csrf_token"] = body.x_csrf_token.strip()
+    if body.cookie.strip():
+        meta["cookie"] = body.cookie.strip()
+    if body.proxy_session_id.strip():
+        meta["proxy_session_id"] = body.proxy_session_id.strip()
+    store.set_meta(job_id, meta)
     _start(job_id, job["network"])
     return {"status": "resuming"}
 
@@ -455,7 +464,8 @@ def preview_data(body: FilterRequest):
     if not os.path.exists(body.file):
         raise HTTPException(404, "File not found")
     try:
-        filter_fn = next((PRESETS[n] for n in body.presets if n in PRESETS), None)
+        fns = [PRESETS[n] for n in body.presets if n in PRESETS]
+        filter_fn = (lambda num: all(fn(num) for fn in fns)) if fns else None
         numbers: list[str] = []
         total = 0
         filtered = 0

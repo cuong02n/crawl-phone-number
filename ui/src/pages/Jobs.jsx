@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
-import { ChevronDown, ChevronUp, Play, Pause, RotateCcw, Trash2 } from 'lucide-react'
+import { ChevronDown, ChevronUp, Play, Pause, RotateCcw, Trash2, Database } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 import { api } from '../api'
 import { useWsData } from '../App'
 
@@ -44,20 +45,37 @@ function ProgressBar({ done, pending, failed, percent }) {
 // ── Job card ───────────────────────────────────────────────────────────────────
 
 function JobCard({ job, onRefresh }) {
+  const navigate = useNavigate()
+  const { has_proxy: hasProxy } = useWsData()
+
   const [open, setOpen]                   = useState(false)
   const [failedPatterns, setFailedPats]   = useState([])
   const [busy, setBusy]                   = useState(false)
   const [resumeThreads, setResumeThreads] = useState(job.threads ?? 1)
 
-  const { id, network, pattern, status, total_saved, progress, threads = 1, log = '', fail_reason = '' } = job
+  // Session refresh state (used when resuming a failed Viettel job)
+  const [resumeSession, setResumeSession]   = useState(null)
+  const [sessionStatus, setSessionStatus]   = useState('')
+  const [sessionError, setSessionError]     = useState('')
+
+  const { id, network, pattern, status, total_saved, output_file = '',
+          progress, threads = 1, log = '', fail_reason = '' } = job
   const s = STATUS[status] ?? STATUS.pending
 
   const logRef = useRef(null)
 
-  // Auto-scroll log to bottom when content updates
   useEffect(() => {
     if (logRef.current) logRef.current.scrollTop = logRef.current.scrollHeight
   }, [log])
+
+  // Reset session state when job transitions out of failed
+  useEffect(() => {
+    if (status !== 'failed') {
+      setResumeSession(null)
+      setSessionStatus('')
+      setSessionError('')
+    }
+  }, [status])
 
   const loadFailedPatterns = useCallback(async () => {
     const res = await api.getFailedPatterns(id)
@@ -74,6 +92,37 @@ function JobCard({ job, onRefresh }) {
     try { await fn() } finally { await onRefresh(); setBusy(false) }
   }
 
+  const fetchSessionForResume = async () => {
+    setSessionStatus('loading')
+    setSessionError('')
+    try {
+      const res = await api.viettelAutoSession()
+      setResumeSession(res)
+      setSessionStatus('ok')
+    } catch (err) {
+      setSessionError(err.message || 'Lỗi không xác định')
+      setSessionStatus('error')
+    }
+  }
+
+  const doResume = () => {
+    const data = { threads: resumeThreads }
+    if (network === 'viettel' && resumeSession) {
+      data.x_csrf_token    = resumeSession.x_csrf_token
+      data.cookie          = resumeSession.cookie
+      data.proxy_session_id = resumeSession.proxy_session_id
+    }
+    return api.resumeJob(id, data)
+  }
+
+  const doDelete = () => {
+    if (!window.confirm(`Xóa job ${id} (${network} ${pattern})? Hành động này không thể hoàn tác.`)) return
+    return api.deleteJob(id)
+  }
+
+  const isViettelFailed = status === 'failed' && network === 'viettel'
+  const outputName = output_file ? output_file.split(/[\\/]/).pop() : ''
+
   return (
     <div className={`card job-card${status === 'running' ? ' is-running' : ''}`}>
       {/* Header row */}
@@ -83,6 +132,9 @@ function JobCard({ job, onRefresh }) {
           <code className="job-id">{id}</code>
           <strong style={{ fontSize: 12 }}>{network.toUpperCase()}</strong>
           <code className="job-pattern">{pattern}</code>
+          {outputName && (
+            <code className="job-id" style={{ color: 'var(--muted)' }}>{outputName}</code>
+          )}
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <span className="saved-count">{total_saved.toLocaleString()} số</span>
@@ -131,27 +183,59 @@ function JobCard({ job, onRefresh }) {
             </div>
           </>
         )}
+
         {['paused', 'pending', 'failed', 'completed'].includes(status) && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-            <input type="number" min={1} max={50}
-              className="form-input" value={resumeThreads}
-              onChange={e => setResumeThreads(Math.max(1, parseInt(e.target.value) || 1))}
-              style={{ width: 52, padding: '3px 6px' }} />
-            <span style={{ fontSize: 11, color: 'var(--muted)' }}>threads</span>
-            <button className="btn btn-success" disabled={busy}
-              onClick={() => act(() => api.resumeJob(id, { threads: resumeThreads }))}>
-              <Play size={13} /> Resume
-            </button>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+            {/* For failed Viettel jobs: session refresh before resume */}
+            {isViettelFailed && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+                <button type="button" className="btn btn-ghost"
+                  disabled={sessionStatus === 'loading' || !hasProxy}
+                  onClick={fetchSessionForResume}>
+                  {sessionStatus === 'loading' ? '⏳ Đang lấy session...' : '🤖 Lấy session mới'}
+                </button>
+                {sessionStatus === 'ok' && (
+                  <span style={{ fontSize: 11, color: 'var(--green)' }}>
+                    ✓ session: <code>{resumeSession.proxy_session_id}</code>
+                  </span>
+                )}
+                {sessionStatus === 'error' && (
+                  <span style={{ fontSize: 11, color: 'var(--red)' }}>✗ {sessionError}</span>
+                )}
+              </div>
+            )}
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <input type="number" min={1} max={50}
+                className="form-input" value={resumeThreads}
+                onChange={e => setResumeThreads(Math.max(1, parseInt(e.target.value) || 1))}
+                style={{ width: 52, padding: '3px 6px' }} />
+              <span style={{ fontSize: 11, color: 'var(--muted)' }}>threads</span>
+              <button className="btn btn-success" disabled={busy}
+                onClick={() => act(doResume)}>
+                <Play size={13} /> Resume
+                {isViettelFailed && resumeSession && ' (session mới)'}
+              </button>
+            </div>
           </div>
         )}
+
         {progress.failed > 0 && (
           <button className="btn btn-ghost" disabled={busy}
             onClick={() => act(() => api.retryJob(id))}>
             <RotateCcw size={13} /> Retry failed ({progress.failed})
           </button>
         )}
+
+        {output_file && (
+          <button className="btn btn-ghost" style={{ fontSize: 12 }}
+            onClick={() => navigate(`/explorer?file=${encodeURIComponent(output_file)}`)}>
+            <Database size={13} /> Xem data
+          </button>
+        )}
+
         <button className="btn btn-danger" disabled={busy}
-          onClick={() => act(() => api.deleteJob(id))}>
+          onClick={() => act(doDelete)}>
           <Trash2 size={13} /> Xóa
         </button>
       </div>
@@ -206,24 +290,20 @@ export default function Jobs() {
   }
 
   const parseCurl = (raw) => {
-    // normalize Windows CMD escaping (^ before quotes, %3D, etc.)
     const s = raw.replace(/\^"/g, '"').replace(/\^/g, '').replace(/%3D/g, '=')
-
     const csrfMatch = s.match(/-H\s+"x-csrf-token:\s*([^"]+)"/i)
     if (csrfMatch) setCsrf(csrfMatch[1].trim())
-
     const cookieMatch = s.match(/-b\s+"([^"]+)"/) || s.match(/-H\s+"cookie:\s*([^"]+)"/i)
     if (cookieMatch) extractCookieFields(cookieMatch[1])
   }
+
   const [error, setError] = useState('')
   const [jobs, setJobs] = useState([])
 
   const { jobs: wsJobs, has_proxy: hasProxy } = useWsData()
 
-  // Keep local jobs in sync with WS; WS is the live source
   useEffect(() => { setJobs(wsJobs) }, [wsJobs])
 
-  // After a user action, fetch fresh state immediately; preserve log content from WS (HTTP endpoint doesn't return it)
   const refresh = useCallback(async () => {
     try {
       const fresh = await api.listJobs()
@@ -325,7 +405,6 @@ export default function Jobs() {
 
           {network === 'viettel' && (
             <div style={{ marginBottom: 10 }}>
-
               {/* Mode tabs */}
               <div className="input-mode-tabs">
                 {[['auto', '🤖 Tự động'], ['fields', 'Từng field'], ['cookie', 'Paste Cookie'], ['curl', 'Paste cURL']].map(([m, label]) => (
@@ -446,7 +525,6 @@ export default function Jobs() {
                   )}
                 </div>
               )}
-
             </div>
           )}
 
