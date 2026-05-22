@@ -3,35 +3,84 @@ import { Download, RefreshCw } from 'lucide-react'
 import { useSearchParams } from 'react-router-dom'
 import { api } from '../api'
 
-const PRESETS = [
-  'Tứ quý (xxxx)',
-  'Ngũ quý (xxxxx)',
-  'Taxi (abcabc)',
-  'Lặp đôi (aabbcc)',
-  'Sảnh xyzxyz',
-  'Sảnh xyztxyzt',
-  'Tiến đều (4 số cuối)',
-  'Sảnh tiến (>=4 số)',
-  'Toàn số chẵn',
-  '0abxabyabz',
-  '0abxab(x+1)ab(x+2)',
-  '0abxab(x-1)ab(x-2)',
+// ── Preset definitions ─────────────────────────────────────────────────────────
+
+// Static presets: name must match backend PRESETS dict keys exactly
+const STATIC_PRESETS = [
+  { group: 'Tứ quý / Ngũ quý', items: [
+    'Tứ quý (xxxx)',
+    'Tứ quý ở cuối',
+    'Ngũ quý (xxxxx)',
+  ]},
+  { group: 'Lặp / Taxi', items: [
+    'Taxi (abcabc)',
+    'Lặp đôi (aabbcc)',
+  ]},
+  { group: 'Sảnh lặp', items: [
+    'Sảnh xyzxyz',
+    'Sảnh xyzxyz ở cuối',
+    'Sảnh xyztxyzt',
+    'Sảnh xyztxyzt ở cuối',
+  ]},
+  { group: 'Sảnh tiến', items: [
+    'Tiến đều (4 số cuối)',
+    'Tiến đều bước 2 (5 số cuối)',
+    'Sảnh tiến (>=4 số)',
+    'Sảnh tiến ở cuối',
+  ]},
+  { group: 'Đặc biệt', items: [
+    'Toàn số chẵn',
+    '0abxabyabz',
+    '0abxab(x+1)ab(x+2)',
+    '0abxab(x-1)ab(x-2)',
+    '0abcabcabc',
+  ]},
 ]
 
+// Parametric presets: user supplies a value; backend key = "key:value"
+const PARAM_PRESETS = [
+  {
+    key:         'Tứ quý cuối',
+    label:       'Tứ quý X ở cuối',
+    description: 'Số kết thúc bằng XXXX (ví dụ: 8888)',
+    placeholder: '0–9',
+    maxLength:   1,
+    isValid:     (v) => /^\d$/.test(v),
+  },
+]
+
+// ── Helpers ────────────────────────────────────────────────────────────────────
+
+const isParamKey = (name) => PARAM_PRESETS.some(p => name.startsWith(`${p.key}:`))
+
+function resolvePresets(active, paramInputs) {
+  return active.filter(name => {
+    if (!isParamKey(name)) return true
+    const key = name.slice(0, name.indexOf(':'))
+    const val = name.slice(key.length + 1)
+    const def = PARAM_PRESETS.find(p => p.key === key)
+    return def ? def.isValid(val) : false
+  })
+}
+
+// ── Component ──────────────────────────────────────────────────────────────────
+
 export default function Explorer() {
-  const [searchParams]          = useSearchParams()
-  const [files, setFiles]       = useState([])
-  const [selected, setSelected] = useState('')
-  const [activePresets, setActivePresets] = useState([])
-  const [result, setResult]     = useState(null)
-  const [loading, setLoading]   = useState(false)
+  const [searchParams]            = useSearchParams()
+  const [files, setFiles]         = useState([])
+  const [selected, setSelected]   = useState('')
+  const [activePresets, setActivePresets] = useState([])  // both static names and "key:val" for param
+  const [paramInputs, setParamInputs]     = useState({})  // { key: value } — independent of active
+  const [result, setResult]       = useState(null)
+  const [loading, setLoading]     = useState(false)
   const [refreshing, setRefreshing] = useState(false)
 
-  const preview = useCallback(async (file, presets) => {
+  // preview takes already-resolved presets (filtered for validity)
+  const preview = useCallback(async (file, resolved) => {
     if (!file) return
     setLoading(true)
     try {
-      const r = await api.previewData({ file, presets, limit: 200 })
+      const r = await api.previewData({ file, presets: resolved, limit: 200 })
       setResult(r)
     } catch (e) {
       alert('Lỗi: ' + e.message)
@@ -40,52 +89,82 @@ export default function Explorer() {
     }
   }, [])
 
-  const loadFiles = useCallback(async (keepSelected) => {
-    const list = await api.listFiles().catch(() => [])
-    setFiles(list)
-    return list
-  }, [])
+  const loadFiles = useCallback(() => api.listFiles().catch(() => []), [])
 
   // Initial load: honour ?file= param or default to first file
   useEffect(() => {
     const fileParam = searchParams.get('file')
     loadFiles().then(list => {
+      setFiles(list)
       if (list.length === 0) return
       const paths = list.map(f => f.path)
-      const toSelect = fileParam && paths.includes(fileParam)
-        ? fileParam
-        : list[0].path
+      const toSelect = fileParam && paths.includes(fileParam) ? fileParam : list[0].path
       setSelected(toSelect)
       preview(toSelect, [])
     })
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-  const handleFileChange = (path) => {
-    setSelected(path)
-    setResult(null)
-    preview(path, activePresets)
-  }
+  // ── Preset toggle helpers ────────────────────────────────────────────────────
 
-  const handlePreset = (name) => {
-    const next = activePresets.includes(name)
+  const isStaticActive = (name) => activePresets.includes(name)
+  const isParamActive  = (key)  => activePresets.some(p => p.startsWith(`${key}:`))
+
+  const toggleStatic = (name) => {
+    const next = isStaticActive(name)
       ? activePresets.filter(p => p !== name)
       : [...activePresets, name]
     setActivePresets(next)
-    preview(selected, next)
+    preview(selected, resolvePresets(next, paramInputs))
+  }
+
+  const toggleParam = (key) => {
+    if (isParamActive(key)) {
+      const next = activePresets.filter(p => !p.startsWith(`${key}:`))
+      setActivePresets(next)
+      preview(selected, resolvePresets(next, paramInputs))
+    } else {
+      const val = paramInputs[key] || ''
+      const next = [...activePresets, `${key}:${val}`]
+      setActivePresets(next)
+      preview(selected, resolvePresets(next, paramInputs))
+    }
+  }
+
+  const updateParamInput = (key, val) => {
+    const newInputs = { ...paramInputs, [key]: val }
+    setParamInputs(newInputs)
+    if (isParamActive(key)) {
+      const next = activePresets.map(p => p.startsWith(`${key}:`) ? `${key}:${val}` : p)
+      setActivePresets(next)
+      preview(selected, resolvePresets(next, newInputs))
+    }
+  }
+
+  const clearAll = () => {
+    setActivePresets([])
+    preview(selected, [])
+  }
+
+  // ── File handlers ────────────────────────────────────────────────────────────
+
+  const handleFileChange = (path) => {
+    setSelected(path)
+    setResult(null)
+    preview(path, resolvePresets(activePresets, paramInputs))
   }
 
   const handleRefresh = async () => {
     setRefreshing(true)
     const list = await loadFiles()
+    setFiles(list)
     setRefreshing(false)
-    // Re-run preview if selected file still exists
-    if (selected && list.some(f => f.path === selected)) {
-      preview(selected, activePresets)
-    } else if (list.length > 0) {
-      setSelected(list[0].path)
-      preview(list[0].path, activePresets)
-    }
+    const stillExists = list.some(f => f.path === selected)
+    const nextFile = stillExists ? selected : (list.length > 0 ? list[0].path : '')
+    if (!stillExists && nextFile) setSelected(nextFile)
+    if (nextFile) preview(nextFile, resolvePresets(activePresets, paramInputs))
   }
+
+  const totalActive = activePresets.length
 
   return (
     <div>
@@ -121,31 +200,84 @@ export default function Explorer() {
           )}
         </div>
 
-        {/* Filter presets — multi-select, click to toggle */}
-        <div className="card-title" style={{ marginBottom: 8 }}>
-          🎯 Bộ lọc số đẹp
-          {activePresets.length > 0 && (
-            <button className="btn btn-ghost" style={{ marginLeft: 10, padding: '1px 8px', fontSize: 11 }}
-              onClick={() => { setActivePresets([]); preview(selected, []) }}>
-              Xóa bộ lọc ({activePresets.length})
-            </button>
+        {/* Filter presets */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>
+          <div className="card-title" style={{ marginBottom: 0 }}>🎯 Bộ lọc số đẹp</div>
+          {totalActive > 0 && (
+            <>
+              <span className="muted" style={{ fontSize: 11 }}>
+                {totalActive} đang bật {totalActive > 1 ? '(AND)' : ''}
+              </span>
+              <button className="btn btn-ghost" style={{ padding: '1px 8px', fontSize: 11 }}
+                onClick={clearAll}>
+                Xóa tất cả
+              </button>
+            </>
           )}
         </div>
-        <div className="preset-grid">
-          {PRESETS.map(name => (
-            <label
-              key={name}
-              className={`preset-chip${activePresets.includes(name) ? ' on' : ''}`}
-              onClick={() => handlePreset(name)}
-            >
-              {name}
-            </label>
-          ))}
-        </div>
-        {activePresets.length > 1 && (
-          <p className="muted" style={{ fontSize: 11, marginBottom: 8 }}>
-            Đang lọc AND: số phải khớp tất cả {activePresets.length} điều kiện.
-          </p>
+
+        {STATIC_PRESETS.map(({ group, items }) => (
+          <div key={group} style={{ marginBottom: 10 }}>
+            <div style={{ fontSize: 10, color: 'var(--muted)', fontWeight: 600, letterSpacing: '0.05em',
+                          textTransform: 'uppercase', marginBottom: 5 }}>
+              {group}
+            </div>
+            <div className="preset-grid" style={{ marginBottom: 0 }}>
+              {items.map(name => (
+                <label key={name}
+                  className={`preset-chip${isStaticActive(name) ? ' on' : ''}`}
+                  onClick={() => toggleStatic(name)}>
+                  {name}
+                </label>
+              ))}
+            </div>
+          </div>
+        ))}
+
+        {/* Parametric presets */}
+        {PARAM_PRESETS.length > 0 && (
+          <div style={{ marginBottom: 10 }}>
+            <div style={{ fontSize: 10, color: 'var(--muted)', fontWeight: 600, letterSpacing: '0.05em',
+                          textTransform: 'uppercase', marginBottom: 5 }}>
+              Tùy chỉnh
+            </div>
+            <div className="preset-grid" style={{ marginBottom: 0 }}>
+              {PARAM_PRESETS.map(({ key, label, placeholder, maxLength, isValid }) => {
+                const active = isParamActive(key)
+                const val    = paramInputs[key] || ''
+                const valid  = !active || isValid(val)
+                return (
+                  <label key={key}
+                    className={`preset-chip param-chip${active ? ' on' : ''}${active && !valid ? ' invalid' : ''}`}
+                    onClick={() => toggleParam(key)}
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                    {label}
+                    {active && (
+                      <>
+                        {' = '}
+                        <input
+                          type="text"
+                          value={val}
+                          maxLength={maxLength}
+                          placeholder={placeholder}
+                          onClick={e => e.stopPropagation()}
+                          onChange={e => updateParamInput(key, e.target.value)}
+                          style={{
+                            width: 28, padding: '0 3px', textAlign: 'center',
+                            background: 'transparent',
+                            border: `1px solid ${valid ? 'currentColor' : 'var(--red)'}`,
+                            borderRadius: 3, color: valid ? 'inherit' : 'var(--red)',
+                            fontSize: 11, fontFamily: 'var(--mono)',
+                            outline: 'none',
+                          }}
+                        />
+                      </>
+                    )}
+                  </label>
+                )
+              })}
+            </div>
+          </div>
         )}
 
         {/* Results */}
@@ -158,10 +290,8 @@ export default function Explorer() {
               <span className="muted">kết quả</span>
               <span className="muted">/</span>
               <span className="muted">{result.total_count.toLocaleString()} tổng</span>
-              {activePresets.length > 0 && result.numbers.length < result.filtered_count && (
-                <span className="muted" style={{ fontSize: 12 }}>
-                  (hiển thị 200 đầu)
-                </span>
+              {totalActive > 0 && result.numbers.length < result.filtered_count && (
+                <span className="muted" style={{ fontSize: 12 }}>(hiển thị 200 đầu)</span>
               )}
             </div>
 

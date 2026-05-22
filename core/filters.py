@@ -1,6 +1,8 @@
 from typing import Callable
 
 
+# ── Static filter functions ────────────────────────────────────────────────────
+
 def has_tu_quy(number: str) -> bool:
     for i in range(len(number) - 3):
         if number[i] == number[i + 1] == number[i + 2] == number[i + 3]:
@@ -8,9 +10,14 @@ def has_tu_quy(number: str) -> bool:
     return False
 
 
+def tu_quy_cuoi(number: str) -> bool:
+    """Last 4 digits identical."""
+    return len(number) >= 4 and number[-4:] == number[-1] * 4
+
+
 def has_ngu_quy(number: str) -> bool:
     for i in range(len(number) - 4):
-        if number[i] == number[i + 1] == number[i + 2] == number[i + 3] == number[i + 4]:
+        if number[i] == number[i+1] == number[i+2] == number[i+3] == number[i+4]:
             return True
     return False
 
@@ -37,11 +44,22 @@ def is_last4_increasing(number: str) -> bool:
     return last4[1] == last4[0] + 1 and last4[2] == last4[1] + 1 and last4[3] == last4[2] + 1
 
 
+def is_last5_step2(number: str) -> bool:
+    """Last 5 digits form arithmetic sequence with step +2 (mod 10).
+    Matches 02468, 13579, 24680, 35791, … and their mod-10 variants."""
+    s = str(number)
+    if len(s) < 5:
+        return False
+    last5 = [int(d) for d in s[-5:]]
+    return all((last5[i + 1] - last5[i]) % 10 == 2 for i in range(4))
+
+
 def is_all_even(number: str) -> bool:
     return all(int(d) % 2 == 0 for d in str(number))
 
 
 def has_sanh_tien(number: str) -> bool:
+    """At least 4 consecutive ascending digits anywhere in the number."""
     s = str(number)
     count = 1
     for i in range(len(s) - 1):
@@ -54,6 +72,18 @@ def has_sanh_tien(number: str) -> bool:
     return False
 
 
+def sanh_tien_cuoi(number: str) -> bool:
+    """At least 4 consecutive ascending digits ending at the last digit."""
+    s = str(number)
+    count = 1
+    for i in range(len(s) - 1, 0, -1):
+        if int(s[i]) == int(s[i - 1]) + 1:
+            count += 1
+        else:
+            break
+    return count >= 4
+
+
 def xyzxyz(number: str) -> bool:
     for i in range(len(number) - 5):
         if number[i:i + 3] == number[i + 3:i + 6]:
@@ -61,11 +91,23 @@ def xyzxyz(number: str) -> bool:
     return False
 
 
+def xyzxyz_cuoi(number: str) -> bool:
+    """Last 6 chars form xyzxyz pattern."""
+    s = str(number)
+    return len(s) >= 6 and s[-6:-3] == s[-3:]
+
+
 def xyztxyzt(number: str) -> bool:
     for i in range(len(number) - 7):
         if number[i:i + 4] == number[i + 4:i + 8]:
             return True
     return False
+
+
+def xyztxyzt_cuoi(number: str) -> bool:
+    """Last 8 chars form xyztxyzt pattern."""
+    s = str(number)
+    return len(s) >= 8 and s[-8:-4] == s[-4:]
 
 
 def is_abxabyabz(number: str) -> bool:
@@ -106,17 +148,63 @@ def is_abx_seq_desc(number: str) -> bool:
     return x >= 2 and int(s[6]) == x - 1 and int(s[9]) == x - 2
 
 
+def is_abcabcabc(number: str) -> bool:
+    """0abcabcabc — 10-digit: prefix 0, then 3-char group abc repeated 3 times."""
+    s = str(number)
+    if len(s) == 9:
+        s = "0" + s
+    if len(s) != 10:
+        return False
+    abc = s[1:4]
+    return s[4:7] == abc and s[7:10] == abc
+
+
+# ── Static preset registry ─────────────────────────────────────────────────────
+
 PRESETS: dict[str, Callable[[str], bool]] = {
-    "Tứ quý (xxxx)":            has_tu_quy,
-    "Ngũ quý (xxxxx)":          has_ngu_quy,
-    "Taxi (abcabc)":             is_taxi,
-    "Lặp đôi (aabbcc)":         is_lap_doi,
-    "Sảnh xyzxyz":              xyzxyz,
-    "Sảnh xyztxyzt":            xyztxyzt,
-    "Tiến đều (4 số cuối)":     is_last4_increasing,
-    "Sảnh tiến (>=4 số)":       has_sanh_tien,
-    "Toàn số chẵn":             is_all_even,
-    "0abxabyabz":               is_abxabyabz,
-    "0abxab(x+1)ab(x+2)":      is_abx_seq,
-    "0abxab(x-1)ab(x-2)":      is_abx_seq_desc,
+    "Tứ quý (xxxx)":                has_tu_quy,
+    "Tứ quý ở cuối":                tu_quy_cuoi,
+    "Ngũ quý (xxxxx)":              has_ngu_quy,
+    "Taxi (abcabc)":                is_taxi,
+    "Lặp đôi (aabbcc)":             is_lap_doi,
+    "Sảnh xyzxyz":                  xyzxyz,
+    "Sảnh xyzxyz ở cuối":           xyzxyz_cuoi,
+    "Sảnh xyztxyzt":                xyztxyzt,
+    "Sảnh xyztxyzt ở cuối":         xyztxyzt_cuoi,
+    "Tiến đều (4 số cuối)":         is_last4_increasing,
+    "Tiến đều bước 2 (5 số cuối)":  is_last5_step2,
+    "Sảnh tiến (>=4 số)":           has_sanh_tien,
+    "Sảnh tiến ở cuối":             sanh_tien_cuoi,
+    "Toàn số chẵn":                 is_all_even,
+    "0abxabyabz":                   is_abxabyabz,
+    "0abxab(x+1)ab(x+2)":          is_abx_seq,
+    "0abxab(x-1)ab(x-2)":          is_abx_seq_desc,
+    "0abcabcabc":                   is_abcabcabc,
 }
+
+
+# ── Parametric preset factories ────────────────────────────────────────────────
+# Each factory receives the raw argument string and returns a filter fn or None.
+
+def _make_tu_quy_cuoi_digit(digit: str) -> Callable | None:
+    if len(digit) != 1 or not digit.isdigit():
+        return None
+    target = digit * 4
+    return lambda num: num[-4:] == target if len(num) >= 4 else False
+
+
+PARAM_PRESET_FACTORIES: dict[str, Callable[[str], Callable | None]] = {
+    "Tứ quý cuối": _make_tu_quy_cuoi_digit,
+}
+
+
+def resolve_preset(name: str) -> Callable | None:
+    """Resolve a static or parametric preset name to a filter function."""
+    if name in PRESETS:
+        return PRESETS[name]
+    if ":" in name:
+        key, _, arg = name.partition(":")
+        factory = PARAM_PRESET_FACTORIES.get(key)
+        if factory:
+            return factory(arg)
+    return None

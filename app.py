@@ -17,7 +17,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 
 from core.config import load_config, save_config
 from core.viettel_auth import async_fetch_viettel_credentials
-from core.filters import PRESETS
+from core.filters import PRESETS, resolve_preset
 from core.job_store import DATA_DIR, JobStatus, JobStore
 from crawlers.viettel import ViettelCrawler
 from crawlers.vnpt import VNPTCrawler
@@ -464,7 +464,7 @@ def preview_data(body: FilterRequest):
     if not os.path.exists(body.file):
         raise HTTPException(404, "File not found")
     try:
-        fns = [PRESETS[n] for n in body.presets if n in PRESETS]
+        fns = [fn for n in body.presets if (fn := resolve_preset(n)) is not None]
         filter_fn = (lambda num: all(fn(num) for fn in fns)) if fns else None
         numbers: list[str] = []
         total = 0
