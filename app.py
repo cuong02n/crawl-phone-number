@@ -392,6 +392,7 @@ def retry_job(job_id: str):
 def delete_job(job_id: str):
     _pause(job_id)
     store.delete_job(job_id)
+    _crawlers.pop(job_id, None)
     return {"status": "deleted"}
 
 

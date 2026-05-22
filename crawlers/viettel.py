@@ -37,6 +37,8 @@ class ViettelCrawler(BaseCrawler):
         # Rate limiter: enforces _RATE_DELAY between requests across all threads
         self._rate_lock = threading.Lock()
         self._last_req_time = 0.0
+        # Prevents concurrent Playwright launches when multiple threads hit ec=1
+        self._session_refresh_lock = threading.Lock()
 
         meta = store.get_meta(job_id)
 
@@ -90,26 +92,28 @@ class ViettelCrawler(BaseCrawler):
         proxy_session_id: pass the current pattern's session_id so Playwright uses the
         same IP → D1N cookie acquired on that IP is still valid for the retry.
         Persists new credentials to DB so they survive pause/resume.
+        Uses a lock so concurrent threads don't spawn multiple Playwright instances.
         """
-        from core.viettel_auth import fetch_viettel_credentials
-        sid = proxy_session_id or self._proxy_session_id
-        self.logger.info(f"[SESSION] refreshing via Playwright (proxy_session={sid})...")
-        creds = fetch_viettel_credentials(proxy_session_id=sid)
+        with self._session_refresh_lock:
+            from core.viettel_auth import fetch_viettel_credentials
+            sid = proxy_session_id or self._proxy_session_id
+            self.logger.info(f"[SESSION] refreshing via Playwright (proxy_session={sid})...")
+            creds = fetch_viettel_credentials(proxy_session_id=sid)
 
-        self._session.headers["x-csrf-token"] = creds["x_csrf_token"]
-        for part in creds["cookie"].split(";"):
-            part = part.strip()
-            if "=" in part:
-                k, v = part.split("=", 1)
-                self._session.cookies.set(k.strip(), v.strip())
+            self._session.headers["x-csrf-token"] = creds["x_csrf_token"]
+            for part in creds["cookie"].split(";"):
+                part = part.strip()
+                if "=" in part:
+                    k, v = part.split("=", 1)
+                    self._session.cookies.set(k.strip(), v.strip())
 
-        # Persist to DB so credentials survive pause/resume
-        meta = self.store.get_meta(self.job_id)
-        meta["x_csrf_token"] = creds["x_csrf_token"]
-        meta["cookie"] = creds["cookie"]
-        self.store.set_meta(self.job_id, meta)
+            # Persist to DB so credentials survive pause/resume
+            meta = self.store.get_meta(self.job_id)
+            meta["x_csrf_token"] = creds["x_csrf_token"]
+            meta["cookie"] = creds["cookie"]
+            self.store.set_meta(self.job_id, meta)
 
-        self.logger.info(f"[SESSION] refreshed: csrf={creds['x_csrf_token'][:12]}...")
+            self.logger.info(f"[SESSION] refreshed: csrf={creds['x_csrf_token'][:12]}...")
 
     def fetch(self, pattern: str) -> list[str]:
         config = load_config()
@@ -162,6 +166,10 @@ class ViettelCrawler(BaseCrawler):
                     f"[RATE] session refresh failed ({refresh_err}), falling back to 60s sleep"
                 )
                 time.sleep(60)
+
+            # Playwright/sleep may block for ~30s — respect pause signal before retrying
+            if self._stop_event.is_set():
+                return []
 
             resp2 = self._throttled_post(pattern, proxies)
             try:
