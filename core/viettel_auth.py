@@ -81,12 +81,16 @@ async def _wait_for_cookie(context, name: str, timeout: int):
     raise TimeoutError(f"Cookie '{name}' not set within {timeout}ms")
 
 
-def _build_proxy_args(config: dict) -> tuple[str, str, str, str]:
-    """Returns (session_id, proxy_server, username, password)."""
+def _build_proxy_args(config: dict, proxy_session_id: str | None = None) -> tuple[str, str, str, str]:
+    """
+    Returns (session_id, proxy_server, username, password).
+    If proxy_session_id is given, reuses it (same exit IP) instead of generating a new one.
+    Reusing the same IP means D1N cookie acquired on that IP is still valid.
+    """
     proxy_dns = config.get("proxy_dns", "").strip()
     if not proxy_dns:
         raise RuntimeError("Proxy chưa được cấu hình trong Settings")
-    session_id = uuid.uuid4().hex[:8]
+    session_id = proxy_session_id or uuid.uuid4().hex[:8]
     username = config.get("username", "").strip()
     password = config.get("password", "").strip()
     if username:
@@ -94,14 +98,15 @@ def _build_proxy_args(config: dict) -> tuple[str, str, str, str]:
     return session_id, f"http://{proxy_dns}", username, password
 
 
-async def async_fetch_viettel_credentials() -> dict:
+async def async_fetch_viettel_credentials(proxy_session_id: str | None = None) -> dict:
     """
     Async version for FastAPI endpoints.
     Playwright must run in its own thread+event loop to avoid conflicts with uvicorn.
+    Pass proxy_session_id to reuse an existing sticky IP (D1N stays valid).
     """
     import concurrent.futures
     config = load_config()
-    session_id, proxy_server, username, password = _build_proxy_args(config)
+    session_id, proxy_server, username, password = _build_proxy_args(config, proxy_session_id)
 
     loop = asyncio.get_event_loop()
     with concurrent.futures.ThreadPoolExecutor(max_workers=1) as pool:
@@ -113,10 +118,13 @@ async def async_fetch_viettel_credentials() -> dict:
     return result
 
 
-def fetch_viettel_credentials() -> dict:
-    """Sync wrapper for use outside async context (CLI/tests)."""
+def fetch_viettel_credentials(proxy_session_id: str | None = None) -> dict:
+    """
+    Sync wrapper — safe to call from worker threads (asyncio.run creates its own loop).
+    Pass proxy_session_id to reuse an existing sticky IP (D1N stays valid).
+    """
     config = load_config()
-    session_id, proxy_server, username, password = _build_proxy_args(config)
+    session_id, proxy_server, username, password = _build_proxy_args(config, proxy_session_id)
     result = asyncio.run(_fetch_credentials(proxy_server, username, password))
     result["proxy_session_id"] = session_id
     return result

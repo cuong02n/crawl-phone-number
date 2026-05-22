@@ -550,23 +550,53 @@ Không thể tự renew `laravel_session` mà không có browser. Tiếp tục c
 
 ```python
 if error_code == 1:
-    self.logger.warning(f"[RATE] ec=1 pattern={pattern}, sleeping 60s")
-    time.sleep(60)              # ngủ 60s để window reset
+    try:
+        self._refresh_session()   # lấy laravel_session + csrf mới qua Playwright
+    except Exception as e:
+        time.sleep(60)            # fallback nếu Playwright lỗi
+
     resp2 = self._throttled_post(pattern, proxies)
     data = resp2.json()
     error_code = data.get("errorCode")
-    # tiếp tục xử lý với data mới
 ```
 
-**Tại sao ngủ 60s (không phải 30s)?**
+**Tại sao dùng session mới thay vì sleep 60s?**
 
-Rate limit là sliding window 30s. Sau 30s tất cả request cũ ra khỏi window nhưng nếu retry ngay ở giây 30, vẫn có thể bị limit nếu có request khác chen vào. 60s = an toàn tuyệt đối, window đã hoàn toàn reset.
+Rate limit của Viettel **có thể là per-session** (`laravel_session`), không phải per-IP. Nếu vậy:
+- Sleep 60s: cùng session → vẫn bị limit sau khi thức dậy
+- Session mới: fresh rate-limit budget → bypass ngay
 
-**Tại sao không raise exception khi ec=1?**
+Gọi `_refresh_session()` khi ec=1 nhanh hơn (~10s Playwright) và đáng tin cậy hơn giả định 60s.
 
-Code cũ raise ValueError → `mark_failed()` → pattern bị đánh dấu `failed`, không xử lý lại trừ khi user bấm Retry. Mất dữ liệu.
+**`_refresh_session()` làm gì?**
 
-ec=1 là trạng thái TẠM THỜI, không phải lỗi vĩnh viễn. Ngủ 60s là đúng behavior, không phải failure.
+```python
+def _refresh_session(self):
+    creds = fetch_viettel_credentials(proxy_session_id=self._proxy_session_id)
+    # ↑ Cùng sticky IP → D1N vẫn hợp lệ, chỉ cần đổi laravel_session + csrf
+
+    self._session.headers["x-csrf-token"] = creds["x_csrf_token"]
+    # Update tất cả cookies trong session
+    for k, v in parse_cookie(creds["cookie"]):
+        self._session.cookies.set(k, v)
+
+    # Lưu vào DB để resume sau này vẫn dùng được credentials mới
+    meta["x_csrf_token"] = creds["x_csrf_token"]
+    meta["cookie"] = creds["cookie"]
+    self.store.set_meta(self.job_id, meta)
+```
+
+**Tại sao reuse cùng `proxy_session_id`?**
+
+D1N cookie bị trói vào IP. Nếu đổi IP (session_id mới), Playwright sẽ lấy D1N cho IP mới — OK. Nhưng nếu giữ IP cũ, D1N đã có sẵn từ trước vẫn còn hợp lệ — không cần thêm roundtrip.
+
+**Fallback 60s nếu Playwright lỗi:**
+
+Playwright có thể fail vì proxy không ổn định, timeout, v.v. Trong trường hợp đó, fall back về sleep 60s để không bỏ pattern hoàn toàn.
+
+**Nếu sau refresh vẫn ec=1:**
+
+→ rate limit là per-IP, không phải per-session. Log cảnh báo, raise ValueError → pattern bị `failed`. User có thể retry sau hoặc đổi proxy.
 
 ### Bước 7.5 — Kiểm tra errorCode khác
 
@@ -794,7 +824,7 @@ KẾT QUẢ
 | D1N challenge | 200 text/html | Extract D1N mới → retry 1 lần | Rotating proxy IP, IP mới cần D1N riêng |
 | D1N retry thất bại | 200 text/html lần 2 | `SessionExpiredError` → FAILED | IP bị block hoặc proxy lỗi, không tự khắc phục được |
 | Session expired | HTTP 419 | `SessionExpiredError` → FAILED | Cần lấy credentials mới từ browser |
-| Rate limited | errorCode=1 | sleep(60s) → retry 1 lần | Sliding window reset sau 30s, 60s đảm bảo an toàn |
+| Rate limited | errorCode=1 | refresh session (Playwright, ~10s) → retry; fallback sleep 60s nếu Playwright lỗi | Rate limit per-session → session mới bypass ngay |
 | Network error | requests exception | `mark_failed(pattern)` | Tạm thời, retry job để xử lý lại |
 | Process crash | — | requeue_processing() lúc resume | Pattern stuck ở `processing` được reclaim |
 | Server restart | — | Auto-PAUSED startup, user resume | Jobs.db là source of truth |

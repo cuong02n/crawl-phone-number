@@ -84,6 +84,31 @@ class ViettelCrawler(BaseCrawler):
         self.logger.info(f"[D1N] auto-refreshed: {m.group(1)[:16]}...")
         return True
 
+    def _refresh_session(self):
+        """
+        Get a brand-new laravel_session + x_csrf_token via Playwright headless browser.
+        Reuses the same sticky proxy IP so D1N cookie is still valid on that IP.
+        Persists new credentials to DB so they survive pause/resume.
+        """
+        from core.viettel_auth import fetch_viettel_credentials
+        self.logger.info("[SESSION] refreshing via Playwright (same proxy IP)...")
+        creds = fetch_viettel_credentials(proxy_session_id=self._proxy_session_id)
+
+        self._session.headers["x-csrf-token"] = creds["x_csrf_token"]
+        for part in creds["cookie"].split(";"):
+            part = part.strip()
+            if "=" in part:
+                k, v = part.split("=", 1)
+                self._session.cookies.set(k.strip(), v.strip())
+
+        # Persist to DB so credentials survive pause/resume
+        meta = self.store.get_meta(self.job_id)
+        meta["x_csrf_token"] = creds["x_csrf_token"]
+        meta["cookie"] = creds["cookie"]
+        self.store.set_meta(self.job_id, meta)
+
+        self.logger.info(f"[SESSION] refreshed: csrf={creds['x_csrf_token'][:12]}...")
+
     def fetch(self, pattern: str) -> list[str]:
         proxies = build_proxies(load_config(), session_id=self._proxy_session_id)
         resp = self._throttled_post(pattern, proxies)
@@ -112,17 +137,33 @@ class ViettelCrawler(BaseCrawler):
 
         error_code = data.get("errorCode")
 
-        # errorCode=1: rate limited — sliding window ~20 req/30s
-        # Sleep 60s to let window reset, then retry once
+        # errorCode=1: rate limited.
+        # Strategy: get a fresh laravel_session via Playwright (same IP → D1N stays valid).
+        # New session = fresh rate-limit budget. Faster than sleeping 60s.
+        # If Playwright fails for any reason, fall back to 60s sleep.
         if error_code == 1:
-            self.logger.warning(f"[RATE] ec=1 pattern={pattern}, sleeping 60s for window reset")
-            time.sleep(60)
+            self.logger.warning(f"[RATE] ec=1 pattern={pattern}, attempting session refresh...")
+            try:
+                self._refresh_session()
+                self.logger.info("[RATE] session refreshed, retrying pattern")
+            except Exception as refresh_err:
+                self.logger.warning(
+                    f"[RATE] session refresh failed ({refresh_err}), falling back to 60s sleep"
+                )
+                time.sleep(60)
+
             resp2 = self._throttled_post(pattern, proxies)
             try:
                 data = resp2.json()
                 error_code = data.get("errorCode")
             except Exception:
                 raise ValueError(f"Retry non-JSON: {resp2.text[:300]}")
+
+        if error_code == 1:
+            # Still rate-limited after refresh + retry → rate limit is likely per-IP.
+            # Log clearly so user can investigate; treat as transient failure.
+            self.logger.warning("[RATE] still ec=1 after session refresh — rate limit may be per-IP")
+            raise ValueError("API errorCode=1 — rate limited after session refresh")
 
         if error_code != 0:
             self.logger.warning(
