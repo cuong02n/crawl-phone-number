@@ -14,12 +14,13 @@ const json = async (res) => {
   return res.json()
 }
 
-const post = (url, body) => {
+const post = (url, body, options = {}) => {
   console.debug('[API POST]', url, body !== undefined ? body : '(no body)')
   return fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
+    ...options,
   }).then(json)
 }
 
@@ -36,8 +37,10 @@ export const api = {
   getConfig:  ()     => get(`${B}/config`),
   saveConfig: (data) => post(`${B}/config`, data),
 
-  // Viettel auto-session
-  viettelAutoSession: () => post(`${B}/viettel/auto-session`, {}),
+  // Viettel session
+  viettelAutoSession:    (noProxy = false) => post(`${B}/viettel/auto-session?no_proxy=${noProxy}`, {}),
+  getViettelSession:     ()      => get(`${B}/viettel/session`),
+  clearViettelSession:   ()      => del(`${B}/viettel/session`),
 
   // Stats
   getStats: () => get(`${B}/stats`),
@@ -50,14 +53,15 @@ export const api = {
   setJobThreads:     (id, threads)   => post(`${B}/jobs/${id}/threads`, { threads }),
   retryJob:          (id)            => post(`${B}/jobs/${id}/retry`),
   deleteJob:         (id)            => del(`${B}/jobs/${id}`),
-  getLog:            (id, lines = 80) => get(`${B}/jobs/${id}/log?lines=${lines}`),
-  getFailedPatterns: (id)            => get(`${B}/jobs/${id}/failed-patterns`),
+  getLog:            (id, lines = 500) => get(`${B}/jobs/${id}/log?lines=${lines}`),
+  getFailedPatterns: (id)              => get(`${B}/jobs/${id}/failed-patterns`),
+  getThreadLogs:     (id, tail = 300)  => get(`${B}/jobs/${id}/thread-logs?tail=${tail}`),
 
   // Feed
   getRecentNumbers: (limit = 60) => get(`${B}/feed/recent?limit=${limit}`),
 
   // Data / Explorer
-  listFiles:   ()     => get(`${B}/data/files`),
-  previewData: (data) => post(`${B}/data/preview`, data),
-  downloadUrl: (path) => `${B}/data/download?path=${encodeURIComponent(path)}`,
+  listFiles:   ()               => get(`${B}/data/files`),
+  previewData: (data, options)  => post(`${B}/data/preview`, data, options),
+  downloadUrl: (path)           => `${B}/data/download?path=${encodeURIComponent(path)}`,
 }

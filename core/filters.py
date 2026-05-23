@@ -148,6 +148,20 @@ def is_abx_seq_desc(number: str) -> bool:
     return x >= 2 and int(s[6]) == x - 1 and int(s[9]) == x - 2
 
 
+def is_abx_seq_step2(number: str) -> bool:
+    """0abxab(x+2)ab(x+4) — e.g. 0123125127"""
+    s = str(number)
+    if len(s) == 9:
+        s = "0" + s
+    if len(s) != 10:
+        return False
+    ab = s[1:3]
+    if s[4:6] != ab or s[7:9] != ab:
+        return False
+    x = int(s[3])
+    return x <= 5 and int(s[6]) == x + 2 and int(s[9]) == x + 4
+
+
 def is_abcabcabc(number: str) -> bool:
     """0abcabcabc — 10-digit: prefix 0, then 3-char group abc repeated 3 times."""
     s = str(number)
@@ -178,6 +192,7 @@ PRESETS: dict[str, Callable[[str], bool]] = {
     "Toàn số chẵn":                 is_all_even,
     "0abxabyabz":                   is_abxabyabz,
     "0abxab(x+1)ab(x+2)":          is_abx_seq,
+    "0abxab(x+2)ab(x+4)":          is_abx_seq_step2,
     "0abxab(x-1)ab(x-2)":          is_abx_seq_desc,
     "0abcabcabc":                   is_abcabcabc,
 }

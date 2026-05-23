@@ -1,0 +1,432 @@
+2026-05-23 14:01:13,857 INFO === Job 34421b5a RUNNING (50 thread(s)) ===
+2026-05-23 14:01:13,865 INFO [T1] session init, proxy_sid=d6bfde29
+2026-05-23 14:01:16,083 INFO [T1] D1N refreshed 94b269585bfd35fa…
+2026-05-23 14:01:22,091 INFO [T1] expand pattern=0????????? got=50 ≥ 30 → split into 10 children
+2026-05-23 14:01:22,102 INFO [T48] session init, proxy_sid=5c8598f3
+2026-05-23 14:01:22,106 INFO [T18] session init, proxy_sid=a9e28ecb
+2026-05-23 14:01:22,114 INFO [T30] session init, proxy_sid=70f79ef9
+2026-05-23 14:01:22,120 INFO [T33] session init, proxy_sid=d92b6227
+2026-05-23 14:01:22,126 INFO [T39] session init, proxy_sid=667eeac0
+2026-05-23 14:01:22,132 INFO [T40] session init, proxy_sid=542c2fae
+2026-05-23 14:01:22,137 INFO [T2] session init, proxy_sid=7ff960fe
+2026-05-23 14:01:22,141 INFO [T22] session init, proxy_sid=3fc89417
+2026-05-23 14:01:22,146 INFO [T7] session init, proxy_sid=52625a65
+2026-05-23 14:01:24,499 INFO [T22] D1N refreshed 4089bcfb6df1e718…
+2026-05-23 14:01:24,533 INFO [T2] D1N refreshed bf3bb18e0210b561…
+2026-05-23 14:01:24,592 INFO [T7] D1N refreshed 9cece34e86af989c…
+2026-05-23 14:01:24,655 INFO [T48] D1N refreshed 6f6c193f0251d4b1…
+2026-05-23 14:01:24,661 INFO [T18] D1N refreshed 9182fe366cf98ed7…
+2026-05-23 14:01:25,939 INFO [T40] D1N refreshed 0b06013f469cca4d…
+2026-05-23 14:01:26,532 INFO [T8] session init, proxy_sid=b8cc6d91
+2026-05-23 14:01:26,537 INFO [T41] session init, proxy_sid=f3f47e5e
+2026-05-23 14:01:26,542 INFO [T50] session init, proxy_sid=6d7a09d6
+2026-05-23 14:01:26,546 INFO [T25] session init, proxy_sid=10c8b903
+2026-05-23 14:01:26,551 INFO [T4] session init, proxy_sid=fadc4e00
+2026-05-23 14:01:26,555 INFO [T1] expand pattern=00???????? got=50 ≥ 30 → split into 10 children
+2026-05-23 14:01:26,559 INFO [T23] session init, proxy_sid=a6f5bd58
+2026-05-23 14:01:26,564 INFO [T15] session init, proxy_sid=fc493733
+2026-05-23 14:01:26,574 INFO [T37] session init, proxy_sid=c0a06810
+2026-05-23 14:01:26,580 INFO [T6] session init, proxy_sid=e5b586cd
+2026-05-23 14:01:27,532 WARNING [T30] ConnectionError attempt=1/3 pattern=03????????: ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', Non
+2026-05-23 14:01:27,532 INFO [T30] rotate IP 70f79ef9 → 3c9b4bb4
+2026-05-23 14:01:27,536 WARNING [T39] ConnectionError attempt=1/3 pattern=05????????: ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', Non
+2026-05-23 14:01:27,536 INFO [T39] rotate IP 667eeac0 → 40e14ca7
+2026-05-23 14:01:27,549 WARNING [T33] ConnectionError attempt=1/3 pattern=04????????: ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', Non
+2026-05-23 14:01:27,549 INFO [T33] rotate IP d92b6227 → 90dd2f50
+2026-05-23 14:01:28,741 INFO [T23] D1N refreshed 056b62cd66b07c59…
+2026-05-23 14:01:28,792 INFO [T8] D1N refreshed 9edb2622b9086b2a…
+2026-05-23 14:01:28,793 INFO [T25] D1N refreshed 8f4e9e9b1cb95ccf…
+2026-05-23 14:01:28,815 INFO [T6] D1N refreshed 444a1312dedce2b3…
+2026-05-23 14:01:29,186 WARNING [T15] SSLError attempt=1/3 pattern=006???????: HTTPSConnectionPool(host='vietteltelecom.vn', port=443): Max retries exceeded with url: /api/get/sim (Caused by SSLError
+2026-05-23 14:01:29,186 INFO [T15] rotate IP fc493733 → 4325fa7b
+2026-05-23 14:01:29,369 INFO [T41] D1N refreshed f3a4366294aa0c90…
+2026-05-23 14:01:29,654 INFO [T22] expand pattern=08???????? got=49 ≥ 30 → split into 10 children
+2026-05-23 14:01:29,771 INFO [T38] session init, proxy_sid=3334e075
+2026-05-23 14:01:29,778 INFO [T21] session init, proxy_sid=7cedef3c
+2026-05-23 14:01:29,784 INFO [T34] session init, proxy_sid=8913f335
+2026-05-23 14:01:29,792 INFO [T17] session init, proxy_sid=2d275a14
+2026-05-23 14:01:29,801 INFO [T24] session init, proxy_sid=1b62e918
+2026-05-23 14:01:29,807 INFO [T9] session init, proxy_sid=1ff86cc1
+2026-05-23 14:01:29,814 INFO [T16] session init, proxy_sid=596b95a2
+2026-05-23 14:01:29,821 INFO [T13] session init, proxy_sid=9630bdfc
+2026-05-23 14:01:29,827 INFO [T49] session init, proxy_sid=6aadfacf
+2026-05-23 14:01:29,883 INFO [T18] leaf pattern=02???????? got=0 saved=0
+2026-05-23 14:01:29,892 INFO [T7] expand pattern=09???????? got=46 ≥ 30 → split into 10 children
+2026-05-23 14:01:29,896 INFO [T12] session init, proxy_sid=3741707c
+2026-05-23 14:01:29,900 INFO [T44] session init, proxy_sid=69ac99cc
+2026-05-23 14:01:29,906 INFO [T46] session init, proxy_sid=ff0ce205
+2026-05-23 14:01:30,035 INFO [T3] session init, proxy_sid=ac388bb6
+2026-05-23 14:01:30,047 INFO [T36] session init, proxy_sid=f4dec001
+2026-05-23 14:01:30,054 INFO [T20] session init, proxy_sid=a5fc5af9
+2026-05-23 14:01:30,060 INFO [T45] session init, proxy_sid=3ea521f7
+2026-05-23 14:01:30,067 INFO [T32] session init, proxy_sid=5cf0d229
+2026-05-23 14:01:30,160 INFO [T48] leaf pattern=01???????? got=0 saved=0
+2026-05-23 14:01:30,173 INFO [T37] D1N refreshed a21d46398e571c69…
+2026-05-23 14:01:30,301 INFO [T2] leaf pattern=07???????? got=0 saved=0
+2026-05-23 14:01:30,330 INFO [T30] D1N refreshed f766803d59cf85c2…
+2026-05-23 14:01:31,154 INFO [T1] expand pattern=007??????? got=50 ≥ 30 → split into 10 children
+2026-05-23 14:01:31,160 INFO [T31] session init, proxy_sid=27cdda9e
+2026-05-23 14:01:31,165 INFO [T47] session init, proxy_sid=e4c6481d
+2026-05-23 14:01:31,186 INFO [T19] session init, proxy_sid=ae519e4e
+2026-05-23 14:01:31,198 INFO [T11] session init, proxy_sid=325a3625
+2026-05-23 14:01:31,232 INFO [T43] session init, proxy_sid=9bfe053f
+2026-05-23 14:01:31,252 INFO [T35] session init, proxy_sid=723e2b3c
+2026-05-23 14:01:31,278 INFO [T27] session init, proxy_sid=3c2ed7c2
+2026-05-23 14:01:31,296 INFO [T26] session init, proxy_sid=7dbb19ce
+2026-05-23 14:01:31,299 INFO [T42] session init, proxy_sid=221c4dd0
+2026-05-23 14:01:31,319 INFO [T10] session init, proxy_sid=51bc3f07
+2026-05-23 14:01:31,952 WARNING [T50] ConnectionError attempt=1/3 pattern=002???????: ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', Non
+2026-05-23 14:01:31,952 INFO [T50] rotate IP 6d7a09d6 → 1eb6572b
+2026-05-23 14:01:31,961 WARNING [T4] ConnectionError attempt=1/3 pattern=004???????: ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', Non
+2026-05-23 14:01:31,961 INFO [T4] rotate IP fadc4e00 → 862ecb53
+2026-05-23 14:01:32,098 INFO [T38] D1N refreshed 7b8875eed12b0788…
+2026-05-23 14:01:32,287 INFO [T46] D1N refreshed c30666c84d716a7e…
+2026-05-23 14:01:32,398 INFO [T15] D1N refreshed ed754ccca2113cf9…
+2026-05-23 14:01:32,403 INFO [T34] D1N refreshed 98f43ff5ff32be80…
+2026-05-23 14:01:32,605 INFO [T49] D1N refreshed ae957870b7571acf…
+2026-05-23 14:01:32,607 INFO [T24] D1N refreshed 169567ffbbdffa56…
+2026-05-23 14:01:32,694 INFO [T16] D1N refreshed f0cf68a3c959f39a…
+2026-05-23 14:01:32,723 INFO [T12] D1N refreshed 04bbdf5642bb83ff…
+2026-05-23 14:01:32,738 INFO [T44] D1N refreshed 8c54d8f85ab300b8…
+2026-05-23 14:01:32,833 INFO [T9] D1N refreshed 101dbdd48553a547…
+2026-05-23 14:01:32,842 INFO [T36] D1N refreshed feb00056b966992d…
+2026-05-23 14:01:32,967 INFO [T21] D1N refreshed 62eb5c2d46197b35…
+2026-05-23 14:01:33,004 INFO [T32] D1N refreshed 32c69b57aeea3c3b…
+2026-05-23 14:01:33,098 INFO [T17] D1N refreshed abab894561f689e4…
+2026-05-23 14:01:33,159 INFO [T13] D1N refreshed 7795f2dd06de6e5f…
+2026-05-23 14:01:33,232 INFO [T20] D1N refreshed b5799e2383f9e4b2…
+2026-05-23 14:01:33,328 INFO [T45] D1N refreshed 9d014f48bdb4998f…
+2026-05-23 14:01:33,559 INFO [T22] leaf pattern=080??????? got=0 saved=0
+2026-05-23 14:01:33,735 INFO [T19] D1N refreshed 8201970a30849c5a…
+2026-05-23 14:01:33,776 INFO [T31] D1N refreshed cfbf080022123b63…
+2026-05-23 14:01:33,833 INFO [T43] D1N refreshed d9e573a9fd4ea9e9…
+2026-05-23 14:01:33,852 INFO [T11] D1N refreshed bdeefc63bb4c1198…
+2026-05-23 14:01:33,877 INFO [T7] leaf pattern=094??????? got=0 saved=0
+2026-05-23 14:01:33,945 WARNING [T39] ConnectionError attempt=2/3 pattern=05????????: ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', Non
+2026-05-23 14:01:33,945 INFO [T39] rotate IP 40e14ca7 → 584ee7fe
+2026-05-23 14:01:33,963 WARNING [T33] ConnectionError attempt=2/3 pattern=04????????: ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', Non
+2026-05-23 14:01:33,963 INFO [T33] rotate IP 90dd2f50 → caf8a10e
+2026-05-23 14:01:33,972 INFO [T10] D1N refreshed 7226207c8312ef12…
+2026-05-23 14:01:34,006 INFO [T18] leaf pattern=093??????? got=0 saved=0
+2026-05-23 14:01:34,007 INFO [T27] D1N refreshed 01da2ae056b23807…
+2026-05-23 14:01:34,243 INFO [T26] D1N refreshed 0126de2bc9066a74…
+2026-05-23 14:01:34,486 INFO [T42] D1N refreshed dd52e6f311feeea0…
+2026-05-23 14:01:34,653 INFO [T6] expand pattern=009??????? got=50 ≥ 30 → split into 10 children
+2026-05-23 14:01:34,735 INFO [T28] session init, proxy_sid=f5fb5018
+2026-05-23 14:01:34,742 INFO [T5] session init, proxy_sid=afbdcfeb
+2026-05-23 14:01:34,749 INFO [T29] session init, proxy_sid=c9dc15f6
+2026-05-23 14:01:34,761 INFO [T14] session init, proxy_sid=4695399f
+2026-05-23 14:01:34,778 INFO [T40] leaf pattern=06???????? got=0 saved=0
+2026-05-23 14:01:34,799 INFO [T8] expand pattern=000??????? got=50 ≥ 30 → split into 10 children
+2026-05-23 14:01:34,824 INFO [T25] expand pattern=003??????? got=50 ≥ 30 → split into 10 children
+2026-05-23 14:01:34,825 INFO [T50] D1N refreshed 7c9b2730c9c4c0d7…
+2026-05-23 14:01:34,877 INFO [T23] expand pattern=005??????? got=48 ≥ 30 → split into 10 children
+2026-05-23 14:01:35,027 INFO [T4] D1N refreshed 8241c941028b0db7…
+2026-05-23 14:01:35,450 WARNING [T3] ConnectionError attempt=1/3 pattern=095???????: ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', Non
+2026-05-23 14:01:35,450 INFO [T3] rotate IP ac388bb6 → 6e066d4e
+2026-05-23 14:01:35,639 INFO [T30] expand pattern=03???????? got=50 ≥ 30 → split into 10 children
+2026-05-23 14:01:35,643 INFO [T41] leaf pattern=001??????? got=0 saved=0
+2026-05-23 14:01:35,650 INFO [T37] expand pattern=008??????? got=49 ≥ 30 → split into 10 children
+2026-05-23 14:01:35,855 INFO [T48] expand pattern=0094?????? got=49 ≥ 30 → split into 10 children
+2026-05-23 14:01:35,918 INFO [T1] expand pattern=0096?????? got=48 ≥ 30 → split into 10 children
+2026-05-23 14:01:35,948 INFO [T2] expand pattern=0098?????? got=49 ≥ 30 → split into 10 children
+2026-05-23 14:01:36,578 WARNING [T47] ConnectionError attempt=1/3 pattern=0071??????: ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', Non
+2026-05-23 14:01:36,579 INFO [T47] rotate IP e4c6481d → 3f32911f
+2026-05-23 14:01:36,625 INFO [T28] D1N refreshed c65409da1a5aa265…
+2026-05-23 14:01:36,635 INFO [T29] D1N refreshed 1a46af15be88bf85…
+2026-05-23 14:01:36,662 WARNING [T35] ConnectionError attempt=1/3 pattern=0075??????: ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', Non
+2026-05-23 14:01:36,663 INFO [T35] rotate IP 723e2b3c → 3b3fb04b
+2026-05-23 14:01:36,710 INFO [T5] D1N refreshed c31eb8d064377026…
+2026-05-23 14:01:36,713 INFO [T14] D1N refreshed 109ae17a7e225107…
+2026-05-23 14:01:37,194 INFO [T38] leaf pattern=081??????? got=0 saved=0
+2026-05-23 14:01:37,265 WARNING [T46] D1N unresolved, rotating IP
+2026-05-23 14:01:37,265 INFO [T46] rotate IP ff0ce205 → 144ff9f6
+2026-05-23 14:01:37,752 INFO [T22] expand pattern=0099?????? got=48 ≥ 30 → split into 10 children
+2026-05-23 14:01:37,973 INFO [T7] expand pattern=0097?????? got=49 ≥ 30 → split into 10 children
+2026-05-23 14:01:38,023 INFO [T39] D1N refreshed f766803d59cf85c2…
+2026-05-23 14:01:38,208 INFO [T18] expand pattern=0001?????? got=47 ≥ 30 → split into 10 children
+2026-05-23 14:01:38,445 INFO [T12] leaf pattern=090??????? got=0 saved=0
+2026-05-23 14:01:38,460 INFO [T15] expand pattern=006??????? got=46 ≥ 30 → split into 10 children
+2026-05-23 14:01:38,465 INFO [T34] leaf pattern=083??????? got=0 saved=0
+2026-05-23 14:01:38,740 INFO [T24] leaf pattern=085??????? got=0 saved=0
+2026-05-23 14:01:38,750 INFO [T6] leaf pattern=0090?????? got=0 saved=0
+2026-05-23 14:01:38,789 INFO [T36] expand pattern=096??????? got=46 ≥ 30 → split into 10 children
+2026-05-23 14:01:38,799 INFO [T9] expand pattern=086??????? got=50 ≥ 30 → split into 10 children
+2026-05-23 14:01:38,892 INFO [T25] expand pattern=0002?????? got=48 ≥ 30 → split into 10 children
+2026-05-23 14:01:38,897 INFO [T16] leaf pattern=087??????? got=0 saved=0
+2026-05-23 14:01:38,914 INFO [T32] leaf pattern=099??????? got=0 saved=0
+2026-05-23 14:01:38,922 INFO [T33] D1N refreshed 06fb63f4647c4c8d…
+2026-05-23 14:01:39,042 INFO [T3] D1N refreshed afd7cc9386b1b58d…
+2026-05-23 14:01:39,131 INFO [T17] leaf pattern=084??????? got=0 saved=0
+2026-05-23 14:01:39,150 INFO [T21] leaf pattern=082??????? got=0 saved=0
+2026-05-23 14:01:39,284 INFO [T23] expand pattern=0003?????? got=50 ≥ 30 → split into 10 children
+2026-05-23 14:01:39,294 INFO [T8] expand pattern=0000?????? got=49 ≥ 30 → split into 10 children
+2026-05-23 14:01:39,308 INFO [T13] leaf pattern=088??????? got=0 saved=0
+2026-05-23 14:01:39,373 INFO [T45] expand pattern=098??????? got=49 ≥ 30 → split into 10 children
+2026-05-23 14:01:39,528 INFO [T49] leaf pattern=089??????? got=0 saved=0
+2026-05-23 14:01:39,661 INFO [T20] expand pattern=097??????? got=47 ≥ 30 → split into 10 children
+2026-05-23 14:01:39,670 INFO [T43] expand pattern=0074?????? got=48 ≥ 30 → split into 10 children
+2026-05-23 14:01:39,686 INFO [T44] leaf pattern=091??????? got=0 saved=0
+2026-05-23 14:01:39,737 INFO [T41] expand pattern=0005?????? got=49 ≥ 30 → split into 10 children
+2026-05-23 14:01:39,814 INFO [T30] expand pattern=0006?????? got=49 ≥ 30 → split into 10 children
+2026-05-23 14:01:39,826 INFO [T37] expand pattern=0007?????? got=49 ≥ 30 → split into 10 children
+2026-05-23 14:01:39,843 INFO [T19] expand pattern=0072?????? got=48 ≥ 30 → split into 10 children
+2026-05-23 14:01:39,881 INFO [T46] D1N refreshed cd431caa052b301d…
+2026-05-23 14:01:39,917 INFO [T11] expand pattern=0073?????? got=48 ≥ 30 → split into 10 children
+2026-05-23 14:01:39,948 INFO [T47] D1N refreshed 3e094886672c588a…
+2026-05-23 14:01:40,032 INFO [T10] expand pattern=0079?????? got=50 ≥ 30 → split into 10 children
+2026-05-23 14:01:40,044 INFO [T31] leaf pattern=0070?????? got=0 saved=0
+2026-05-23 14:01:40,066 INFO [T48] expand pattern=0008?????? got=50 ≥ 30 → split into 10 children
+2026-05-23 14:01:40,126 INFO [T35] D1N refreshed c38d9c07853aabd9…
+2026-05-23 14:01:40,136 INFO [T2] leaf pattern=0030?????? got=0 saved=0
+2026-05-23 14:01:40,185 INFO [T27] expand pattern=0076?????? got=48 ≥ 30 → split into 10 children
+2026-05-23 14:01:40,262 WARNING [T26] D1N unresolved, rotating IP
+2026-05-23 14:01:40,262 INFO [T26] rotate IP 7dbb19ce → f14b90f7
+2026-05-23 14:01:40,422 INFO [T1] expand pattern=0009?????? got=50 ≥ 30 → split into 10 children
+2026-05-23 14:01:40,528 INFO [T4] expand pattern=004??????? got=50 ≥ 30 → split into 10 children
+2026-05-23 14:01:40,951 INFO [T50] expand pattern=002??????? got=49 ≥ 30 → split into 10 children
+2026-05-23 14:01:41,230 INFO [T42] expand pattern=0078?????? got=49 ≥ 30 → split into 10 children
+2026-05-23 14:01:41,525 INFO [T38] leaf pattern=0031?????? got=0 saved=0
+2026-05-23 14:01:41,807 INFO [T22] expand pattern=0032?????? got=50 ≥ 30 → split into 10 children
+2026-05-23 14:01:41,954 INFO [T28] leaf pattern=0091?????? got=0 saved=0
+2026-05-23 14:01:41,983 INFO [T7] expand pattern=0033?????? got=50 ≥ 30 → split into 10 children
+2026-05-23 14:01:42,052 INFO [T26] D1N refreshed 1a20eff6c29175a5…
+2026-05-23 14:01:42,066 INFO [T14] expand pattern=0095?????? got=47 ≥ 30 → split into 10 children
+2026-05-23 14:01:42,183 INFO [T5] expand pattern=0092?????? got=49 ≥ 30 → split into 10 children
+2026-05-23 14:01:42,292 INFO [T18] expand pattern=0034?????? got=49 ≥ 30 → split into 10 children
+2026-05-23 14:01:42,469 INFO [T15] expand pattern=0036?????? got=49 ≥ 30 → split into 10 children
+2026-05-23 14:01:42,478 INFO [T29] expand pattern=0093?????? got=49 ≥ 30 → split into 10 children
+2026-05-23 14:01:42,539 INFO [T40] expand pattern=0004?????? got=48 ≥ 30 → split into 10 children
+2026-05-23 14:01:42,611 INFO [T12] expand pattern=0035?????? got=49 ≥ 30 → split into 10 children
+2026-05-23 14:01:42,736 INFO [T24] expand pattern=0038?????? got=50 ≥ 30 → split into 10 children
+2026-05-23 14:01:42,867 INFO [T9] leaf pattern=0051?????? got=0 saved=0
+2026-05-23 14:01:42,898 INFO [T25] expand pattern=0052?????? got=49 ≥ 30 → split into 10 children
+2026-05-23 14:01:42,924 INFO [T6] expand pattern=0039?????? got=48 ≥ 30 → split into 10 children
+2026-05-23 14:01:42,978 INFO [T34] expand pattern=0037?????? got=49 ≥ 30 → split into 10 children
+2026-05-23 14:01:43,087 INFO [T32] expand pattern=0054?????? got=49 ≥ 30 → split into 10 children
+2026-05-23 14:01:43,090 INFO [T36] leaf pattern=0050?????? got=0 saved=0
+2026-05-23 14:01:43,102 INFO [T17] expand pattern=0055?????? got=49 ≥ 30 → split into 10 children
+2026-05-23 14:01:43,123 INFO [T16] expand pattern=0053?????? got=49 ≥ 30 → split into 10 children
+2026-05-23 14:01:43,129 INFO [T39] leaf pattern=05???????? got=0 saved=0
+2026-05-23 14:01:43,161 INFO [T21] expand pattern=0056?????? got=50 ≥ 30 → split into 10 children
+2026-05-23 14:01:43,322 INFO [T45] leaf pattern=030??????? got=0 saved=0
+2026-05-23 14:01:43,377 INFO [T8] expand pattern=0058?????? got=47 ≥ 30 → split into 10 children
+2026-05-23 14:01:43,381 INFO [T13] expand pattern=0059?????? got=48 ≥ 30 → split into 10 children
+2026-05-23 14:01:43,446 INFO [T23] expand pattern=0057?????? got=47 ≥ 30 → split into 10 children
+2026-05-23 14:01:43,519 INFO [T49] leaf pattern=031??????? got=0 saved=0
+2026-05-23 14:01:43,545 WARNING [T30] ec=1 rate limited, rotating IP
+2026-05-23 14:01:43,545 INFO [T30] rotate IP 3c9b4bb4 → a3ffd11a
+2026-05-23 14:01:43,596 INFO [T20] expand pattern=032??????? got=49 ≥ 30 → split into 10 children
+2026-05-23 14:01:43,666 INFO [T41] expand pattern=035??????? got=50 ≥ 30 → split into 10 children
+2026-05-23 14:01:43,680 INFO [T43] expand pattern=033??????? got=50 ≥ 30 → split into 10 children
+2026-05-23 14:01:43,800 INFO [T44] expand pattern=034??????? got=50 ≥ 30 → split into 10 children
+2026-05-23 14:01:43,870 INFO [T11] expand pattern=039??????? got=49 ≥ 30 → split into 10 children
+2026-05-23 14:01:43,978 INFO [T19] expand pattern=038??????? got=50 ≥ 30 → split into 10 children
+2026-05-23 14:01:44,048 INFO [T10] leaf pattern=0080?????? got=0 saved=0
+2026-05-23 14:01:44,057 INFO [T37] expand pattern=037??????? got=49 ≥ 30 → split into 10 children
+2026-05-23 14:01:44,071 INFO [T31] expand pattern=0081?????? got=46 ≥ 30 → split into 10 children
+2026-05-23 14:01:44,137 INFO [T48] expand pattern=0082?????? got=49 ≥ 30 → split into 10 children
+2026-05-23 14:01:44,148 INFO [T2] expand pattern=0083?????? got=48 ≥ 30 → split into 10 children
+2026-05-23 14:01:44,177 INFO [T33] leaf pattern=04???????? got=0 saved=0
+2026-05-23 14:01:44,234 INFO [T3] leaf pattern=095??????? got=0 saved=0
+2026-05-23 14:01:44,594 INFO [T1] expand pattern=0085?????? got=50 ≥ 30 → split into 10 children
+2026-05-23 14:01:44,691 INFO [T4] expand pattern=0086?????? got=48 ≥ 30 → split into 10 children
+2026-05-23 14:01:45,035 INFO [T50] expand pattern=0087?????? got=48 ≥ 30 → split into 10 children
+2026-05-23 14:01:45,098 INFO [T46] leaf pattern=092??????? got=0 saved=0
+2026-05-23 14:01:45,159 INFO [T47] expand pattern=0071?????? got=42 ≥ 30 → split into 10 children
+2026-05-23 14:01:45,255 INFO [T27] expand pattern=0084?????? got=50 ≥ 30 → split into 10 children
+2026-05-23 14:01:45,261 INFO [T30] D1N refreshed 99b6a451ae097856…
+2026-05-23 14:01:45,432 INFO [T35] expand pattern=0075?????? got=49 ≥ 30 → split into 10 children
+2026-05-23 14:01:45,527 INFO [T42] expand pattern=0088?????? got=44 ≥ 30 → split into 10 children
+2026-05-23 14:01:45,595 INFO [T38] expand pattern=0089?????? got=50 ≥ 30 → split into 10 children
+2026-05-23 14:01:45,837 INFO [T22] expand pattern=00940????? got=43 ≥ 30 → split into 10 children
+2026-05-23 14:01:46,027 INFO [T28] expand pattern=00941????? got=42 ≥ 30 → split into 10 children
+2026-05-23 14:01:46,083 INFO [T14] expand pattern=00943????? got=41 ≥ 30 → split into 10 children
+2026-05-23 14:01:46,146 INFO [T7] expand pattern=00942????? got=38 ≥ 30 → split into 10 children
+2026-05-23 14:01:46,199 INFO [T5] expand pattern=00944????? got=40 ≥ 30 → split into 10 children
+2026-05-23 14:01:46,462 INFO [T15] expand pattern=00946????? got=42 ≥ 30 → split into 10 children
+2026-05-23 14:01:46,522 INFO [T29] expand pattern=00947????? got=43 ≥ 30 → split into 10 children
+2026-05-23 14:01:46,663 INFO [T12] expand pattern=00949????? got=41 ≥ 30 → split into 10 children
+2026-05-23 14:01:46,743 INFO [T24] expand pattern=00960????? got=39 ≥ 30 → split into 10 children
+2026-05-23 14:01:46,903 INFO [T9] expand pattern=00961????? got=44 ≥ 30 → split into 10 children
+2026-05-23 14:01:46,955 INFO [T25] expand pattern=00962????? got=46 ≥ 30 → split into 10 children
+2026-05-23 14:01:47,110 INFO [T6] expand pattern=00963????? got=45 ≥ 30 → split into 10 children
+2026-05-23 14:01:47,117 INFO [T16] expand pattern=00968????? got=48 ≥ 30 → split into 10 children
+2026-05-23 14:01:47,125 INFO [T17] expand pattern=00967????? got=46 ≥ 30 → split into 10 children
+2026-05-23 14:01:47,136 INFO [T26] expand pattern=0077?????? got=48 ≥ 30 → split into 10 children
+2026-05-23 14:01:47,145 INFO [T32] expand pattern=00965????? got=41 ≥ 30 → split into 10 children
+2026-05-23 14:01:47,155 INFO [T36] expand pattern=00966????? got=43 ≥ 30 → split into 10 children
+2026-05-23 14:01:47,224 INFO [T21] expand pattern=00980????? got=40 ≥ 30 → split into 10 children
+2026-05-23 14:01:47,302 INFO [T18] expand pattern=00945????? got=45 ≥ 30 → split into 10 children
+2026-05-23 14:01:47,337 INFO [T8] expand pattern=00983????? got=43 ≥ 30 → split into 10 children
+2026-05-23 14:01:47,361 INFO [T34] expand pattern=00964????? got=47 ≥ 30 → split into 10 children
+2026-05-23 14:01:47,367 INFO [T45] expand pattern=00981????? got=48 ≥ 30 → split into 10 children
+2026-05-23 14:01:47,468 INFO [T23] expand pattern=00984????? got=46 ≥ 30 → split into 10 children
+2026-05-23 14:01:47,514 INFO [T39] expand pattern=00969????? got=44 ≥ 30 → split into 10 children
+2026-05-23 14:01:47,537 INFO [T40] expand pattern=00948????? got=46 ≥ 30 → split into 10 children
+2026-05-23 14:01:47,590 INFO [T20] expand pattern=00986????? got=43 ≥ 30 → split into 10 children
+2026-05-23 14:01:47,625 INFO [T41] expand pattern=00987????? got=43 ≥ 30 → split into 10 children
+2026-05-23 14:01:47,635 INFO [T49] expand pattern=00985????? got=42 ≥ 30 → split into 10 children
+2026-05-23 14:01:47,654 INFO [T43] expand pattern=00988????? got=38 ≥ 30 → split into 10 children
+2026-05-23 14:01:47,858 INFO [T44] expand pattern=00989????? got=37 ≥ 30 → split into 10 children
+2026-05-23 14:01:47,944 INFO [T13] expand pattern=00982????? got=42 ≥ 30 → split into 10 children
+2026-05-23 14:01:47,968 INFO [T11] leaf pattern=00990????? got=24 saved=24
+2026-05-23 14:01:47,984 INFO [T19] leaf pattern=00991????? got=24 saved=24
+2026-05-23 14:01:48,073 INFO [T37] expand pattern=00993????? got=30 ≥ 30 → split into 10 children
+2026-05-23 14:01:48,087 INFO [T31] expand pattern=00994????? got=41 ≥ 30 → split into 10 children
+2026-05-23 14:01:48,206 INFO [T48] expand pattern=00995????? got=34 ≥ 30 → split into 10 children
+2026-05-23 14:01:48,223 INFO [T33] expand pattern=00997????? got=33 ≥ 30 → split into 10 children
+2026-05-23 14:01:48,229 INFO [T10] leaf pattern=00992????? got=21 saved=21
+2026-05-23 14:01:48,257 INFO [T2] expand pattern=00996????? got=31 ≥ 30 → split into 10 children
+2026-05-23 14:01:48,320 INFO [T3] leaf pattern=00998????? got=25 saved=25
+2026-05-23 14:01:48,711 INFO [T1] leaf pattern=00999????? got=0 saved=0
+2026-05-23 14:01:49,018 INFO [T50] expand pattern=00971????? got=46 ≥ 30 → split into 10 children
+2026-05-23 14:01:49,192 INFO [T47] expand pattern=00973????? got=49 ≥ 30 → split into 10 children
+2026-05-23 14:01:49,205 INFO [T46] expand pattern=00972????? got=48 ≥ 30 → split into 10 children
+2026-05-23 14:01:49,293 INFO [T27] expand pattern=00974????? got=46 ≥ 30 → split into 10 children
+2026-05-23 14:01:49,510 INFO [T35] expand pattern=00975????? got=46 ≥ 30 → split into 10 children
+2026-05-23 14:01:49,589 INFO [T42] expand pattern=00976????? got=48 ≥ 30 → split into 10 children
+2026-05-23 14:01:49,602 INFO [T38] expand pattern=00977????? got=39 ≥ 30 → split into 10 children
+2026-05-23 14:01:49,676 INFO [T4] expand pattern=00970????? got=38 ≥ 30 → split into 10 children
+2026-05-23 14:01:49,844 INFO [T22] expand pattern=00978????? got=44 ≥ 30 → split into 10 children
+2026-05-23 14:01:50,135 INFO [T14] leaf pattern=00010????? got=28 saved=28
+2026-05-23 14:01:50,155 INFO [T7] leaf pattern=00011????? got=24 saved=24
+2026-05-23 14:01:50,243 INFO [T5] leaf pattern=00012????? got=27 saved=27
+2026-05-23 14:01:50,325 INFO [T30] expand pattern=036??????? got=49 ≥ 30 → split into 10 children
+2026-05-23 14:01:50,436 INFO [T15] leaf pattern=00013????? got=23 saved=23
+2026-05-23 14:01:50,588 INFO [T29] expand pattern=00014????? got=32 ≥ 30 → split into 10 children
+2026-05-23 14:01:50,645 INFO [T28] expand pattern=00979????? got=33 ≥ 30 → split into 10 children
+2026-05-23 14:01:50,873 INFO [T9] expand pattern=00017????? got=33 ≥ 30 → split into 10 children
+2026-05-23 14:01:50,879 INFO [T24] leaf pattern=00016????? got=29 saved=29
+2026-05-23 14:01:50,900 INFO [T12] leaf pattern=00015????? got=26 saved=26
+2026-05-23 14:01:50,994 INFO [T25] leaf pattern=00018????? got=28 saved=28
+2026-05-23 14:01:51,032 INFO [T36] expand pattern=0063?????? got=48 ≥ 30 → split into 10 children
+2026-05-23 14:01:51,097 INFO [T17] expand pattern=0062?????? got=46 ≥ 30 → split into 10 children
+2026-05-23 14:01:51,157 INFO [T26] leaf pattern=0060?????? got=0 saved=0
+2026-05-23 14:01:51,170 INFO [T6] leaf pattern=00019????? got=28 saved=28
+2026-05-23 14:01:51,186 INFO [T32] expand pattern=0061?????? got=39 ≥ 30 → split into 10 children
+2026-05-23 14:01:51,410 INFO [T21] expand pattern=0065?????? got=49 ≥ 30 → split into 10 children
+2026-05-23 14:01:51,429 INFO [T18] expand pattern=0066?????? got=48 ≥ 30 → split into 10 children
+2026-05-23 14:01:51,441 INFO [T16] expand pattern=0064?????? got=50 ≥ 30 → split into 10 children
+2026-05-23 14:01:51,449 INFO [T39] expand pattern=0961?????? got=39 ≥ 30 → split into 10 children
+2026-05-23 14:01:51,548 INFO [T34] expand pattern=0068?????? got=48 ≥ 30 → split into 10 children
+2026-05-23 14:01:51,560 INFO [T41] expand pattern=0965?????? got=38 ≥ 30 → split into 10 children
+2026-05-23 14:01:51,583 INFO [T49] expand pattern=0964?????? got=46 ≥ 30 → split into 10 children
+2026-05-23 14:01:51,602 INFO [T20] expand pattern=0963?????? got=33 ≥ 30 → split into 10 children
+2026-05-23 14:01:51,612 INFO [T45] expand pattern=0069?????? got=50 ≥ 30 → split into 10 children
+2026-05-23 14:01:51,635 INFO [T23] leaf pattern=0960?????? got=0 saved=0
+2026-05-23 14:01:51,741 INFO [T8] expand pattern=0067?????? got=49 ≥ 30 → split into 10 children
+2026-05-23 14:01:51,750 INFO [T43] expand pattern=0966?????? got=36 ≥ 30 → split into 10 children
+2026-05-23 14:01:51,760 INFO [T40] expand pattern=0962?????? got=40 ≥ 30 → split into 10 children
+2026-05-23 14:01:51,835 INFO [T44] expand pattern=0967?????? got=38 ≥ 30 → split into 10 children
+2026-05-23 14:01:51,927 INFO [T13] expand pattern=0968?????? got=41 ≥ 30 → split into 10 children
+2026-05-23 14:01:51,984 INFO [T37] leaf pattern=0861?????? got=0 saved=0
+2026-05-23 14:01:52,066 INFO [T31] expand pattern=0862?????? got=45 ≥ 30 → split into 10 children
+2026-05-23 14:01:52,128 INFO [T10] leaf pattern=0863?????? got=0 saved=0
+2026-05-23 14:01:52,204 INFO [T2] expand pattern=0866?????? got=49 ≥ 30 → split into 10 children
+2026-05-23 14:01:52,261 INFO [T19] leaf pattern=0860?????? got=0 saved=0
+2026-05-23 14:01:52,266 INFO [T33] leaf pattern=0864?????? got=0 saved=0
+2026-05-23 14:01:52,287 INFO [T3] expand pattern=0867?????? got=48 ≥ 30 → split into 10 children
+2026-05-23 14:01:52,499 INFO [T11] expand pattern=0969?????? got=36 ≥ 30 → split into 10 children
+2026-05-23 14:01:52,601 INFO [T48] expand pattern=0865?????? got=50 ≥ 30 → split into 10 children
+2026-05-23 14:01:52,774 INFO [T1] expand pattern=0868?????? got=46 ≥ 30 → split into 10 children
+2026-05-23 14:01:52,976 INFO [T50] expand pattern=0869?????? got=49 ≥ 30 → split into 10 children
+2026-05-23 14:01:53,213 INFO [T46] expand pattern=00021????? got=48 ≥ 30 → split into 10 children
+2026-05-23 14:01:53,222 INFO [T47] expand pattern=00020????? got=50 ≥ 30 → split into 10 children
+2026-05-23 14:01:53,236 INFO [T27] expand pattern=00022????? got=49 ≥ 30 → split into 10 children
+2026-05-23 14:01:53,651 INFO [T38] expand pattern=00025????? got=50 ≥ 30 → split into 10 children
+2026-05-23 14:01:53,771 INFO [T4] expand pattern=00026????? got=50 ≥ 30 → split into 10 children
+2026-05-23 14:01:53,839 INFO [T22] expand pattern=00027????? got=49 ≥ 30 → split into 10 children
+2026-05-23 14:01:54,054 INFO [T35] expand pattern=00023????? got=48 ≥ 30 → split into 10 children
+2026-05-23 14:01:54,064 INFO [T42] expand pattern=00024????? got=48 ≥ 30 → split into 10 children
+2026-05-23 14:01:54,326 INFO [T5] expand pattern=00030????? got=46 ≥ 30 → split into 10 children
+2026-05-23 14:01:54,374 INFO [T7] expand pattern=00029????? got=46 ≥ 30 → split into 10 children
+2026-05-23 14:01:54,431 INFO [T14] expand pattern=00028????? got=50 ≥ 30 → split into 10 children
+2026-05-23 14:01:54,493 INFO [T15] expand pattern=00032????? got=47 ≥ 30 → split into 10 children
+2026-05-23 14:01:54,509 INFO [T30] expand pattern=00031????? got=47 ≥ 30 → split into 10 children
+2026-05-23 14:01:54,645 INFO [T28] expand pattern=00034????? got=50 ≥ 30 → split into 10 children
+2026-05-23 14:01:54,818 INFO [T29] expand pattern=00033????? got=50 ≥ 30 → split into 10 children
+2026-05-23 14:01:54,889 INFO [T24] expand pattern=00036????? got=49 ≥ 30 → split into 10 children
+2026-05-23 14:01:54,902 INFO [T12] expand pattern=00037????? got=48 ≥ 30 → split into 10 children
+2026-05-23 14:01:54,927 INFO [T9] expand pattern=00035????? got=49 ≥ 30 → split into 10 children
+2026-05-23 14:01:55,115 INFO [T25] expand pattern=00038????? got=50 ≥ 30 → split into 10 children
+2026-05-23 14:01:55,209 INFO [T26] expand pattern=00001????? got=48 ≥ 30 → split into 10 children
+2026-05-23 14:01:55,218 INFO [T36] expand pattern=00039????? got=49 ≥ 30 → split into 10 children
+2026-05-23 14:01:55,286 INFO [T6] expand pattern=00002????? got=50 ≥ 30 → split into 10 children
+2026-05-23 14:01:55,343 INFO [T17] expand pattern=00000????? got=50 ≥ 30 → split into 10 children
+2026-05-23 14:01:55,545 INFO [T49] leaf pattern=0980?????? got=0 saved=0
+2026-05-23 14:01:55,553 INFO [T21] expand pattern=00004????? got=49 ≥ 30 → split into 10 children
+2026-05-23 14:01:55,563 INFO [T45] expand pattern=0982?????? got=34 ≥ 30 → split into 10 children
+2026-05-23 14:01:55,573 INFO [T20] expand pattern=0981?????? got=40 ≥ 30 → split into 10 children
+2026-05-23 14:01:55,614 INFO [T8] expand pattern=0985?????? got=33 ≥ 30 → split into 10 children
+2026-05-23 14:01:55,618 INFO [T39] expand pattern=00007????? got=49 ≥ 30 → split into 10 children
+2026-05-23 14:01:55,622 INFO [T32] expand pattern=00003????? got=49 ≥ 30 → split into 10 children
+2026-05-23 14:01:55,675 INFO [T43] expand pattern=0984?????? got=35 ≥ 30 → split into 10 children
+2026-05-23 14:01:55,739 INFO [T44] leaf pattern=0987?????? got=24 saved=24
+2026-05-23 14:01:55,841 INFO [T23] expand pattern=0983?????? got=31 ≥ 30 → split into 10 children
+2026-05-23 14:01:55,846 INFO [T41] expand pattern=00009????? got=50 ≥ 30 → split into 10 children
+2026-05-23 14:01:55,859 INFO [T16] expand pattern=00005????? got=47 ≥ 30 → split into 10 children
+2026-05-23 14:01:55,879 INFO [T40] expand pattern=0986?????? got=31 ≥ 30 → split into 10 children
+2026-05-23 14:01:55,887 INFO [T34] expand pattern=00008????? got=49 ≥ 30 → split into 10 children
+2026-05-23 14:01:55,915 INFO [T37] leaf pattern=0989?????? got=29 saved=29
+2026-05-23 14:01:56,038 INFO [T31] leaf pattern=0970?????? got=0 saved=0
+2026-05-23 14:01:56,052 INFO [T13] leaf pattern=0988?????? got=12 saved=12
+2026-05-23 14:01:56,061 INFO [T10] expand pattern=0971?????? got=41 ≥ 30 → split into 10 children
+2026-05-23 14:01:56,136 INFO [T18] expand pattern=00006????? got=48 ≥ 30 → split into 10 children
+2026-05-23 14:01:56,145 INFO [T19] expand pattern=0973?????? got=40 ≥ 30 → split into 10 children
+2026-05-23 14:01:56,176 INFO [T33] expand pattern=0974?????? got=47 ≥ 30 → split into 10 children
+2026-05-23 14:01:56,247 INFO [T3] expand pattern=0975?????? got=38 ≥ 30 → split into 10 children
+2026-05-23 14:01:56,266 INFO [T2] expand pattern=0972?????? got=42 ≥ 30 → split into 10 children
+2026-05-23 14:01:56,423 INFO [T11] expand pattern=0976?????? got=40 ≥ 30 → split into 10 children
+2026-05-23 14:01:56,573 INFO [T48] expand pattern=0977?????? got=30 ≥ 30 → split into 10 children
+2026-05-23 14:01:56,835 INFO [T1] expand pattern=0978?????? got=41 ≥ 30 → split into 10 children
+2026-05-23 14:01:57,231 INFO [T46] expand pattern=00740????? got=37 ≥ 30 → split into 10 children
+2026-05-23 14:01:57,288 INFO [T50] leaf pattern=0979?????? got=28 saved=28
+2026-05-23 14:01:57,543 INFO [T27] expand pattern=00742????? got=41 ≥ 30 → split into 10 children
+2026-05-23 14:01:57,754 INFO [T38] expand pattern=00743????? got=44 ≥ 30 → split into 10 children
+2026-05-23 14:01:57,800 INFO [T47] expand pattern=00741????? got=41 ≥ 30 → split into 10 children
+2026-05-23 14:01:57,826 INFO [T4] expand pattern=00744????? got=38 ≥ 30 → split into 10 children
+2026-05-23 14:01:57,860 INFO [T22] expand pattern=00745????? got=40 ≥ 30 → split into 10 children
+2026-05-23 14:01:58,269 INFO [T42] expand pattern=00747????? got=40 ≥ 30 → split into 10 children
+2026-05-23 14:01:58,284 INFO [T35] expand pattern=00746????? got=41 ≥ 30 → split into 10 children
+2026-05-23 14:01:58,345 INFO [T5] expand pattern=00748????? got=42 ≥ 30 → split into 10 children
+2026-05-23 14:01:58,383 INFO [T7] expand pattern=00749????? got=41 ≥ 30 → split into 10 children
+2026-05-23 14:01:58,529 INFO [T14] expand pattern=00050????? got=49 ≥ 30 → split into 10 children
+2026-05-23 14:01:58,544 INFO [T30] expand pattern=00052????? got=50 ≥ 30 → split into 10 children
+2026-05-23 14:01:58,554 INFO [T15] expand pattern=00051????? got=49 ≥ 30 → split into 10 children
+2026-05-23 14:01:58,712 INFO [T28] expand pattern=00053????? got=48 ≥ 30 → split into 10 children
+2026-05-23 14:01:58,889 INFO [T12] expand pattern=00056????? got=50 ≥ 30 → split into 10 children
+2026-05-23 14:01:58,899 INFO [T29] expand pattern=00054????? got=48 ≥ 30 → split into 10 children
+2026-05-23 14:01:58,940 INFO [T24] expand pattern=00055????? got=50 ≥ 30 → split into 10 children
+2026-05-23 14:01:59,006 INFO [T9] expand pattern=00057????? got=47 ≥ 30 → split into 10 children
+2026-05-23 14:01:59,206 INFO [T25] expand pattern=00058????? got=49 ≥ 30 → split into 10 children
+2026-05-23 14:01:59,290 INFO [T36] expand pattern=00059????? got=50 ≥ 30 → split into 10 children
+2026-05-23 14:01:59,303 INFO [T6] expand pattern=00061????? got=49 ≥ 30 → split into 10 children
+2026-05-23 14:01:59,561 INFO [T49] expand pattern=00064????? got=50 ≥ 30 → split into 10 children
+2026-05-23 14:01:59,598 INFO [T45] expand pattern=00065????? got=48 ≥ 30 → split into 10 children
+2026-05-23 14:01:59,623 INFO [T17] expand pattern=00062????? got=48 ≥ 30 → split into 10 children
+2026-05-23 14:01:59,654 INFO [T26] expand pattern=00060????? got=50 ≥ 30 → split into 10 children
+2026-05-23 14:01:59,666 INFO [T39] expand pattern=00068????? got=50 ≥ 30 → split into 10 children
+2026-05-23 14:01:59,674 INFO [T21] expand pattern=00063????? got=48 ≥ 30 → split into 10 children
+2026-05-23 14:01:59,689 INFO [T43] expand pattern=00070????? got=50 ≥ 30 → split into 10 children
+2026-05-23 14:01:59,704 INFO [T32] expand pattern=00069????? got=49 ≥ 30 → split into 10 children
+2026-05-23 14:01:59,779 INFO [T44] expand pattern=00071????? got=45 ≥ 30 → split into 10 children
+2026-05-23 14:01:59,837 INFO [T20] expand pattern=00066????? got=47 ≥ 30 → split into 10 children
+2026-05-23 14:01:59,847 INFO [T16] expand pattern=00074????? got=49 ≥ 30 → split into 10 children
+2026-05-23 14:01:59,934 INFO [T40] expand pattern=00075????? got=47 ≥ 30 → split into 10 children
+2026-05-23 14:01:59,972 INFO [T8] expand pattern=00067????? got=49 ≥ 30 → split into 10 children
+2026-05-23 14:01:59,985 INFO [T23] expand pattern=00072????? got=49 ≥ 30 → split into 10 children
+2026-05-23 14:02:00,045 INFO [T10] expand pattern=00720????? got=33 ≥ 30 → split into 10 children
+2026-05-23 14:02:00,067 INFO [T34] expand pattern=00076????? got=49 ≥ 30 → split into 10 children
+2026-05-23 14:02:00,119 INFO [T19] expand pattern=00722????? got=32 ≥ 30 → split into 10 children
+2026-05-23 14:02:00,172 INFO [T13] expand pattern=00079????? got=50 ≥ 30 → split into 10 children
+2026-05-23 14:02:00,207 INFO [T33] expand pattern=00723????? got=39 ≥ 30 → split into 10 children
+2026-05-23 14:02:00,328 INFO [T41] expand pattern=00073????? got=47 ≥ 30 → split into 10 children
+2026-05-23 14:02:00,342 INFO [T3] expand pattern=00724????? got=48 ≥ 30 → split into 10 children
+2026-05-23 14:02:00,356 INFO [T37] expand pattern=00077????? got=49 ≥ 30 → split into 10 children
+2026-05-23 14:02:00,372 INFO [T2] expand pattern=00725????? got=40 ≥ 30 → split into 10 children
+2026-05-23 14:02:00,411 INFO [T18] expand pattern=00721????? got=36 ≥ 30 → split into 10 children
+2026-05-23 14:02:00,422 INFO [T11] expand pattern=00726????? got=41 ≥ 30 → split into 10 children
+2026-05-23 14:02:00,656 INFO [T48] expand pattern=00727????? got=33 ≥ 30 → split into 10 children
+2026-05-23 14:02:00,670 INFO [T31] expand pattern=00078????? got=49 ≥ 30 → split into 10 children
+2026-05-23 14:02:00,778 INFO === Job 34421b5a PAUSED ===

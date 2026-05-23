@@ -1,0 +1,455 @@
+2026-05-23 14:33:59,861 INFO Smart seed: skipping 00/01/02/04-07 → enqueue ['03????????', '08????????', '09????????']
+2026-05-23 14:33:59,866 INFO === Job ebbb69c8 RUNNING (50 thread(s)) ===
+2026-05-23 14:33:59,919 INFO [T7] session init, proxy_sid=83218387
+2026-05-23 14:33:59,923 INFO [T14] session init, proxy_sid=53927c4b
+2026-05-23 14:33:59,929 INFO [T17] session init, proxy_sid=3e03203f
+2026-05-23 14:34:02,682 INFO [T17] D1N refreshed 3eb3f8ed56a9ecbc…
+2026-05-23 14:34:02,845 INFO [T14] D1N refreshed 08cb2ecf10cbd13e…
+2026-05-23 14:34:03,263 WARNING [T7] SSLError attempt=1/3 pattern=03????????: HTTPSConnectionPool(host='vietteltelecom.vn', port=443): Max retries exceeded with url: /api/get/sim (Caused by SSLError
+2026-05-23 14:34:03,264 INFO [T7] rotate IP 83218387 → 1e2ff01f
+2026-05-23 14:34:06,800 INFO [T17] expand pattern=09???????? got=49 ≥ 30 → split into 10 children
+2026-05-23 14:34:06,810 INFO [T5] session init, proxy_sid=6cdcc050
+2026-05-23 14:34:06,813 INFO [T45] session init, proxy_sid=74479fef
+2026-05-23 14:34:06,818 INFO [T42] session init, proxy_sid=e955cce8
+2026-05-23 14:34:06,822 INFO [T37] session init, proxy_sid=7dc203ac
+2026-05-23 14:34:06,828 INFO [T22] session init, proxy_sid=5de4ed14
+2026-05-23 14:34:06,834 INFO [T49] session init, proxy_sid=f9b7ac7c
+2026-05-23 14:34:06,839 INFO [T13] session init, proxy_sid=766066a9
+2026-05-23 14:34:06,842 INFO [T20] session init, proxy_sid=82418a76
+2026-05-23 14:34:06,847 INFO [T21] session init, proxy_sid=4a011ded
+2026-05-23 14:34:07,000 INFO [T7] D1N refreshed 46cf0a26d26dd7c8…
+2026-05-23 14:34:08,140 INFO [T14] expand pattern=08???????? got=47 ≥ 30 → split into 10 children
+2026-05-23 14:34:08,243 WARNING [T45] SSLError attempt=1/3 pattern=092???????: HTTPSConnectionPool(host='vietteltelecom.vn', port=443): Max retries exceeded with url: /api/get/sim (Caused by SSLError
+2026-05-23 14:34:08,244 INFO [T45] rotate IP 74479fef → de1124e3
+2026-05-23 14:34:08,294 INFO [T15] session init, proxy_sid=19f58953
+2026-05-23 14:34:08,298 INFO [T40] session init, proxy_sid=204d2b53
+2026-05-23 14:34:08,305 INFO [T11] session init, proxy_sid=446ad43a
+2026-05-23 14:34:08,309 INFO [T19] session init, proxy_sid=0f2d36d0
+2026-05-23 14:34:08,314 INFO [T12] session init, proxy_sid=199c897d
+2026-05-23 14:34:08,318 INFO [T36] session init, proxy_sid=69840244
+2026-05-23 14:34:08,323 INFO [T47] session init, proxy_sid=3ae94a80
+2026-05-23 14:34:08,328 INFO [T34] session init, proxy_sid=7e5b1f3f
+2026-05-23 14:34:08,331 INFO [T1] session init, proxy_sid=a58fa722
+2026-05-23 14:34:08,969 INFO [T20] D1N refreshed f1e2586ca0dc84fd…
+2026-05-23 14:34:09,021 INFO [T5] D1N refreshed 2358a3ce36814af5…
+2026-05-23 14:34:09,072 INFO [T37] D1N refreshed f5f2f9aeab646aa6…
+2026-05-23 14:34:09,073 INFO [T13] D1N refreshed 4a07dfedbc377c47…
+2026-05-23 14:34:09,105 INFO [T22] D1N refreshed b710cd33d06a12a0…
+2026-05-23 14:34:09,718 INFO [T17] leaf pattern=090??????? got=0 saved=0
+2026-05-23 14:34:09,724 WARNING [T19] SSLError attempt=1/3 pattern=084???????: HTTPSConnectionPool(host='vietteltelecom.vn', port=443): Max retries exceeded with url: /api/get/sim (Caused by SSLError
+2026-05-23 14:34:09,724 INFO [T19] rotate IP 0f2d36d0 → 6a1fa17a
+2026-05-23 14:34:09,756 WARNING [T1] SSLError attempt=1/3 pattern=089???????: HTTPSConnectionPool(host='vietteltelecom.vn', port=443): Max retries exceeded with url: /api/get/sim (Caused by SSLError
+2026-05-23 14:34:09,756 INFO [T1] rotate IP a58fa722 → 29f30eae
+2026-05-23 14:34:10,471 INFO [T12] D1N refreshed c8be5fb982fb2beb…
+2026-05-23 14:34:10,478 INFO [T36] D1N refreshed 51d20213933004d4…
+2026-05-23 14:34:10,480 INFO [T34] D1N refreshed 4b253ef71f72fa65…
+2026-05-23 14:34:10,562 INFO [T40] D1N refreshed ffba264f8de4268a…
+2026-05-23 14:34:10,659 INFO [T15] D1N refreshed 4d65e6b1d4417d60…
+2026-05-23 14:34:11,060 INFO [T45] D1N refreshed b2e675c423b75bf6…
+2026-05-23 14:34:11,072 INFO [T11] D1N refreshed 14a3ff4206fdaae1…
+2026-05-23 14:34:11,090 INFO [T14] leaf pattern=080??????? got=0 saved=0
+2026-05-23 14:34:11,195 INFO [T35] session init, proxy_sid=5dea062c
+2026-05-23 14:34:11,201 INFO [T38] session init, proxy_sid=c4e7176b
+2026-05-23 14:34:11,206 INFO [T33] session init, proxy_sid=77f79633
+2026-05-23 14:34:11,212 INFO [T7] expand pattern=03???????? got=50 ≥ 30 → split into 10 children
+2026-05-23 14:34:11,218 INFO [T2] session init, proxy_sid=cc026c04
+2026-05-23 14:34:11,226 INFO [T28] session init, proxy_sid=c632b9a6
+2026-05-23 14:34:11,231 INFO [T10] session init, proxy_sid=b0bde952
+2026-05-23 14:34:11,240 INFO [T16] session init, proxy_sid=839d48e7
+2026-05-23 14:34:11,244 INFO [T30] session init, proxy_sid=6e703134
+2026-05-23 14:34:11,248 INFO [T50] session init, proxy_sid=e5a5423b
+2026-05-23 14:34:11,252 INFO [T8] session init, proxy_sid=ea006744
+2026-05-23 14:34:12,242 WARNING [T42] ConnectionError attempt=1/3 pattern=093???????: ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', Non
+2026-05-23 14:34:12,242 INFO [T42] rotate IP e955cce8 → 8395c765
+2026-05-23 14:34:12,542 INFO [T19] D1N refreshed a9c6dc03227bea28…
+2026-05-23 14:34:12,605 WARNING [T22] SSLError attempt=1/3 pattern=095???????: HTTPSConnectionPool(host='vietteltelecom.vn', port=443): Max retries exceeded with url: /api/get/sim (Caused by SSLError
+2026-05-23 14:34:12,605 INFO [T22] rotate IP 5de4ed14 → 9407275c
+2026-05-23 14:34:12,640 INFO [T1] D1N refreshed c5d6f30bff1c0fe6…
+2026-05-23 14:34:13,251 WARNING [T49] ConnectionError attempt=1/3 pattern=096???????: ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', Non
+2026-05-23 14:34:13,251 INFO [T49] rotate IP f9b7ac7c → 5ce273ac
+2026-05-23 14:34:13,269 WARNING [T21] ConnectionError attempt=1/3 pattern=099???????: ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', Non
+2026-05-23 14:34:13,270 INFO [T21] rotate IP 4a011ded → e00e771b
+2026-05-23 14:34:13,357 INFO [T20] expand pattern=098??????? got=49 ≥ 30 → split into 10 children
+2026-05-23 14:34:13,404 INFO [T31] session init, proxy_sid=c904ba6c
+2026-05-23 14:34:13,409 INFO [T43] session init, proxy_sid=c2e0ce5c
+2026-05-23 14:34:13,414 INFO [T18] session init, proxy_sid=8356b869
+2026-05-23 14:34:13,415 WARNING [T38] ProxyError attempt=1/3 pattern=031???????: HTTPSConnectionPool(host='vietteltelecom.vn', port=443): Max retries exceeded with url: /api/get/sim (Caused by ProxyErr
+2026-05-23 14:34:13,415 INFO [T38] rotate IP c4e7176b → f20a2516
+2026-05-23 14:34:13,420 INFO [T44] session init, proxy_sid=111083de
+2026-05-23 14:34:13,425 INFO [T6] session init, proxy_sid=11d36c39
+2026-05-23 14:34:13,429 INFO [T39] session init, proxy_sid=1f2d6b2e
+2026-05-23 14:34:13,436 INFO [T26] session init, proxy_sid=1737aece
+2026-05-23 14:34:13,441 INFO [T23] session init, proxy_sid=43abb080
+2026-05-23 14:34:13,445 INFO [T4] session init, proxy_sid=101bf34b
+2026-05-23 14:34:13,467 INFO [T35] D1N refreshed 60697c6406964c4e…
+2026-05-23 14:34:13,581 INFO [T8] D1N refreshed ee8d8745a9b80392…
+2026-05-23 14:34:13,710 INFO [T28] D1N refreshed a74586a68fdae508…
+2026-05-23 14:34:13,727 WARNING [T47] ConnectionError attempt=1/3 pattern=087???????: ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', Non
+2026-05-23 14:34:13,727 INFO [T47] rotate IP 3ae94a80 → 706b65b7
+2026-05-23 14:34:13,776 INFO [T10] D1N refreshed 14644491b0cc2bcb…
+2026-05-23 14:34:13,778 WARNING [T33] ProxyError attempt=1/3 pattern=032???????: HTTPSConnectionPool(host='vietteltelecom.vn', port=443): Max retries exceeded with url: /api/get/sim (Caused by ProxyErr
+2026-05-23 14:34:13,778 INFO [T33] rotate IP 77f79633 → a70a7c9c
+2026-05-23 14:34:13,840 INFO [T30] D1N refreshed 365042fe5345022d…
+2026-05-23 14:34:13,887 INFO [T2] D1N refreshed 9e60b18032500e58…
+2026-05-23 14:34:13,892 WARNING [T12] SSLError attempt=1/3 pattern=085???????: HTTPSConnectionPool(host='vietteltelecom.vn', port=443): Max retries exceeded with url: /api/get/sim (Caused by SSLError
+2026-05-23 14:34:13,892 INFO [T12] rotate IP 199c897d → ecdcbbfa
+2026-05-23 14:34:13,946 INFO [T13] expand pattern=097??????? got=47 ≥ 30 → split into 10 children
+2026-05-23 14:34:14,092 INFO [T29] session init, proxy_sid=2a6d35f5
+2026-05-23 14:34:14,113 INFO [T46] session init, proxy_sid=3387fe84
+2026-05-23 14:34:14,120 INFO [T9] session init, proxy_sid=2151a4da
+2026-05-23 14:34:14,127 INFO [T25] session init, proxy_sid=73867385
+2026-05-23 14:34:14,133 INFO [T41] session init, proxy_sid=e8eed5e9
+2026-05-23 14:34:14,216 INFO [T32] session init, proxy_sid=7e4f17fc
+2026-05-23 14:34:14,221 INFO [T3] session init, proxy_sid=fbc76f74
+2026-05-23 14:34:14,240 INFO [T37] leaf pattern=094??????? got=0 saved=0
+2026-05-23 14:34:14,244 INFO [T5] leaf pattern=091??????? got=0 saved=0
+2026-05-23 14:34:14,638 INFO [T34] leaf pattern=088??????? got=0 saved=0
+2026-05-23 14:34:14,646 INFO [T36] expand pattern=086??????? got=48 ≥ 30 → split into 10 children
+2026-05-23 14:34:14,674 INFO [T16] D1N refreshed 4823ec8b2a80cdcd…
+2026-05-23 14:34:14,777 INFO [T24] session init, proxy_sid=7431ae00
+2026-05-23 14:34:14,923 INFO [T27] session init, proxy_sid=2b6f3211
+2026-05-23 14:34:14,972 INFO [T48] session init, proxy_sid=6aefb92a
+2026-05-23 14:34:15,143 INFO [T11] leaf pattern=083??????? got=0 saved=0
+2026-05-23 14:34:15,152 INFO [T14] expand pattern=0977?????? got=32 ≥ 30 → split into 10 children
+2026-05-23 14:34:15,393 INFO [T15] leaf pattern=081??????? got=0 saved=0
+2026-05-23 14:34:15,437 INFO [T42] D1N refreshed ff166c5737b974cf…
+2026-05-23 14:34:15,509 INFO [T45] leaf pattern=092??????? got=0 saved=0
+2026-05-23 14:34:15,873 INFO [T6] D1N refreshed c18062cb8d112575…
+2026-05-23 14:34:15,940 INFO [T31] D1N refreshed 74ac388d79f6b4eb…
+2026-05-23 14:34:15,996 WARNING [T32] SSLError attempt=1/3 pattern=0978??????: HTTPSConnectionPool(host='vietteltelecom.vn', port=443): Max retries exceeded with url: /api/get/sim (Caused by SSLError
+2026-05-23 14:34:15,996 INFO [T32] rotate IP 7e4f17fc → d4ef3925
+2026-05-23 14:34:16,030 INFO [T39] D1N refreshed d6459ebb5c23381c…
+2026-05-23 14:34:16,030 INFO [T44] D1N refreshed 4e06bca3420e5777…
+2026-05-23 14:34:16,045 INFO [T7] expand pattern=0862?????? got=48 ≥ 30 → split into 10 children
+2026-05-23 14:34:16,050 INFO [T4] D1N refreshed 878fe3472d6597fc…
+2026-05-23 14:34:16,320 INFO [T26] D1N refreshed 0770414a9c726933…
+2026-05-23 14:34:16,325 INFO [T20] leaf pattern=0980?????? got=0 saved=0
+2026-05-23 14:34:16,386 INFO [T23] D1N refreshed daaa8dfa3ddde111…
+2026-05-23 14:34:16,516 INFO [T40] leaf pattern=082??????? got=0 saved=0
+2026-05-23 14:34:16,656 WARNING [T50] ConnectionError attempt=1/3 pattern=038???????: ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', Non
+2026-05-23 14:34:16,657 INFO [T50] rotate IP e5a5423b → b491c5fe
+2026-05-23 14:34:16,913 INFO [T3] D1N refreshed 88613fdfb6da36de…
+2026-05-23 14:34:16,959 INFO [T13] expand pattern=0971?????? got=44 ≥ 30 → split into 10 children
+2026-05-23 14:34:17,127 INFO [T5] leaf pattern=0863?????? got=0 saved=0
+2026-05-23 14:34:17,156 WARNING [T28] SSLError attempt=1/3 pattern=034???????: HTTPSConnectionPool(host='vietteltelecom.vn', port=443): Max retries exceeded with url: /api/get/sim (Caused by SSLError
+2026-05-23 14:34:17,156 INFO [T28] rotate IP c632b9a6 → a356f57a
+2026-05-23 14:34:17,372 INFO [T46] D1N refreshed 660704d503eff059…
+2026-05-23 14:34:17,502 INFO [T43] D1N refreshed 59c3a1f331fcc83c…
+2026-05-23 14:34:17,532 INFO [T37] expand pattern=0866?????? got=47 ≥ 30 → split into 10 children
+2026-05-23 14:34:17,637 INFO [T36] leaf pattern=0861?????? got=0 saved=0
+2026-05-23 14:34:17,666 WARNING [T22] D1N unresolved, rotating IP
+2026-05-23 14:34:17,666 INFO [T22] rotate IP 9407275c → 4249f0e7
+2026-05-23 14:34:17,729 INFO [T38] D1N refreshed 43a9e7a8c6b0e736…
+2026-05-23 14:34:17,734 INFO [T24] D1N refreshed 2dff59f49a126de0…
+2026-05-23 14:34:17,756 INFO [T34] leaf pattern=0860?????? got=0 saved=0
+2026-05-23 14:34:17,770 INFO [T27] D1N refreshed ff74537e39feec15…
+2026-05-23 14:34:17,774 INFO [T21] D1N refreshed e30dc543d6f3e63b…
+2026-05-23 14:34:17,813 INFO [T48] D1N refreshed 431cdf53c6829dca…
+2026-05-23 14:34:17,840 INFO [T41] D1N refreshed 26c0f1ce96bfb0f9…
+2026-05-23 14:34:17,854 INFO [T49] D1N refreshed 03e5384c63497e61…
+2026-05-23 14:34:17,860 WARNING [T12] D1N unresolved, rotating IP
+2026-05-23 14:34:17,861 INFO [T12] rotate IP ecdcbbfa → 38b636f5
+2026-05-23 14:34:17,891 INFO [T17] leaf pattern=0970?????? got=0 saved=0
+2026-05-23 14:34:18,074 INFO [T11] expand pattern=0868?????? got=49 ≥ 30 → split into 10 children
+2026-05-23 14:34:18,103 INFO [T33] D1N refreshed 248769e94ed56b38…
+2026-05-23 14:34:18,110 INFO [T47] D1N refreshed 4bf1ac5ad2d28648…
+2026-05-23 14:34:18,135 INFO [T19] leaf pattern=084??????? got=0 saved=0
+2026-05-23 14:34:18,143 INFO [T1] leaf pattern=089??????? got=0 saved=0
+2026-05-23 14:34:18,158 INFO [T14] expand pattern=0869?????? got=49 ≥ 30 → split into 10 children
+2026-05-23 14:34:18,313 INFO [T15] leaf pattern=09770????? got=7 saved=7
+2026-05-23 14:34:18,512 INFO [T35] leaf pattern=030??????? got=0 saved=0
+2026-05-23 14:34:18,544 INFO [T30] expand pattern=037??????? got=50 ≥ 30 → split into 10 children
+2026-05-23 14:34:18,610 INFO [T8] expand pattern=039??????? got=49 ≥ 30 → split into 10 children
+2026-05-23 14:34:18,620 INFO [T45] leaf pattern=09771????? got=6 saved=6
+2026-05-23 14:34:18,740 INFO [T2] expand pattern=033??????? got=49 ≥ 30 → split into 10 children
+2026-05-23 14:34:18,824 WARNING [T18] ConnectionError attempt=1/3 pattern=0983??????: ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', Non
+2026-05-23 14:34:18,824 INFO [T18] rotate IP 8356b869 → 0684cb2e
+2026-05-23 14:34:18,979 INFO [T32] D1N refreshed 50669b0a3ef1c448…
+2026-05-23 14:34:18,998 INFO [T10] expand pattern=035??????? got=49 ≥ 30 → split into 10 children
+2026-05-23 14:34:19,222 INFO [T20] leaf pattern=09773????? got=6 saved=6
+2026-05-23 14:34:19,388 INFO [T7] leaf pattern=09772????? got=3 saved=3
+2026-05-23 14:34:19,517 WARNING [T29] ConnectionError attempt=1/3 pattern=0972??????: ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', Non
+2026-05-23 14:34:19,518 INFO [T29] rotate IP 2a6d35f5 → 98974f7c
+2026-05-23 14:34:19,539 WARNING [T9] ConnectionError attempt=1/3 pattern=0974??????: ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', Non
+2026-05-23 14:34:19,539 INFO [T9] rotate IP 2151a4da → b0493414
+2026-05-23 14:34:19,573 INFO [T40] leaf pattern=09774????? got=11 saved=11
+2026-05-23 14:34:19,615 INFO [T42] leaf pattern=093??????? got=0 saved=0
+2026-05-23 14:34:19,969 INFO [T13] leaf pattern=09775????? got=6 saved=6
+2026-05-23 14:34:20,048 INFO [T5] leaf pattern=09776????? got=4 saved=4
+2026-05-23 14:34:20,198 INFO [T22] D1N refreshed 1f05e07c21839777…
+2026-05-23 14:34:20,455 INFO [T6] expand pattern=0985?????? got=35 ≥ 30 → split into 10 children
+2026-05-23 14:34:20,630 INFO [T34] leaf pattern=09779????? got=4 saved=4
+2026-05-23 14:34:20,679 INFO [T16] expand pattern=036??????? got=47 ≥ 30 → split into 10 children
+2026-05-23 14:34:20,688 INFO [T37] leaf pattern=09777????? got=0 saved=0
+2026-05-23 14:34:20,802 INFO [T17] expand pattern=08620????? got=36 ≥ 30 → split into 10 children
+2026-05-23 14:34:20,813 INFO [T26] leaf pattern=0987?????? got=25 saved=25
+2026-05-23 14:34:20,822 INFO [T4] leaf pattern=0989?????? got=29 saved=29
+2026-05-23 14:34:20,831 INFO [T31] expand pattern=0981?????? got=39 ≥ 30 → split into 10 children
+2026-05-23 14:34:20,842 INFO [T44] expand pattern=0984?????? got=35 ≥ 30 → split into 10 children
+2026-05-23 14:34:20,903 INFO [T36] leaf pattern=09778????? got=5 saved=5
+2026-05-23 14:34:20,983 INFO [T11] expand pattern=08621????? got=40 ≥ 30 → split into 10 children
+2026-05-23 14:34:21,081 INFO [T25] D1N refreshed ec36bb6ca1e6e82a…
+2026-05-23 14:34:21,091 INFO [T1] expand pattern=08623????? got=43 ≥ 30 → split into 10 children
+2026-05-23 14:34:21,098 INFO [T23] leaf pattern=0988?????? got=10 saved=10
+2026-05-23 14:34:21,136 INFO [T19] expand pattern=08622????? got=39 ≥ 30 → split into 10 children
+2026-05-23 14:34:21,145 INFO [T14] expand pattern=08624????? got=45 ≥ 30 → split into 10 children
+2026-05-23 14:34:21,260 INFO [T3] leaf pattern=0979?????? got=24 saved=24
+2026-05-23 14:34:21,271 INFO [T15] expand pattern=08625????? got=42 ≥ 30 → split into 10 children
+2026-05-23 14:34:21,389 INFO [T35] expand pattern=08626????? got=40 ≥ 30 → split into 10 children
+2026-05-23 14:34:21,398 INFO [T45] expand pattern=08629????? got=41 ≥ 30 → split into 10 children
+2026-05-23 14:34:21,424 INFO [T46] expand pattern=0973?????? got=41 ≥ 30 → split into 10 children
+2026-05-23 14:34:21,493 INFO [T30] expand pattern=08627????? got=47 ≥ 30 → split into 10 children
+2026-05-23 14:34:21,522 INFO [T8] expand pattern=08628????? got=41 ≥ 30 → split into 10 children
+2026-05-23 14:34:21,677 INFO [T2] leaf pattern=09710????? got=20 saved=20
+2026-05-23 14:34:21,952 INFO [T10] leaf pattern=09711????? got=14 saved=14
+2026-05-23 14:34:21,971 INFO [T39] leaf pattern=0986?????? got=26 saved=26
+2026-05-23 14:34:21,996 WARNING [T28] D1N unresolved, rotating IP
+2026-05-23 14:34:21,996 INFO [T28] rotate IP a356f57a → d897a9e9
+2026-05-23 14:34:22,002 INFO [T43] expand pattern=0982?????? got=32 ≥ 30 → split into 10 children
+2026-05-23 14:34:22,156 INFO [T20] leaf pattern=09712????? got=17 saved=17
+2026-05-23 14:34:22,209 INFO [T24] leaf pattern=0864?????? got=0 saved=0
+2026-05-23 14:34:22,295 INFO [T27] expand pattern=0865?????? got=49 ≥ 30 → split into 10 children
+2026-05-23 14:34:22,308 INFO [T7] leaf pattern=09713????? got=14 saved=14
+2026-05-23 14:34:22,365 INFO [T21] leaf pattern=099??????? got=0 saved=0
+2026-05-23 14:34:22,369 INFO [T41] expand pattern=0976?????? got=35 ≥ 30 → split into 10 children
+2026-05-23 14:34:22,379 INFO [T48] expand pattern=0867?????? got=50 ≥ 30 → split into 10 children
+2026-05-23 14:34:22,448 INFO [T49] expand pattern=096??????? got=45 ≥ 30 → split into 10 children
+2026-05-23 14:34:22,453 INFO [T38] leaf pattern=031??????? got=0 saved=0
+2026-05-23 14:34:22,577 INFO [T42] leaf pattern=09715????? got=14 saved=14
+2026-05-23 14:34:22,625 INFO [T40] leaf pattern=09714????? got=23 saved=23
+2026-05-23 14:34:22,646 INFO [T33] expand pattern=032??????? got=47 ≥ 30 → split into 10 children
+2026-05-23 14:34:22,761 INFO [T47] leaf pattern=087??????? got=0 saved=0
+2026-05-23 14:34:22,907 INFO [T13] leaf pattern=09716????? got=16 saved=16
+2026-05-23 14:34:22,970 INFO [T5] leaf pattern=09717????? got=14 saved=14
+2026-05-23 14:34:22,991 WARNING [T9] SSLError attempt=2/3 pattern=0974??????: HTTPSConnectionPool(host='vietteltelecom.vn', port=443): Max retries exceeded with url: /api/get/sim (Caused by SSLError
+2026-05-23 14:34:22,991 INFO [T9] rotate IP b0493414 → e7364faf
+2026-05-23 14:34:23,062 WARNING [T50] ConnectionError attempt=2/3 pattern=038???????: ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', Non
+2026-05-23 14:34:23,062 INFO [T50] rotate IP b491c5fe → 233ddcce
+2026-05-23 14:34:23,217 INFO [T18] D1N refreshed 916ebad2d14fda31…
+2026-05-23 14:34:23,277 WARNING [T12] ConnectionError attempt=1/3 pattern=085???????: ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', Non
+2026-05-23 14:34:23,278 INFO [T12] rotate IP 38b636f5 → c755d75a
+2026-05-23 14:34:23,300 INFO [T32] expand pattern=0978?????? got=36 ≥ 30 → split into 10 children
+2026-05-23 14:34:23,427 INFO [T6] leaf pattern=09718????? got=18 saved=18
+2026-05-23 14:34:23,466 INFO [T29] D1N refreshed 67cb172650548b44…
+2026-05-23 14:34:23,610 INFO [T37] expand pattern=08661????? got=36 ≥ 30 → split into 10 children
+2026-05-23 14:34:23,626 INFO [T16] expand pattern=08660????? got=35 ≥ 30 → split into 10 children
+2026-05-23 14:34:23,714 INFO [T31] expand pattern=08665????? got=34 ≥ 30 → split into 10 children
+2026-05-23 14:34:23,765 INFO [T4] expand pattern=08663????? got=32 ≥ 30 → split into 10 children
+2026-05-23 14:34:23,775 INFO [T17] expand pattern=08662????? got=34 ≥ 30 → split into 10 children
+2026-05-23 14:34:23,798 INFO [T44] leaf pattern=08666????? got=5 saved=5
+2026-05-23 14:34:23,881 INFO [T36] expand pattern=08667????? got=33 ≥ 30 → split into 10 children
+2026-05-23 14:34:23,903 INFO [T11] leaf pattern=08668????? got=18 saved=18
+2026-05-23 14:34:23,920 INFO [T26] expand pattern=08664????? got=44 ≥ 30 → split into 10 children
+2026-05-23 14:34:24,041 INFO [T23] expand pattern=08680????? got=33 ≥ 30 → split into 10 children
+2026-05-23 14:34:24,051 INFO [T19] expand pattern=08681????? got=33 ≥ 30 → split into 10 children
+2026-05-23 14:34:24,089 INFO [T1] expand pattern=08669????? got=34 ≥ 30 → split into 10 children
+2026-05-23 14:34:24,142 INFO [T14] leaf pattern=08682????? got=28 saved=28
+2026-05-23 14:34:24,200 INFO [T15] expand pattern=08684????? got=34 ≥ 30 → split into 10 children
+2026-05-23 14:34:24,346 INFO [T45] leaf pattern=08686????? got=7 saved=7
+2026-05-23 14:34:24,354 INFO [T28] D1N refreshed 1f9f6a7ec3681fec…
+2026-05-23 14:34:24,412 INFO [T3] expand pattern=08683????? got=33 ≥ 30 → split into 10 children
+2026-05-23 14:34:24,425 INFO [T30] leaf pattern=08688????? got=24 saved=24
+2026-05-23 14:34:24,536 INFO [T8] expand pattern=08689????? got=30 ≥ 30 → split into 10 children
+2026-05-23 14:34:24,542 INFO [T46] expand pattern=08687????? got=33 ≥ 30 → split into 10 children
+2026-05-23 14:34:24,561 INFO [T34] leaf pattern=09719????? got=17 saved=17
+2026-05-23 14:34:24,591 INFO [T22] leaf pattern=095??????? got=0 saved=0
+2026-05-23 14:34:24,767 INFO [T35] expand pattern=08685????? got=35 ≥ 30 → split into 10 children
+2026-05-23 14:34:24,826 INFO [T2] expand pattern=08690????? got=42 ≥ 30 → split into 10 children
+2026-05-23 14:34:24,895 INFO [T10] expand pattern=08691????? got=42 ≥ 30 → split into 10 children
+2026-05-23 14:34:24,937 INFO [T43] expand pattern=08693????? got=45 ≥ 30 → split into 10 children
+2026-05-23 14:34:25,052 INFO [T20] expand pattern=08694????? got=47 ≥ 30 → split into 10 children
+2026-05-23 14:34:25,195 INFO [T24] expand pattern=08695????? got=48 ≥ 30 → split into 10 children
+2026-05-23 14:34:25,209 INFO [T7] expand pattern=08697????? got=47 ≥ 30 → split into 10 children
+2026-05-23 14:34:25,289 INFO [T48] expand pattern=08698????? got=43 ≥ 30 → split into 10 children
+2026-05-23 14:34:25,309 INFO [T21] expand pattern=08699????? got=38 ≥ 30 → split into 10 children
+2026-05-23 14:34:25,320 INFO [T39] expand pattern=08692????? got=43 ≥ 30 → split into 10 children
+2026-05-23 14:34:25,325 INFO [T41] leaf pattern=0370?????? got=0 saved=0
+2026-05-23 14:34:25,350 INFO [T27] expand pattern=08696????? got=42 ≥ 30 → split into 10 children
+2026-05-23 14:34:25,384 INFO [T49] leaf pattern=0371?????? got=0 saved=0
+2026-05-23 14:34:25,542 INFO [T42] expand pattern=0373?????? got=48 ≥ 30 → split into 10 children
+2026-05-23 14:34:25,603 INFO [T33] expand pattern=0375?????? got=48 ≥ 30 → split into 10 children
+2026-05-23 14:34:25,619 INFO [T38] expand pattern=0372?????? got=48 ≥ 30 → split into 10 children
+2026-05-23 14:34:25,650 INFO [T40] expand pattern=0374?????? got=49 ≥ 30 → split into 10 children
+2026-05-23 14:34:25,750 INFO [T47] expand pattern=0376?????? got=49 ≥ 30 → split into 10 children
+2026-05-23 14:34:25,819 INFO [T13] expand pattern=0377?????? got=48 ≥ 30 → split into 10 children
+2026-05-23 14:34:26,254 INFO [T32] expand pattern=0379?????? got=48 ≥ 30 → split into 10 children
+2026-05-23 14:34:26,295 INFO [T5] expand pattern=0378?????? got=47 ≥ 30 → split into 10 children
+2026-05-23 14:34:26,346 INFO [T6] leaf pattern=0390?????? got=0 saved=0
+2026-05-23 14:34:26,475 INFO [T25] expand pattern=0975?????? got=34 ≥ 30 → split into 10 children
+2026-05-23 14:34:26,525 INFO [T37] leaf pattern=0391?????? got=0 saved=0
+2026-05-23 14:34:26,661 INFO [T31] expand pattern=0393?????? got=47 ≥ 30 → split into 10 children
+2026-05-23 14:34:26,686 INFO [T4] expand pattern=0394?????? got=50 ≥ 30 → split into 10 children
+2026-05-23 14:34:26,754 INFO [T17] expand pattern=0395?????? got=47 ≥ 30 → split into 10 children
+2026-05-23 14:34:26,773 INFO [T44] expand pattern=0396?????? got=50 ≥ 30 → split into 10 children
+2026-05-23 14:34:26,781 INFO [T12] D1N refreshed ef35530c1473e1a1…
+2026-05-23 14:34:26,819 INFO [T36] expand pattern=0397?????? got=48 ≥ 30 → split into 10 children
+2026-05-23 14:34:26,832 INFO [T26] expand pattern=0399?????? got=49 ≥ 30 → split into 10 children
+2026-05-23 14:34:26,850 INFO [T9] D1N refreshed bd3570b96589af0f…
+2026-05-23 14:34:26,881 INFO [T11] expand pattern=0398?????? got=45 ≥ 30 → split into 10 children
+2026-05-23 14:34:26,927 INFO [T19] leaf pattern=0331?????? got=0 saved=0
+2026-05-23 14:34:26,940 INFO [T23] leaf pattern=0330?????? got=0 saved=0
+2026-05-23 14:34:27,053 INFO [T1] expand pattern=0332?????? got=48 ≥ 30 → split into 10 children
+2026-05-23 14:34:27,086 INFO [T16] expand pattern=0392?????? got=50 ≥ 30 → split into 10 children
+2026-05-23 14:34:27,142 INFO [T14] leaf pattern=0333?????? got=28 saved=28
+2026-05-23 14:34:27,206 INFO [T45] expand pattern=0335?????? got=45 ≥ 30 → split into 10 children
+2026-05-23 14:34:27,334 INFO [T30] expand pattern=0337?????? got=48 ≥ 30 → split into 10 children
+2026-05-23 14:34:27,349 INFO [T18] expand pattern=0983?????? got=32 ≥ 30 → split into 10 children
+2026-05-23 14:34:27,360 INFO [T15] expand pattern=0334?????? got=46 ≥ 30 → split into 10 children
+2026-05-23 14:34:27,445 INFO [T3] expand pattern=0336?????? got=48 ≥ 30 → split into 10 children
+2026-05-23 14:34:27,496 INFO [T46] expand pattern=0339?????? got=49 ≥ 30 → split into 10 children
+2026-05-23 14:34:27,506 INFO [T8] expand pattern=0338?????? got=50 ≥ 30 → split into 10 children
+2026-05-23 14:34:27,612 INFO [T50] D1N refreshed 5de96d1fcfe563b4…
+2026-05-23 14:34:27,619 INFO [T22] leaf pattern=0351?????? got=0 saved=0
+2026-05-23 14:34:27,723 INFO [T35] expand pattern=0352?????? got=47 ≥ 30 → split into 10 children
+2026-05-23 14:34:27,730 INFO [T29] expand pattern=0972?????? got=43 ≥ 30 → split into 10 children
+2026-05-23 14:34:27,868 INFO [T2] expand pattern=0353?????? got=49 ≥ 30 → split into 10 children
+2026-05-23 14:34:27,878 INFO [T10] expand pattern=0354?????? got=48 ≥ 30 → split into 10 children
+2026-05-23 14:34:27,888 INFO [T34] leaf pattern=0350?????? got=0 saved=0
+2026-05-23 14:34:27,947 INFO [T43] expand pattern=0355?????? got=47 ≥ 30 → split into 10 children
+2026-05-23 14:34:27,963 INFO [T20] expand pattern=0356?????? got=48 ≥ 30 → split into 10 children
+2026-05-23 14:34:28,097 INFO [T7] expand pattern=0358?????? got=47 ≥ 30 → split into 10 children
+2026-05-23 14:34:28,153 INFO [T24] expand pattern=0357?????? got=48 ≥ 30 → split into 10 children
+2026-05-23 14:34:28,204 INFO [T41] leaf pattern=09852????? got=2 saved=2
+2026-05-23 14:34:28,231 INFO [T39] leaf pattern=09851????? got=13 saved=13
+2026-05-23 14:34:28,244 INFO [T48] expand pattern=0359?????? got=50 ≥ 30 → split into 10 children
+2026-05-23 14:34:28,258 INFO [T27] leaf pattern=09853????? got=6 saved=6
+2026-05-23 14:34:28,278 INFO [T21] leaf pattern=09850????? got=9 saved=9
+2026-05-23 14:34:28,337 INFO [T49] leaf pattern=09854????? got=11 saved=11
+2026-05-23 14:34:28,579 INFO [T33] leaf pattern=09856????? got=7 saved=7
+2026-05-23 14:34:28,642 INFO [T40] leaf pattern=09858????? got=4 saved=4
+2026-05-23 14:34:28,658 INFO [T38] leaf pattern=09857????? got=8 saved=8
+2026-05-23 14:34:28,671 INFO [T42] leaf pattern=09855????? got=5 saved=5
+2026-05-23 14:34:28,685 INFO [T47] leaf pattern=09859????? got=5 saved=5
+2026-05-23 14:34:28,699 INFO [T13] leaf pattern=0360?????? got=0 saved=0
+2026-05-23 14:34:28,966 INFO [T28] expand pattern=034??????? got=49 ≥ 30 → split into 10 children
+2026-05-23 14:34:29,109 INFO [T32] leaf pattern=0361?????? got=0 saved=0
+2026-05-23 14:34:29,230 INFO [T5] expand pattern=0362?????? got=48 ≥ 30 → split into 10 children
+2026-05-23 14:34:29,272 INFO [T6] expand pattern=0363?????? got=48 ≥ 30 → split into 10 children
+2026-05-23 14:34:29,415 INFO [T37] expand pattern=0365?????? got=46 ≥ 30 → split into 10 children
+2026-05-23 14:34:29,514 INFO [T25] expand pattern=0364?????? got=49 ≥ 30 → split into 10 children
+2026-05-23 14:34:29,573 INFO [T31] expand pattern=0366?????? got=47 ≥ 30 → split into 10 children
+2026-05-23 14:34:29,611 INFO [T4] expand pattern=0367?????? got=48 ≥ 30 → split into 10 children
+2026-05-23 14:34:29,692 INFO [T17] expand pattern=0368?????? got=47 ≥ 30 → split into 10 children
+2026-05-23 14:34:29,726 INFO [T36] leaf pattern=086200???? got=2 saved=2
+2026-05-23 14:34:29,758 INFO [T11] leaf pattern=086202???? got=4 saved=4
+2026-05-23 14:34:29,775 INFO [T44] expand pattern=0369?????? got=46 ≥ 30 → split into 10 children
+2026-05-23 14:34:29,830 INFO [T19] leaf pattern=086203???? got=6 saved=6
+2026-05-23 14:34:29,857 INFO [T23] leaf pattern=086204???? got=21 saved=21
+2026-05-23 14:34:29,983 INFO [T1] leaf pattern=086205???? got=13 saved=13
+2026-05-23 14:34:30,049 INFO [T16] leaf pattern=086206???? got=7 saved=7
+2026-05-23 14:34:30,103 INFO [T14] leaf pattern=086207???? got=14 saved=14
+2026-05-23 14:34:30,116 INFO [T45] leaf pattern=086208???? got=8 saved=8
+2026-05-23 14:34:30,217 WARNING [T12] SSLError attempt=1/3 pattern=085???????: HTTPSConnectionPool(host='vietteltelecom.vn', port=443): Max retries exceeded with url: /api/get/sim (Caused by SSLError
+2026-05-23 14:34:30,217 INFO [T12] rotate IP c755d75a → 5ed9b0a1
+2026-05-23 14:34:30,256 INFO [T30] leaf pattern=086209???? got=15 saved=15
+2026-05-23 14:34:30,269 INFO [T15] leaf pattern=09811????? got=9 saved=9
+2026-05-23 14:34:30,289 INFO [T18] leaf pattern=09810????? got=8 saved=8
+2026-05-23 14:34:30,404 INFO [T8] leaf pattern=09814????? got=19 saved=19
+2026-05-23 14:34:30,412 INFO [T3] leaf pattern=09812????? got=13 saved=13
+2026-05-23 14:34:30,425 INFO [T46] leaf pattern=09813????? got=12 saved=12
+2026-05-23 14:34:30,581 INFO [T35] leaf pattern=09816????? got=13 saved=13
+2026-05-23 14:34:30,663 INFO [T22] leaf pattern=09815????? got=12 saved=12
+2026-05-23 14:34:30,719 INFO [T29] leaf pattern=09817????? got=19 saved=19
+2026-05-23 14:34:30,765 INFO [T34] leaf pattern=09840????? got=13 saved=13
+2026-05-23 14:34:30,783 INFO [T2] leaf pattern=09818????? got=4 saved=4
+2026-05-23 14:34:30,796 INFO [T10] leaf pattern=09819????? got=13 saved=13
+2026-05-23 14:34:30,852 INFO [T20] leaf pattern=09842????? got=10 saved=10
+2026-05-23 14:34:30,904 INFO [T26] leaf pattern=086201???? got=4 saved=4
+2026-05-23 14:34:30,913 INFO [T43] leaf pattern=09841????? got=6 saved=6
+2026-05-23 14:34:30,992 INFO [T7] leaf pattern=09843????? got=8 saved=8
+2026-05-23 14:34:31,126 INFO [T24] leaf pattern=09844????? got=5 saved=5
+2026-05-23 14:34:31,130 INFO [T41] leaf pattern=09845????? got=9 saved=9
+2026-05-23 14:34:31,212 INFO [T27] leaf pattern=09848????? got=13 saved=13
+2026-05-23 14:34:31,229 INFO [T39] leaf pattern=09846????? got=9 saved=9
+2026-05-23 14:34:31,235 INFO [T48] leaf pattern=09847????? got=9 saved=9
+2026-05-23 14:34:31,251 INFO [T21] leaf pattern=09849????? got=13 saved=13
+2026-05-23 14:34:31,360 INFO [T49] leaf pattern=086210???? got=15 saved=15
+2026-05-23 14:34:31,541 INFO [T38] leaf pattern=086213???? got=11 saved=11
+2026-05-23 14:34:31,565 INFO [T33] leaf pattern=086211???? got=7 saved=7
+2026-05-23 14:34:31,580 INFO [T13] leaf pattern=086216???? got=12 saved=12
+2026-05-23 14:34:31,614 INFO [T47] leaf pattern=086215???? got=14 saved=14
+2026-05-23 14:34:31,644 INFO [T40] leaf pattern=086212???? got=8 saved=8
+2026-05-23 14:34:31,654 INFO [T42] leaf pattern=086214???? got=16 saved=16
+2026-05-23 14:34:31,748 INFO [T50] expand pattern=038??????? got=49 ≥ 30 → split into 10 children
+2026-05-23 14:34:31,858 INFO [T9] expand pattern=0974?????? got=39 ≥ 30 → split into 10 children
+2026-05-23 14:34:32,006 INFO [T32] leaf pattern=086218???? got=18 saved=18
+2026-05-23 14:34:32,108 INFO [T5] leaf pattern=086219???? got=13 saved=13
+2026-05-23 14:34:32,172 INFO [T6] leaf pattern=086230???? got=15 saved=15
+2026-05-23 14:34:32,226 INFO [T28] leaf pattern=086217???? got=14 saved=14
+2026-05-23 14:34:32,479 INFO [T31] leaf pattern=086233???? got=10 saved=10
+2026-05-23 14:34:32,489 INFO [T37] leaf pattern=086231???? got=14 saved=14
+2026-05-23 14:34:32,523 INFO [T4] leaf pattern=086234???? got=18 saved=18
+2026-05-23 14:34:32,620 INFO [T36] leaf pattern=086236???? got=16 saved=16
+2026-05-23 14:34:32,652 INFO [T17] leaf pattern=086235???? got=19 saved=19
+2026-05-23 14:34:32,719 INFO [T11] leaf pattern=086237???? got=20 saved=20
+2026-05-23 14:34:32,731 INFO [T25] leaf pattern=086232???? got=14 saved=14
+2026-05-23 14:34:32,752 INFO [T19] leaf pattern=086239???? got=11 saved=11
+2026-05-23 14:34:32,766 INFO [T44] leaf pattern=086238???? got=16 saved=16
+2026-05-23 14:34:32,836 INFO [T23] leaf pattern=086220???? got=6 saved=6
+2026-05-23 14:34:32,853 INFO [T1] leaf pattern=086221???? got=13 saved=13
+2026-05-23 14:34:32,978 INFO [T16] leaf pattern=086222???? got=2 saved=2
+2026-05-23 14:34:33,059 INFO [T14] leaf pattern=086223???? got=10 saved=10
+2026-05-23 14:34:33,159 INFO [T45] leaf pattern=086224???? got=18 saved=18
+2026-05-23 14:34:33,205 INFO [T30] leaf pattern=086225???? got=11 saved=11
+2026-05-23 14:34:33,258 INFO [T15] leaf pattern=086226???? got=6 saved=6
+2026-05-23 14:34:33,612 INFO [T46] leaf pattern=086240???? got=17 saved=17
+2026-05-23 14:34:33,619 INFO [T8] leaf pattern=086228???? got=16 saved=16
+2026-05-23 14:34:33,625 INFO [T3] leaf pattern=086229???? got=15 saved=15
+2026-05-23 14:34:33,650 INFO [T35] leaf pattern=086241???? got=18 saved=18
+2026-05-23 14:34:33,683 INFO [T2] leaf pattern=086245???? got=17 saved=17
+2026-05-23 14:34:33,697 INFO [T22] leaf pattern=086242???? got=20 saved=20
+2026-05-23 14:34:33,723 INFO [T10] leaf pattern=086246???? got=16 saved=16
+2026-05-23 14:34:33,737 INFO [T20] leaf pattern=086247???? got=22 saved=22
+2026-05-23 14:34:33,795 INFO [T34] leaf pattern=086244???? got=8 saved=8
+2026-05-23 14:34:33,860 INFO [T7] leaf pattern=086250???? got=23 saved=23
+2026-05-23 14:34:33,943 ERROR [T12] SESSION EXPIRED — dừng job: D1N challenge unresolved after IP rotation
+2026-05-23 14:34:34,033 INFO [T41] leaf pattern=086252???? got=13 saved=13
+2026-05-23 14:34:34,041 INFO [T24] leaf pattern=086251???? got=20 saved=20
+2026-05-23 14:34:34,132 INFO [T18] leaf pattern=086227???? got=14 saved=14
+2026-05-23 14:34:34,145 INFO [T39] leaf pattern=086254???? got=25 saved=25
+2026-05-23 14:34:34,152 INFO [T48] leaf pattern=086255???? got=12 saved=12
+2026-05-23 14:34:34,163 INFO [T27] leaf pattern=086253???? got=18 saved=18
+2026-05-23 14:34:34,180 INFO [T21] leaf pattern=086256???? got=11 saved=11
+2026-05-23 14:34:34,315 INFO [T49] leaf pattern=086257???? got=17 saved=17
+2026-05-23 14:34:34,450 INFO [T38] leaf pattern=086258???? got=11 saved=11
+2026-05-23 14:34:34,534 INFO [T47] leaf pattern=086261???? got=11 saved=11
+2026-05-23 14:34:34,553 INFO [T33] leaf pattern=086259???? got=12 saved=12
+2026-05-23 14:34:34,559 INFO [T13] leaf pattern=086260???? got=20 saved=20
+2026-05-23 14:34:34,685 INFO [T40] leaf pattern=086262???? got=5 saved=5
+2026-05-23 14:34:34,699 INFO [T42] leaf pattern=086263???? got=16 saved=16
+2026-05-23 14:34:34,704 INFO [T50] leaf pattern=086264???? got=19 saved=19
+2026-05-23 14:34:34,762 INFO [T29] leaf pattern=086243???? got=19 saved=19
+2026-05-23 14:34:34,897 INFO [T32] leaf pattern=086266???? got=7 saved=7
+2026-05-23 14:34:34,908 INFO [T43] leaf pattern=086249???? got=24 saved=24
+2026-05-23 14:34:34,953 INFO [T26] leaf pattern=086248???? got=21 saved=21
+2026-05-23 14:34:35,103 INFO [T6] leaf pattern=086268???? got=12 saved=12
+2026-05-23 14:34:35,131 INFO [T5] leaf pattern=086267???? got=9 saved=9
+2026-05-23 14:34:35,169 INFO [T9] leaf pattern=086265???? got=8 saved=8
+2026-05-23 14:34:35,261 INFO [T28] leaf pattern=086269???? got=7 saved=7
+2026-05-23 14:34:35,393 INFO [T31] leaf pattern=086290???? got=19 saved=19
+2026-05-23 14:34:35,422 INFO [T4] leaf pattern=086292???? got=13 saved=13
+2026-05-23 14:34:35,433 INFO [T37] leaf pattern=086291???? got=13 saved=13
+2026-05-23 14:34:35,529 INFO [T36] leaf pattern=086293???? got=18 saved=18
+2026-05-23 14:34:35,608 INFO [T17] leaf pattern=086294???? got=19 saved=19
+2026-05-23 14:34:35,621 INFO [T11] leaf pattern=086295???? got=15 saved=15
+2026-05-23 14:34:35,655 INFO [T19] leaf pattern=086297???? got=19 saved=19
+2026-05-23 14:34:35,750 INFO [T44] leaf pattern=086298???? got=17 saved=17
+2026-05-23 14:34:35,813 INFO [T23] leaf pattern=086299???? got=11 saved=11
+2026-05-23 14:34:35,824 INFO [T25] leaf pattern=086296???? got=17 saved=17
+2026-05-23 14:34:35,829 INFO [T1] leaf pattern=09730????? got=12 saved=12
+2026-05-23 14:34:35,919 INFO [T16] leaf pattern=09731????? got=11 saved=11
+2026-05-23 14:34:36,075 INFO [T45] leaf pattern=09733????? got=13 saved=13
+2026-05-23 14:34:36,084 INFO [T14] leaf pattern=09732????? got=12 saved=12
+2026-05-23 14:34:36,104 INFO [T30] leaf pattern=09734????? got=18 saved=18
+2026-05-23 14:34:36,177 INFO [T15] leaf pattern=09735????? got=10 saved=10
+2026-05-23 14:34:36,359 INFO [T8] leaf pattern=09736????? got=16 saved=16
+2026-05-23 14:34:36,378 INFO [T46] leaf pattern=09737????? got=14 saved=14
+2026-05-23 14:34:36,429 INFO [T35] leaf pattern=09739????? got=14 saved=14
+2026-05-23 14:34:36,454 INFO [T3] leaf pattern=09738????? got=20 saved=20
+2026-05-23 14:34:36,608 INFO [T2] leaf pattern=086270???? got=18 saved=18
+2026-05-23 14:34:36,639 INFO [T20] leaf pattern=086273???? got=17 saved=17
+2026-05-23 14:34:36,658 INFO [T10] leaf pattern=086272???? got=12 saved=12
+2026-05-23 14:34:36,693 INFO [T22] leaf pattern=086271???? got=20 saved=20
+2026-05-23 14:34:36,709 INFO [T34] leaf pattern=086274???? got=17 saved=17
+2026-05-23 14:34:36,800 INFO [T7] leaf pattern=086275???? got=20 saved=20
+2026-05-23 14:34:36,950 INFO === Job ebbb69c8 PAUSED ===

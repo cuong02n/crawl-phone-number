@@ -16,7 +16,21 @@
       "Bash(Write-Host \"Killed\")",
       "PowerShell(Get-Process *)",
       "Bash(cd /d E:\\\\CODE\\\\python\\\\crawl-phone-number)",
-      "Bash(pip show *)"
+      "Bash(pip show *)",
+      "Read(//mnt/e/CODE/python/**)",
+      "Bash(cat config.json)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(pip install *)",
+      "Bash(playwright install *)",
+      "Bash(curl -s -X POST http://localhost:9000/api/viettel/auto-session -H \"Content-Type: application/json\" -d \"{}\")",
+      "Bash(kill %1)",
+      "Bash(curl -s -m 90 -X POST http://localhost:9000/api/viettel/auto-session -H \"Content-Type: application/json\" -d \"{}\")",
+      "Bash(curl -s -v -m 90 -X POST http://localhost:9000/api/viettel/auto-session -H \"Content-Type: application/json\" -d \"{}\")",
+      "Bash(wait)",
+      "Bash(curl -s -m 60 -X POST http://localhost:9000/api/viettel/auto-session -H \"Content-Type: application/json\" -d \"{}\")",
+      "Bash(taskkill /F /IM python.exe)",
+      "Bash(taskkill /F /IM node.exe)"
     ]
   }
 }

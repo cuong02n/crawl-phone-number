@@ -1,0 +1,15 @@
+2026-05-23 11:28:08,020 INFO === Job a0415981 RUNNING (1 thread(s)) ===
+2026-05-23 11:28:08,024 INFO [T1] session init, proxy_sid=7e2548ce
+2026-05-23 11:28:10,352 INFO [T1] D1N refreshed 8448a3e475c050e7…
+2026-05-23 11:28:15,702 INFO [T1] expand pattern=09???????? → 10 children
+2026-05-23 11:28:19,664 INFO [T1] leaf pattern=090??????? saved=0
+2026-05-23 11:28:23,557 INFO [T1] leaf pattern=091??????? saved=0
+2026-05-23 11:28:27,452 INFO [T1] leaf pattern=092??????? saved=0
+2026-05-23 11:28:31,338 INFO [T1] leaf pattern=093??????? saved=0
+2026-05-23 11:28:35,244 INFO [T1] leaf pattern=094??????? saved=0
+2026-05-23 11:28:39,135 INFO [T1] leaf pattern=095??????? saved=0
+2026-05-23 11:28:43,143 INFO [T1] expand pattern=096??????? → 10 children
+2026-05-23 11:28:47,087 INFO [T1] expand pattern=097??????? → 10 children
+2026-05-23 11:28:51,057 INFO [T1] expand pattern=098??????? → 10 children
+2026-05-23 11:28:55,069 INFO [T1] leaf pattern=099??????? saved=0
+2026-05-23 11:28:55,255 INFO === Job a0415981 PAUSED ===

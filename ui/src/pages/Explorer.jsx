@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { Download, RefreshCw } from 'lucide-react'
 import { useSearchParams } from 'react-router-dom'
 import { api } from '../api'
@@ -74,18 +74,38 @@ export default function Explorer() {
   const [result, setResult]       = useState(null)
   const [loading, setLoading]     = useState(false)
   const [refreshing, setRefreshing] = useState(false)
+  const [error, setError]         = useState('')
+
+  // Cancel in-flight request when a new one starts; ignore stale responses.
+  const abortRef  = useRef(null)
+  const reqIdRef  = useRef(0)
 
   // preview takes already-resolved presets (filtered for validity)
   const preview = useCallback(async (file, resolved) => {
     if (!file) return
+
+    // Cancel any previous request so the latest click wins
+    if (abortRef.current) abortRef.current.abort()
+    const controller = new AbortController()
+    abortRef.current = controller
+    const reqId = ++reqIdRef.current
+
     setLoading(true)
+    setError('')
     try {
-      const r = await api.previewData({ file, presets: resolved, limit: 200 })
-      setResult(r)
+      const r = await api.previewData(
+        { file, presets: resolved, limit: 200 },
+        { signal: controller.signal },
+      )
+      if (reqId === reqIdRef.current) setResult(r)
     } catch (e) {
-      alert('Lỗi: ' + e.message)
+      if (e.name === 'AbortError') return  // superseded by newer request — silent
+      if (reqId === reqIdRef.current) {
+        console.error('[preview failed]', e)
+        setError(e.message || 'Lỗi không xác định')
+      }
     } finally {
-      setLoading(false)
+      if (reqId === reqIdRef.current) setLoading(false)
     }
   }, [])
 
@@ -283,7 +303,17 @@ export default function Explorer() {
         {/* Results */}
         {loading && <p className="muted" style={{ marginTop: 12 }}>Đang lọc…</p>}
 
-        {!loading && result && (
+        {error && !loading && (
+          <div className="alert alert-error" style={{ marginTop: 12, fontSize: 12 }}>
+            ❌ Lỗi: {error}
+            <button className="btn btn-ghost" style={{ marginLeft: 10, padding: '2px 8px', fontSize: 11 }}
+              onClick={() => preview(selected, resolvePresets(activePresets, paramInputs))}>
+              Thử lại
+            </button>
+          </div>
+        )}
+
+        {!loading && !error && result && (
           <>
             <div className="result-bar">
               <strong>{result.filtered_count.toLocaleString()}</strong>

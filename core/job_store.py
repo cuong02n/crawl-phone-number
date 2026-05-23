@@ -75,7 +75,9 @@ class JobStore:
 
         with self._db_lock:
             self.conn.execute(
-                "INSERT INTO jobs VALUES (?,?,?,?,0,?,?,?,?,?)",
+                """INSERT INTO jobs
+                   (id, network, pattern, status, total_saved, output_file, log_file, created_at, updated_at, meta)
+                   VALUES (?,?,?,?,0,?,?,?,?,?)""",
                 (job_id, network, pattern, JobStatus.PENDING,
                  output_file, log_file, now, now, json.dumps(meta or {})),
             )

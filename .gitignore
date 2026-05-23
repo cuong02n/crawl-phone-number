@@ -15,9 +15,5 @@ ui/node_modules/
 ui/dist/
 
 # Runtime / secrets
-jobs.db
-config.json
-logs/
-data/
 debug_viettel_result.txt
 _test_*.py

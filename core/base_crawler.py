@@ -176,13 +176,16 @@ class BaseCrawler(ABC):
         if len(numbers) < self.THRESHOLD:
             self._save(numbers)
             self.store.mark_done(self.job_id, pattern)
-            self.logger.info(f"[T{t}] leaf pattern={pattern} saved={len(numbers)}")
+            self.logger.info(f"[T{t}] leaf pattern={pattern} got={len(numbers)} saved={len(numbers)}")
         elif "?" in pattern:
             idx = pattern.index("?")
             children = [pattern[:idx] + d + pattern[idx + 1:] for d in "0123456789"]
             self.store.enqueue(self.job_id, children)
             self.store.mark_done(self.job_id, pattern)
-            self.logger.info(f"[T{t}] expand pattern={pattern} → {len(children)} children")
+            self.logger.info(
+                f"[T{t}] expand pattern={pattern} got={len(numbers)} ≥ {self.THRESHOLD} "
+                f"→ split into {len(children)} children"
+            )
         else:
             self._save(numbers)
             self.store.mark_done(self.job_id, pattern)

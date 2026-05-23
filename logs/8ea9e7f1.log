@@ -1,0 +1,39 @@
+2026-05-23 14:16:03,752 INFO === Job 8ea9e7f1 RUNNING (10 thread(s)) ===
+2026-05-23 14:16:03,759 INFO [T1] session init, no_proxy mode (direct IP)
+2026-05-23 14:16:04,696 INFO [T2] session init, no_proxy mode (direct IP)
+2026-05-23 14:16:04,701 INFO [T6] session init, no_proxy mode (direct IP)
+2026-05-23 14:16:04,712 INFO [T3] session init, no_proxy mode (direct IP)
+2026-05-23 14:16:04,716 INFO [T10] session init, no_proxy mode (direct IP)
+2026-05-23 14:16:04,725 INFO [T1] expand pattern=0????????? got=50 ≥ 30 → split into 10 children
+2026-05-23 14:16:04,730 INFO [T5] session init, no_proxy mode (direct IP)
+2026-05-23 14:16:04,734 INFO [T4] session init, no_proxy mode (direct IP)
+2026-05-23 14:16:04,739 INFO [T8] session init, no_proxy mode (direct IP)
+2026-05-23 14:16:04,820 INFO [T7] session init, no_proxy mode (direct IP)
+2026-05-23 14:16:04,931 INFO [T9] session init, no_proxy mode (direct IP)
+2026-05-23 14:16:05,544 WARNING [T3] ec=1 rate limited, rotating IP
+2026-05-23 14:16:05,544 INFO [T3] rotate skipped (no_proxy mode)
+2026-05-23 14:16:05,572 WARNING [T8] ec=1 rate limited, rotating IP
+2026-05-23 14:16:05,572 INFO [T8] rotate skipped (no_proxy mode)
+2026-05-23 14:16:05,642 WARNING [T6] ec=1 rate limited, rotating IP
+2026-05-23 14:16:05,642 INFO [T6] rotate skipped (no_proxy mode)
+2026-05-23 14:16:05,660 WARNING [T7] ec=1 rate limited, rotating IP
+2026-05-23 14:16:05,660 INFO [T7] rotate skipped (no_proxy mode)
+2026-05-23 14:16:05,669 INFO [T4] leaf pattern=05???????? got=0 saved=0
+2026-05-23 14:16:05,670 WARNING [T5] ec=1 rate limited, rotating IP
+2026-05-23 14:16:05,672 INFO [T5] rotate skipped (no_proxy mode)
+2026-05-23 14:16:05,672 WARNING [T2] ec=1 rate limited, rotating IP
+2026-05-23 14:16:05,674 WARNING [T10] ec=1 rate limited, rotating IP
+2026-05-23 14:16:05,674 INFO [T2] rotate skipped (no_proxy mode)
+2026-05-23 14:16:05,674 INFO [T10] rotate skipped (no_proxy mode)
+2026-05-23 14:16:05,697 ERROR [T3] fetch failed pattern=02????????: ec=1 after IP rotation — server-wide rate limit?
+2026-05-23 14:16:05,718 ERROR [T8] fetch failed pattern=06????????: ec=1 after IP rotation — server-wide rate limit?
+2026-05-23 14:16:05,730 WARNING [T9] ec=1 rate limited, rotating IP
+2026-05-23 14:16:05,730 INFO [T9] rotate skipped (no_proxy mode)
+2026-05-23 14:16:05,810 ERROR [T6] fetch failed pattern=01????????: ec=1 after IP rotation — server-wide rate limit?
+2026-05-23 14:16:05,812 ERROR [T2] fetch failed pattern=00????????: ec=1 after IP rotation — server-wide rate limit?
+2026-05-23 14:16:05,821 ERROR [T5] fetch failed pattern=04????????: ec=1 after IP rotation — server-wide rate limit?
+2026-05-23 14:16:05,839 ERROR [T7] fetch failed pattern=08????????: ec=1 after IP rotation — server-wide rate limit?
+2026-05-23 14:16:05,868 ERROR [T9] fetch failed pattern=09????????: ec=1 after IP rotation — server-wide rate limit?
+2026-05-23 14:16:05,877 ERROR [T10] fetch failed pattern=03????????: ec=1 after IP rotation — server-wide rate limit?
+2026-05-23 14:16:07,941 INFO [T1] leaf pattern=07???????? got=0 saved=0
+2026-05-23 14:16:08,278 INFO === Job 8ea9e7f1 COMPLETED ===

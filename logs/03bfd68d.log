@@ -1,0 +1,4 @@
+2026-05-23 11:22:45,260 INFO === Job 03bfd68d RUNNING (3 thread(s)) ===
+2026-05-23 11:22:45,400 INFO [T3] session init, proxy_sid=3dabc9e7
+2026-05-23 11:22:57,786 ERROR [T3] fetch failed pattern=09????????: HTTPSConnectionPool(host='vietteltelecom.vn', port=443): Max retries exceeded with url: /api/get/sim (Caused by ProxyError('Unable to connect to proxy', RemoteDisconnected('Remote end closed connection without response')))
+2026-05-23 11:22:57,992 INFO === Job 03bfd68d COMPLETED ===

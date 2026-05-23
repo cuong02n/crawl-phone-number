@@ -1,0 +1,69 @@
+2026-05-23 11:49:34,940 INFO === Job d393a3e8 RUNNING (2 thread(s)) ===
+2026-05-23 11:49:34,945 INFO [T1] session init, proxy_sid=26683e3d
+2026-05-23 11:49:36,634 INFO [T1] D1N refreshed 5574006c2c2846d4…
+2026-05-23 11:49:42,040 INFO [T1] expand pattern=09???????? got=45 ≥ 30 → split into 10 children
+2026-05-23 11:49:42,164 INFO [T2] session init, proxy_sid=96bda5d4
+2026-05-23 11:49:44,323 INFO [T2] D1N refreshed 2c0bbede2817eba9…
+2026-05-23 11:49:46,179 INFO [T1] leaf pattern=090??????? got=0 saved=0
+2026-05-23 11:49:49,957 INFO [T2] leaf pattern=091??????? got=0 saved=0
+2026-05-23 11:49:50,088 INFO [T1] leaf pattern=092??????? got=0 saved=0
+2026-05-23 11:49:53,970 INFO [T1] leaf pattern=094??????? got=0 saved=0
+2026-05-23 11:49:54,252 INFO [T2] leaf pattern=093??????? got=0 saved=0
+2026-05-23 11:49:57,906 INFO [T1] leaf pattern=095??????? got=0 saved=0
+2026-05-23 11:49:59,713 INFO [T2] expand pattern=096??????? got=46 ≥ 30 → split into 10 children
+2026-05-23 11:50:01,871 INFO [T1] expand pattern=097??????? got=46 ≥ 30 → split into 10 children
+2026-05-23 11:50:03,747 INFO [T2] expand pattern=098??????? got=46 ≥ 30 → split into 10 children
+2026-05-23 11:50:05,741 INFO [T1] leaf pattern=099??????? got=0 saved=0
+2026-05-23 11:50:08,090 INFO [T2] leaf pattern=0960?????? got=0 saved=0
+2026-05-23 11:50:09,695 INFO [T1] expand pattern=0961?????? got=40 ≥ 30 → split into 10 children
+2026-05-23 11:50:12,973 INFO [T2] expand pattern=0962?????? got=41 ≥ 30 → split into 10 children
+2026-05-23 11:50:13,762 INFO [T1] expand pattern=0963?????? got=37 ≥ 30 → split into 10 children
+2026-05-23 11:50:16,998 INFO [T2] expand pattern=0964?????? got=45 ≥ 30 → split into 10 children
+2026-05-23 11:50:17,672 INFO [T1] expand pattern=0965?????? got=34 ≥ 30 → split into 10 children
+2026-05-23 11:50:21,201 INFO [T2] leaf pattern=0966?????? got=28 saved=28
+2026-05-23 11:50:21,561 INFO [T1] expand pattern=0967?????? got=34 ≥ 30 → split into 10 children
+2026-05-23 11:50:25,143 INFO [T2] expand pattern=0968?????? got=37 ≥ 30 → split into 10 children
+2026-05-23 11:50:25,475 INFO [T1] expand pattern=0969?????? got=33 ≥ 30 → split into 10 children
+2026-05-23 11:50:29,497 INFO [T2] leaf pattern=0970?????? got=0 saved=0
+2026-05-23 11:50:29,673 INFO [T1] expand pattern=0971?????? got=45 ≥ 30 → split into 10 children
+2026-05-23 11:50:33,586 INFO [T1] expand pattern=0973?????? got=44 ≥ 30 → split into 10 children
+2026-05-23 11:50:33,600 INFO [T2] expand pattern=0972?????? got=38 ≥ 30 → split into 10 children
+2026-05-23 11:50:37,484 INFO [T1] expand pattern=0974?????? got=42 ≥ 30 → split into 10 children
+2026-05-23 11:50:37,578 INFO [T2] expand pattern=0975?????? got=41 ≥ 30 → split into 10 children
+2026-05-23 11:50:41,384 INFO [T1] expand pattern=0976?????? got=37 ≥ 30 → split into 10 children
+2026-05-23 11:50:41,451 INFO [T2] expand pattern=0977?????? got=32 ≥ 30 → split into 10 children
+2026-05-23 11:50:45,468 INFO [T1] expand pattern=0978?????? got=38 ≥ 30 → split into 10 children
+2026-05-23 11:50:45,479 INFO [T2] leaf pattern=0979?????? got=23 saved=23
+2026-05-23 11:50:49,360 INFO [T1] leaf pattern=0980?????? got=0 saved=0
+2026-05-23 11:50:49,583 INFO [T2] expand pattern=0981?????? got=42 ≥ 30 → split into 10 children
+2026-05-23 11:50:53,562 INFO [T2] expand pattern=0983?????? got=32 ≥ 30 → split into 10 children
+2026-05-23 11:50:54,018 INFO [T1] expand pattern=0982?????? got=37 ≥ 30 → split into 10 children
+2026-05-23 11:50:57,650 INFO [T2] expand pattern=0984?????? got=39 ≥ 30 → split into 10 children
+2026-05-23 11:50:57,897 INFO [T1] expand pattern=0985?????? got=33 ≥ 30 → split into 10 children
+2026-05-23 11:51:01,773 INFO [T2] leaf pattern=0986?????? got=19 saved=19
+2026-05-23 11:51:01,834 INFO [T1] leaf pattern=0987?????? got=24 saved=24
+2026-05-23 11:51:05,733 INFO [T1] leaf pattern=0989?????? got=26 saved=26
+2026-05-23 11:51:05,918 INFO [T2] leaf pattern=0988?????? got=10 saved=10
+2026-05-23 11:51:09,868 INFO [T1] leaf pattern=09610????? got=10 saved=10
+2026-05-23 11:51:09,943 INFO [T2] leaf pattern=09611????? got=7 saved=7
+2026-05-23 11:51:13,784 INFO [T1] leaf pattern=09612????? got=6 saved=6
+2026-05-23 11:51:14,084 INFO [T2] leaf pattern=09613????? got=10 saved=10
+2026-05-23 11:51:17,720 INFO [T1] leaf pattern=09614????? got=14 saved=14
+2026-05-23 11:51:18,003 INFO [T2] leaf pattern=09615????? got=9 saved=9
+2026-05-23 11:51:21,670 INFO [T1] leaf pattern=09616????? got=13 saved=13
+2026-05-23 11:51:22,121 INFO [T2] leaf pattern=09617????? got=12 saved=12
+2026-05-23 11:51:25,595 INFO [T1] leaf pattern=09618????? got=13 saved=13
+2026-05-23 11:51:26,113 INFO [T2] leaf pattern=09619????? got=12 saved=12
+2026-05-23 11:51:29,847 INFO [T1] leaf pattern=09620????? got=11 saved=11
+2026-05-23 11:51:30,113 INFO [T2] leaf pattern=09621????? got=12 saved=12
+2026-05-23 11:51:34,001 INFO [T1] leaf pattern=09622????? got=10 saved=10
+2026-05-23 11:51:34,202 INFO [T2] leaf pattern=09623????? got=9 saved=9
+2026-05-23 11:51:37,901 INFO [T1] leaf pattern=09624????? got=21 saved=21
+2026-05-23 11:51:38,207 INFO [T2] leaf pattern=09625????? got=12 saved=12
+2026-05-23 11:51:41,855 INFO [T1] leaf pattern=09626????? got=10 saved=10
+2026-05-23 11:51:42,291 INFO [T2] leaf pattern=09627????? got=7 saved=7
+2026-05-23 11:51:45,763 INFO [T1] leaf pattern=09628????? got=8 saved=8
+2026-05-23 11:51:46,338 INFO [T2] leaf pattern=09629????? got=14 saved=14
+2026-05-23 11:51:49,850 INFO [T1] leaf pattern=09630????? got=7 saved=7
+2026-05-23 11:51:50,381 INFO [T2] leaf pattern=09631????? got=9 saved=9
+2026-05-23 11:51:50,570 INFO === Job d393a3e8 PAUSED ===
