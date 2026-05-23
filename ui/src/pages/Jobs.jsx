@@ -48,25 +48,44 @@ function JobCard({ job, onRefresh }) {
   const navigate = useNavigate()
   const { has_proxy: hasProxy } = useWsData()
 
-  const [open, setOpen]                   = useState(false)
+  const [open, setOpen]                   = useState(status === 'failed')
   const [failedPatterns, setFailedPats]   = useState([])
   const [busy, setBusy]                   = useState(false)
   const [resumeThreads, setResumeThreads] = useState(job.threads ?? 1)
+  const [fullLog, setFullLog]             = useState(null)
+  const [loadingLog, setLoadingLog]       = useState(false)
 
   // Session refresh state (used when resuming a failed Viettel job)
   const [resumeSession, setResumeSession]   = useState(null)
   const [sessionStatus, setSessionStatus]   = useState('')
   const [sessionError, setSessionError]     = useState('')
 
-  const { id, network, pattern, status, total_saved, output_file = '',
+  const { id, network, pattern, status, total_saved, output_file = '', meta = '{}',
           progress, threads = 1, log = '', fail_reason = '' } = job
   const s = STATUS[status] ?? STATUS.pending
 
-  const logRef = useRef(null)
+  const metaObj = (() => { try { return JSON.parse(meta) } catch { return {} } })()
+
+  const logRef   = useRef(null)
+  const prevStatusRef = useRef(status)
 
   useEffect(() => {
     if (logRef.current) logRef.current.scrollTop = logRef.current.scrollHeight
-  }, [log])
+  }, [log, fullLog])
+
+  // Auto-expand + load patterns when job transitions to failed
+  useEffect(() => {
+    if (prevStatusRef.current !== 'failed' && status === 'failed') {
+      setOpen(true)
+      loadFailedPatterns()
+    }
+    prevStatusRef.current = status
+  }, [status]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Load failed patterns on mount if already failed
+  useEffect(() => {
+    if (status === 'failed') loadFailedPatterns()
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Reset session state when job transitions out of failed
   useEffect(() => {
@@ -74,6 +93,7 @@ function JobCard({ job, onRefresh }) {
       setResumeSession(null)
       setSessionStatus('')
       setSessionError('')
+      setFullLog(null)
     }
   }, [status])
 
@@ -81,6 +101,15 @@ function JobCard({ job, onRefresh }) {
     const res = await api.getFailedPatterns(id)
     setFailedPats(res.patterns)
   }, [id])
+
+  const loadFullLog = async () => {
+    setLoadingLog(true)
+    try {
+      const res = await api.getLog(id, 500)
+      setFullLog(res.log)
+    } catch {}
+    setLoadingLog(false)
+  }
 
   const toggle = () => {
     if (!open) loadFailedPatterns()
@@ -253,9 +282,42 @@ function JobCard({ job, onRefresh }) {
               </div>
             </div>
           )}
+          {/* Debug info for failed Viettel jobs */}
+          {status === 'failed' && network === 'viettel' && (
+            <div style={{ fontSize: 11, color: 'var(--muted)', background: 'var(--surface-2)',
+                          border: '1px solid var(--border)', borderRadius: 4, padding: '8px 10px' }}>
+              <strong style={{ color: 'var(--text)' }}>🔍 Debug info</strong>
+              <div style={{ marginTop: 4, fontFamily: 'var(--mono)', lineHeight: 1.8 }}>
+                <div>proxy_session_id: <code>{metaObj.proxy_session_id || '—'}</code></div>
+                <div>x_csrf_token: <code>{metaObj.x_csrf_token ? `${metaObj.x_csrf_token.slice(0, 16)}…` : '—'}</code></div>
+                <div>cookie: <code>{metaObj.cookie ? `${metaObj.cookie.slice(0, 40)}…` : '—'}</code></div>
+              </div>
+            </div>
+          )}
+
           <div className="log-section">
-            <h4>📜 Log</h4>
-            <pre className="log-pre" ref={logRef}>{log || 'Chưa có log...'}</pre>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+              <h4 style={{ margin: 0 }}>📜 Log</h4>
+              {!fullLog && (
+                <button className="btn btn-ghost" style={{ padding: '1px 7px', fontSize: 11 }}
+                  disabled={loadingLog} onClick={loadFullLog}>
+                  {loadingLog ? 'Loading…' : 'Load full log (500 dòng)'}
+                </button>
+              )}
+              {fullLog && (
+                <span style={{ fontSize: 11, color: 'var(--muted)' }}>
+                  {fullLog.split('\n').length} dòng
+                  <button className="btn btn-ghost" style={{ padding: '1px 6px', fontSize: 10, marginLeft: 6 }}
+                    onClick={() => setFullLog(null)}>
+                    Thu lại
+                  </button>
+                </span>
+              )}
+            </div>
+            <pre className="log-pre" ref={logRef}
+              style={status === 'failed' ? { maxHeight: 400, borderColor: 'rgba(248,81,73,0.3)' } : undefined}>
+              {fullLog || log || 'Chưa có log...'}
+            </pre>
           </div>
         </div>
       )}
@@ -340,9 +402,17 @@ export default function Jobs() {
     setBusy(true)
     try {
       const cookie = `D1N=${d1n}; laravel_session=${laravelSession}`
-      await api.createJob({ network, pattern, x_csrf_token: csrfToken, cookie, proxy_session_id: proxySessionId, threads })
+      const payload = { network, pattern, x_csrf_token: csrfToken, cookie, proxy_session_id: proxySessionId, threads }
+      console.group('[CREATE JOB]')
+      console.debug('network:', network, '| pattern:', pattern, '| threads:', threads)
+      console.debug('proxy_session_id:', proxySessionId)
+      console.debug('csrf:', csrfToken.slice(0, 16) + '…')
+      console.debug('cookie:', cookie.slice(0, 60) + '…')
+      console.groupEnd()
+      await api.createJob(payload)
       await refresh()
     } catch (err) {
+      console.error('[CREATE JOB failed]', err)
       setError(err.message || 'Lỗi không xác định')
     } finally { setBusy(false) }
   }
@@ -371,7 +441,11 @@ export default function Jobs() {
       {/* Create form */}
       <div className="card create-card">
         <div className="card-title">➕ Tạo Job mới</div>
-        {error && <div className="alert alert-error" style={{ marginBottom: 10 }}>{error}</div>}
+        {error && (
+          <div className="alert alert-error" style={{ marginBottom: 10 }}>
+            <strong>Lỗi:</strong> {error}
+          </div>
+        )}
         <form onSubmit={create}>
           <div className="form-row" style={{ marginBottom: 10 }}>
             <select className="form-select" value={network}
