@@ -660,7 +660,7 @@ def preview_data(body: FilterRequest):
                 total += 1
                 if filter_fn is None or filter_fn(num):
                     filtered += 1
-                    if len(numbers) < body.limit:
+                    if body.limit == 0 or len(numbers) < body.limit:
                         numbers.append(num)
         return {
             "numbers": numbers,

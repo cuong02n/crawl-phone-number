@@ -172,6 +172,44 @@ def is_abcabcabc(number: str) -> bool:
     abc = s[1:4]
     return s[4:7] == abc and s[7:10] == abc
 
+def is_0axaayaaza(number: str) -> bool:
+    """0(axa)(aya)(aza) — 3 nhóm aXa với a là cùng một chữ số, ví dụ: 0919929939."""
+    s = str(number)
+    if len(s) == 9:
+        s = "0" + s
+    if len(s) != 10:
+        return False
+    a = s[1]
+    return s[3] == a and s[4] == a and s[6] == a and s[7] == a and s[9] == a
+
+
+def is_0xaxbxcxdx(number: str) -> bool:
+    """0xaxbxcxdx — vị trí 1,3,5,7,9 đều là cùng một chữ số x (ví dụ: 0919293949)."""
+    s = str(number)
+    if len(s) == 9:
+        s = "0" + s
+    if len(s) != 10:
+        return False
+    x = s[1]
+    return s[3] == x and s[5] == x and s[7] == x and s[9] == x
+
+
+def _chi_n_so_tru_0(number: str, n: int) -> bool:
+    """Sau số 0 đầu tiên, không có thêm số 0 và chỉ gồm đúng n chữ số khác nhau."""
+    s = str(number)
+    tail = s[1:] if s.startswith("0") else s
+    if "0" in tail:
+        return False
+    return len(set(tail)) == n
+
+
+def chi_2_so_tru_0(number: str) -> bool:
+    return _chi_n_so_tru_0(number, 2)
+
+
+def chi_3_so_tru_0(number: str) -> bool:
+    return _chi_n_so_tru_0(number, 3)
+
 
 # ── Static preset registry ─────────────────────────────────────────────────────
 
@@ -195,6 +233,10 @@ PRESETS: dict[str, Callable[[str], bool]] = {
     "0abxab(x+2)ab(x+4)":          is_abx_seq_step2,
     "0abxab(x-1)ab(x-2)":          is_abx_seq_desc,
     "0abcabcabc":                   is_abcabcabc,
+    "0axaayaaza":                   is_0axaayaaza,
+    "0xaxbxcxdx":                   is_0xaxbxcxdx,
+    "Chỉ 2 số (ngoài 0)":          chi_2_so_tru_0,
+    "Chỉ 3 số (ngoài 0)":          chi_3_so_tru_0,
 }
 
 

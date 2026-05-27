@@ -34,6 +34,12 @@ const STATIC_PRESETS = [
     '0abxab(x+1)ab(x+2)',
     '0abxab(x-1)ab(x-2)',
     '0abcabcabc',
+    '0axaayaaza',
+    '0xaxbxcxdx',
+  ]},
+  { group: 'Số ít chữ số (ngoài 0)', items: [
+    'Chỉ 2 số (ngoài 0)',
+    'Chỉ 3 số (ngoài 0)',
   ]},
 ]
 
@@ -75,6 +81,7 @@ export default function Explorer() {
   const [loading, setLoading]     = useState(false)
   const [refreshing, setRefreshing] = useState(false)
   const [error, setError]         = useState('')
+  const [fetchAll, setFetchAll]   = useState(false)
 
   // Cancel in-flight request when a new one starts; ignore stale responses.
   const abortRef  = useRef(null)
@@ -94,7 +101,7 @@ export default function Explorer() {
     setError('')
     try {
       const r = await api.previewData(
-        { file, presets: resolved, limit: 200 },
+        { file, presets: resolved, limit: fetchAll ? 0 : 200 },
         { signal: controller.signal },
       )
       if (reqId === reqIdRef.current) setResult(r)
@@ -107,7 +114,7 @@ export default function Explorer() {
     } finally {
       if (reqId === reqIdRef.current) setLoading(false)
     }
-  }, [])
+  }, [fetchAll])
 
   const loadFiles = useCallback(() => api.listFiles().catch(() => []), [])
 
@@ -300,6 +307,14 @@ export default function Explorer() {
           </div>
         )}
 
+        {/* Fetch all toggle */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8, marginTop: 4 }}>
+          <label style={{ display: 'flex', alignItems: 'center', gap: 6, cursor: 'pointer', fontSize: 12 }}>
+            <input type="checkbox" checked={fetchAll} onChange={e => setFetchAll(e.target.checked)} />
+            Lấy hết (không giới hạn 200)
+          </label>
+        </div>
+
         {/* Results */}
         {loading && <p className="muted" style={{ marginTop: 12 }}>Đang lọc…</p>}
 
@@ -320,7 +335,7 @@ export default function Explorer() {
               <span className="muted">kết quả</span>
               <span className="muted">/</span>
               <span className="muted">{result.total_count.toLocaleString()} tổng</span>
-              {totalActive > 0 && result.numbers.length < result.filtered_count && (
+              {!fetchAll && totalActive > 0 && result.numbers.length < result.filtered_count && (
                 <span className="muted" style={{ fontSize: 12 }}>(hiển thị 200 đầu)</span>
               )}
             </div>
